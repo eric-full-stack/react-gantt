@@ -36,6 +36,7 @@ const Body: React.FC = ({ children }) => {
 export interface GanttProps<RecordType = DefaultRecordType> {
   data: Gantt.Record<RecordType>[]
   columns: Gantt.Column[]
+  renderCustomHeaderFilter?: GanttContext<RecordType>['renderCustomHeaderFilter']
   dependencies?: Gantt.Dependence[]
   onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>
   startDateKey?: string
@@ -135,6 +136,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     alwaysShowTaskBar = true,
     renderLeftText,
     renderRightText,
+    renderCustomHeaderFilter,
     onExpand,
     customSights = [],
     locale = {...defaultLocale},
@@ -196,6 +198,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       alwaysShowTaskBar,
       renderLeftText,
       renderRightText,
+      renderCustomHeaderFilter,
       onExpand,
       hideTable,
     }),
@@ -217,6 +220,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       alwaysShowTaskBar,
       renderLeftText,
       renderRightText,
+      renderCustomHeaderFilter,
       onExpand,
       hideTable,
     ]

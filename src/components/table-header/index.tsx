@@ -4,7 +4,7 @@ import Context from '../../context';
 import './index.less';
 
 const TableHeader: React.FC = () => {
-  const { store, prefixCls } = useContext(Context);
+  const { store, prefixCls, renderCustomHeaderFilter } = useContext(Context);
   const { columns, tableWidth } = store;
   const width = tableWidth;
   const columnsWidth = store.getColumnsWidth;
@@ -36,6 +36,7 @@ const TableHeader: React.FC = () => {
             </div>
           ))}
         </div>
+        { renderCustomHeaderFilter ? renderCustomHeaderFilter() : null}
       </div>
     </div>
   );

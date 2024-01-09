@@ -38,6 +38,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   alwaysShowTaskBar?: boolean
   renderLeftText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
   renderRightText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
+  renderCustomHeaderFilter?: () => React.ReactNode
   onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void
 
   hideTable?: boolean
