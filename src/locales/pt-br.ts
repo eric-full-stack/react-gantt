@@ -11,7 +11,6 @@ export const ptBR: GanttLocale = Object.freeze({
     firstHalf: "Primeiro Semestre",
     secondHalf: "Segundo Semestre",
     halfYear: "Semestre",
-
     majorFormat: {
         day: "MM, YYYY",
         week: "MMM, YYYY",
@@ -23,7 +22,7 @@ export const ptBR: GanttLocale = Object.freeze({
         day: "D",
         week: "[semana] w",
         month: "MMMM",
-        quarter: "[T]T",
+        quarter: "[T]Q",
         halfYear: "YYYY-",
     },
   });

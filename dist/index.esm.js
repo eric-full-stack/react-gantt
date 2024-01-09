@@ -7093,7 +7093,7 @@ var ptBR = Object.freeze({
     day: "D",
     week: "[semana] w",
     month: "MMMM",
-    quarter: "[T]T",
+    quarter: "[T]Q",
     halfYear: "YYYY-"
   }
 });
