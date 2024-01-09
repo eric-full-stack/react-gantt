@@ -23,7 +23,7 @@ export const ptBR: GanttLocale = Object.freeze({
         day: "D",
         week: "[semana] w",
         month: "MMMM",
-        quarter: "[Q]T",
+        quarter: "[T]T",
         halfYear: "YYYY-",
     },
   });

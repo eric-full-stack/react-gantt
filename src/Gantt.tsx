@@ -14,7 +14,7 @@ import TimeIndicator from './components/time-indicator'
 import { BAR_HEIGHT, ROW_HEIGHT, TABLE_INDENT } from './constants'
 import Context, { GanttContext } from './context'
 import './Gantt.less'
-import { zhCN } from './locales'
+import { ptBR } from './locales'
 import GanttStore from './store'
 import { DefaultRecordType, Gantt } from './types'
 
@@ -105,7 +105,7 @@ export interface GanttLocale {
   }
 }
 
-export const defaultLocale: GanttLocale = {...zhCN};
+export const defaultLocale: GanttLocale = {...ptBR};
 
 const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<RecordType>) => {
   const {
