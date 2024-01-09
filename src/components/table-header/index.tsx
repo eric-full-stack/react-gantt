@@ -35,8 +35,8 @@ const TableHeader: React.FC = () => {
               </div>
             </div>
           ))}
+          { renderCustomHeaderFilter ? renderCustomHeaderFilter() : null}
         </div>
-        { renderCustomHeaderFilter ? renderCustomHeaderFilter() : null}
       </div>
     </div>
   );
