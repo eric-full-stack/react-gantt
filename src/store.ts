@@ -14,7 +14,9 @@ import { HEADER_HEIGHT, TOP_PADDING } from './constants'
 import { GanttProps as GanttProperties, GanttLocale, defaultLocale } from './Gantt'
 import { Gantt } from './types'
 import { flattenDeep, transverseData } from './utils'
+import ptBR from "dayjs/locale/pt-br"
 
+dayjs.locale(ptBR)
 dayjs.extend(weekday)
 dayjs.extend(weekOfYear)
 dayjs.extend(quarterOfYear)
