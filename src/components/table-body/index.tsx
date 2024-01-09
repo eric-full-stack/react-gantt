@@ -23,7 +23,7 @@ const TableRows = () => {
           marginTop: 30,
         }}
       >
-        暂无数据
+        Nada encontrado.
       </div>
     )
   }
