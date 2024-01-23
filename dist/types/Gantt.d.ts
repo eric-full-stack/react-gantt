@@ -8,6 +8,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     columns: Gantt.Column[];
     renderCustomHeaderFilter?: GanttContext<RecordType>['renderCustomHeaderFilter'];
     dependencies?: Gantt.Dependence[];
+    isTimeline?: boolean;
     onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>;
     startDateKey?: string;
     endDateKey?: string;

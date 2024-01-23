@@ -4794,6 +4794,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.columns = [];
     this.dependencies = [];
     this.scrolling = false;
+    this.isTimeline = false;
     this.scrollTop = 0;
     this.collapse = false;
     this.showSelectionIndicator = false;
@@ -4972,6 +4973,11 @@ var GanttStore = /*#__PURE__*/function () {
     key: "setDependencies",
     value: function setDependencies(dependencies) {
       this.dependencies = dependencies;
+    }
+  }, {
+    key: "setTimeline",
+    value: function setTimeline(active) {
+      this.isTimeline = active;
     }
   }, {
     key: "setHideTable",
@@ -5392,6 +5398,17 @@ var GanttStore = /*#__PURE__*/function () {
       };
 
       var flattenData = flattenDeep(data);
+      var constructionIdMap = {};
+
+      if (this.isTimeline) {
+        //if isTimeline create a object map with constructionId as key and a index as value
+        flattenData.forEach(function (item, index) {
+          if (item.record.constructionId) {
+            if (constructionIdMap[item.record.constructionId] === undefined) constructionIdMap[item.record.constructionId] = index;
+          }
+        });
+      }
+
       var barList = flattenData.map(function (item, index) {
         var valid = item.startDate && item.endDate;
         var startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
@@ -5404,7 +5421,8 @@ var GanttStore = /*#__PURE__*/function () {
 
         var width = valid ? (endAmp - startAmp) / pxUnitAmp : 0;
         var translateX = valid ? startAmp / pxUnitAmp : 0;
-        var translateY = baseTop + index * topStep;
+        var indexMultiplier = _this4.isTimeline ? constructionIdMap[item.record.constructionId] : index;
+        var translateY = baseTop + indexMultiplier * topStep;
         var _parent = item._parent;
 
         var record = _objectSpread2(_objectSpread2({}, item.record), {}, {
@@ -5461,23 +5479,25 @@ var GanttStore = /*#__PURE__*/function () {
     value: function showSelectionBar(event) {
       var _a, _b;
 
-      var scrollTop = ((_a = this.mainElementRef.current) === null || _a === void 0 ? void 0 : _a.scrollTop) || 0;
+      if (this.isTimeline) this.showSelectionIndicator = false;else {
+        var scrollTop = ((_a = this.mainElementRef.current) === null || _a === void 0 ? void 0 : _a.scrollTop) || 0;
 
-      var _ref2 = ((_b = this.mainElementRef.current) === null || _b === void 0 ? void 0 : _b.getBoundingClientRect()) || {
-        top: 0
-      },
-          top = _ref2.top; // 内容区高度
+        var _ref2 = ((_b = this.mainElementRef.current) === null || _b === void 0 ? void 0 : _b.getBoundingClientRect()) || {
+          top: 0
+        },
+            top = _ref2.top; // 内容区高度
 
 
-      var contentHeight = this.getBarList.length * this.rowHeight;
-      var offsetY = event.clientY - top + scrollTop;
+        var contentHeight = this.getBarList.length * this.rowHeight;
+        var offsetY = event.clientY - top + scrollTop;
 
-      if (offsetY - contentHeight > TOP_PADDING) {
-        this.showSelectionIndicator = false;
-      } else {
-        var topValue = Math.floor((offsetY - TOP_PADDING) / this.rowHeight) * this.rowHeight + TOP_PADDING;
-        this.showSelectionIndicator = true;
-        this.selectionIndicatorTop = topValue;
+        if (offsetY - contentHeight > TOP_PADDING) {
+          this.showSelectionIndicator = false;
+        } else {
+          var topValue = Math.floor((offsetY - TOP_PADDING) / this.rowHeight) * this.rowHeight + TOP_PADDING;
+          this.showSelectionIndicator = true;
+          this.selectionIndicatorTop = topValue;
+        }
       }
     }
   }, {
@@ -5637,6 +5657,8 @@ __decorate([observable], GanttStore.prototype, "dependencies", void 0);
 
 __decorate([observable], GanttStore.prototype, "scrolling", void 0);
 
+__decorate([observable], GanttStore.prototype, "isTimeline", void 0);
+
 __decorate([observable], GanttStore.prototype, "scrollTop", void 0);
 
 __decorate([observable], GanttStore.prototype, "collapse", void 0);
@@ -5676,6 +5698,8 @@ __decorate([action], GanttStore.prototype, "setOnUpdate", null);
 __decorate([action], GanttStore.prototype, "setColumns", null);
 
 __decorate([action], GanttStore.prototype, "setDependencies", null);
+
+__decorate([action], GanttStore.prototype, "setTimeline", null);
 
 __decorate([action], GanttStore.prototype, "setHideTable", null);
 
@@ -5964,7 +5988,7 @@ var BarList = function BarList() {
 
 var BarList$1 = observer(BarList);
 
-var css_248z$e = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n}\n";
+var css_248z$e = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@-webkit-keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n";
 styleInject(css_248z$e);
 
 var TaskBarThumb = function TaskBarThumb(_ref) {
@@ -5996,7 +6020,7 @@ var TaskBarThumb = function TaskBarThumb(_ref) {
     e.stopPropagation();
     store.scrollToBar(data, type);
   }, [data, store, type]);
-  var getBackgroundColor = useMemo(function () {
+  useMemo(function () {
     return record.backgroundColor || getBarColor && getBarColor(record).backgroundColor;
   }, [record]);
   return /*#__PURE__*/React.createElement("div", {
@@ -6008,15 +6032,9 @@ var TaskBarThumb = function TaskBarThumb(_ref) {
     },
     onClick: handleClick
   }, type === 'left' && /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTaskBarThumb, "-circle-left"),
-    style: {
-      backgroundColor: getBackgroundColor
-    }
+    className: "".concat(prefixClsTaskBarThumb, "-circle-left")
   }), renderBarThumb ? renderBarThumb(data.record, type) : label, type === 'right' && /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTaskBarThumb, "-circle-right"),
-    style: {
-      backgroundColor: getBackgroundColor
-    }
+    className: "".concat(prefixClsTaskBarThumb, "-circle-right")
   }));
 };
 
@@ -7129,6 +7147,7 @@ var GanttComponent = function GanttComponent(props) {
       columns = props.columns,
       _props$dependencies = props.dependencies,
       dependencies = _props$dependencies === void 0 ? [] : _props$dependencies,
+      isTimeline = props.isTimeline,
       onUpdate = props.onUpdate,
       _props$startDateKey = props.startDateKey,
       startDateKey = _props$startDateKey === void 0 ? 'startDate' : _props$startDateKey,
@@ -7191,6 +7210,9 @@ var GanttComponent = function GanttComponent(props) {
   useEffect(function () {
     store.setDependencies(dependencies);
   }, [dependencies, store]);
+  useEffect(function () {
+    store.setTimeline(isTimeline);
+  }, [isTimeline, store]);
   useEffect(function () {
     store.setHideTable(hideTable);
   }, [hideTable]);

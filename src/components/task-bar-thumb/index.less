@@ -27,11 +27,25 @@
     transform: translate(-100%);
   }
 
+  @keyframes pulse {
+    0% {
+      transform: scale(0.8);
+    }
+    50% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0.8);
+    }
+  }
+
   &-circle-left{
     height: 10px;
     width: 10px;
     border-radius:50%;
     margin-right: 10px;
+    background-color: lightblue;
+    animation: pulse 1s infinite;
   }
 
   &-circle-right{
@@ -39,5 +53,7 @@
     width: 10px;
     border-radius:50%;
     margin-left: 10px;
+    background-color: lightblue;
+    animation: pulse 1s infinite;
   }
 }

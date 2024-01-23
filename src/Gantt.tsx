@@ -38,6 +38,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   columns: Gantt.Column[]
   renderCustomHeaderFilter?: GanttContext<RecordType>['renderCustomHeaderFilter']
   dependencies?: Gantt.Dependence[]
+  isTimeline?: boolean
   onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>
   startDateKey?: string
   endDateKey?: string
@@ -112,6 +113,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     data,
     columns,
     dependencies = [],
+    isTimeline,
     onUpdate,
     startDateKey = 'startDate',
     endDateKey = 'endDate',
@@ -159,6 +161,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   useEffect(() => {
     store.setDependencies(dependencies)
   }, [dependencies, store])
+
+  useEffect(() => {
+    store.setTimeline(isTimeline)
+  }, [isTimeline, store])
 
   useEffect(() => {
     store.setHideTable(hideTable)

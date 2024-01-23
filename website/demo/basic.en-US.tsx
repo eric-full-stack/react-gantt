@@ -16,7 +16,8 @@ function createData(len: number) {
       id: i,
       name: 'Title' + i,
       startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
-      endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+      endDate: dayjs().add(i * 2, 'day').format('YYYY-MM-DD'),
+      constructionId: i % 2 == 0 ? "1" : "2",
     })
   }
   return result
@@ -29,6 +30,10 @@ const App = () => {
     <div style={{ width: '100%', height: 500 }}>
       <RcGantt<Data>
         data={data}
+        isTimeline
+        renderLeftText={row => ""}
+        renderRightText={row => ""}
+        disabled
         columns={[
           {
             name: 'name',

@@ -50,11 +50,11 @@ const TaskBarThumb: React.FC<TaskBarProps> = ({ data }) => {
       onClick={handleClick}
     >
       {type === 'left' && (
-        <div className={`${prefixClsTaskBarThumb}-circle-left`} style={{ backgroundColor: getBackgroundColor }} />
+        <div className={`${prefixClsTaskBarThumb}-circle-left`} />
       )}
       {renderBarThumb ? renderBarThumb(data.record, type) : label}
       {type === 'right' && (
-        <div className={`${prefixClsTaskBarThumb}-circle-right`} style={{ backgroundColor: getBackgroundColor }} />
+        <div className={`${prefixClsTaskBarThumb}-circle-right`} />
       )}
     </div>
   )

@@ -45,6 +45,7 @@ declare class GanttStore {
     columns: Gantt.Column[];
     dependencies: Gantt.Dependence[];
     scrolling: boolean;
+    isTimeline: boolean;
     scrollTop: number;
     collapse: boolean;
     tableWidth: number;
@@ -79,6 +80,7 @@ declare class GanttStore {
     setOnUpdate(onUpdate: GanttProperties['onUpdate']): void;
     setColumns(columns: Gantt.Column[]): void;
     setDependencies(dependencies: Gantt.Dependence[]): void;
+    setTimeline(active: boolean): void;
     setHideTable(isHidden?: boolean): void;
     handlePanMove(translateX: number): void;
     handlePanEnd(): void;

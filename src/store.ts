@@ -105,6 +105,8 @@ class GanttStore {
 
   @observable scrolling = false
 
+  @observable isTimeline = false
+
   @observable scrollTop = 0
 
   @observable collapse = false
@@ -201,6 +203,10 @@ class GanttStore {
   @action
   setDependencies(dependencies: Gantt.Dependence[]) {
     this.dependencies = dependencies
+  }
+  @action
+  setTimeline(active: boolean) {
+    this.isTimeline = active
   }
 
   @action
@@ -645,6 +651,18 @@ class GanttStore {
     }
 
     const flattenData = flattenDeep(data)
+
+    const constructionIdMap: { [key: string]: number } = {}
+    if(this.isTimeline) {
+      //if isTimeline create a object map with constructionId as key and a index as value
+      flattenData.forEach((item, index) => {
+        if (item.record.constructionId) {
+          if(constructionIdMap[item.record.constructionId] === undefined) 
+            constructionIdMap[item.record.constructionId] = index
+        }
+      })
+    }
+
     const barList = flattenData.map((item, index) => {
       const valid = item.startDate && item.endDate
       let startAmp = dayjs(item.startDate || 0)
@@ -667,7 +685,8 @@ class GanttStore {
 
       const width = valid ? (endAmp - startAmp) / pxUnitAmp : 0
       const translateX = valid ? startAmp / pxUnitAmp : 0
-      const translateY = baseTop + index * topStep
+      const indexMultiplier = this.isTimeline ? constructionIdMap[item.record.constructionId] : index
+      const translateY = baseTop + indexMultiplier * topStep
       const { _parent } = item
       const record = { ...item.record, disabled: this.disabled }
       const bar: Gantt.Bar = {
@@ -746,19 +765,22 @@ class GanttStore {
 
   @action
   showSelectionBar(event: MouseEvent) {
-    const scrollTop = this.mainElementRef.current?.scrollTop || 0
-    const { top } = this.mainElementRef.current?.getBoundingClientRect() || {
-      top: 0,
-    }
-    // 内容区高度
-    const contentHeight = this.getBarList.length * this.rowHeight
-    const offsetY = event.clientY - top + scrollTop
-    if (offsetY - contentHeight > TOP_PADDING) {
-      this.showSelectionIndicator = false
-    } else {
-      const topValue = Math.floor((offsetY - TOP_PADDING) / this.rowHeight) * this.rowHeight + TOP_PADDING
-      this.showSelectionIndicator = true
-      this.selectionIndicatorTop = topValue
+    if(this.isTimeline) this.showSelectionIndicator = false;
+    else {
+      const scrollTop = this.mainElementRef.current?.scrollTop || 0
+      const { top } = this.mainElementRef.current?.getBoundingClientRect() || {
+        top: 0,
+      }
+      // 内容区高度
+      const contentHeight = this.getBarList.length * this.rowHeight
+      const offsetY = event.clientY - top + scrollTop
+      if (offsetY - contentHeight > TOP_PADDING) {
+        this.showSelectionIndicator = false
+      } else {
+        const topValue = Math.floor((offsetY - TOP_PADDING) / this.rowHeight) * this.rowHeight + TOP_PADDING
+        this.showSelectionIndicator = true
+        this.selectionIndicatorTop = topValue
+      }
     }
   }
 
