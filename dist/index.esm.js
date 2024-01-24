@@ -157,7 +157,7 @@ function flattenDeep() {
     item._parent = parent;
     item._index = index;
     index += 1;
-    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline ? flattenDeep(isTimeline ? item.children_hidden : item.children, depth + 1, item, isTimeline) : []));
+    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline ? flattenDeep(isTimeline ? item.record.children_hidden : item.children, depth + 1, item, isTimeline) : []));
   }, []);
 }
 function getMaxRange(bar) {
@@ -5425,7 +5425,7 @@ var GanttStore = /*#__PURE__*/function () {
 
         var width = valid ? (endAmp - startAmp) / pxUnitAmp : 0;
         var translateX = valid ? startAmp / pxUnitAmp : 0;
-        var indexMultiplier = _this4.isTimeline ? parentIdMap[item.record.parentId] : index;
+        var indexMultiplier = _this4.isTimeline && item.record.parentId ? parentIdMap[item.record.parentId] : index;
         console.log("indexMultiplier", indexMultiplier);
         var translateY = baseTop + indexMultiplier * topStep;
         var _parent = item._parent;
