@@ -4,7 +4,7 @@ import { Gantt } from './types';
  *
  * @param {any} arr 数据源
  */
-export declare function flattenDeep(array?: Gantt.Item[], depth?: number, parent?: Gantt.Item | undefined): Gantt.Item[];
+export declare function flattenDeep(array?: Gantt.Item[], depth?: number, parent?: Gantt.Item | undefined, isTimeline?: boolean): Gantt.Item[];
 export declare function getMaxRange(bar: Gantt.Bar): {
     translateX: number;
     width: number;

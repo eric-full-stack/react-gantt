@@ -150,13 +150,14 @@ function flattenDeep() {
   var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
   var parent = arguments.length > 2 ? arguments[2] : undefined;
+  var isTimeline = arguments.length > 3 ? arguments[3] : undefined;
   var index = 0;
   return array.reduce(function (flat, item) {
     item._depth = depth;
     item._parent = parent;
     item._index = index;
     index += 1;
-    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed ? flattenDeep(item.children, depth + 1, item) : []));
+    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline ? flattenDeep(isTimeline ? item.children_hidden : item.children, depth + 1, item) : []));
   }, []);
 }
 function getMaxRange(bar) {
@@ -5397,14 +5398,14 @@ var GanttStore = /*#__PURE__*/function () {
         return "".concat(startDate.diff(endDate, 'day') + 1);
       };
 
-      var flattenData = flattenDeep(data);
+      var flattenData = flattenDeep(data, 0, undefined, this.isTimeline);
       var parentIdMap = {};
 
       if (this.isTimeline) {
         //if isTimeline create a object map with parentId as key and a index as value
-        flattenData.forEach(function (item, index) {
-          if (item.record.parentId) {
-            if (parentIdMap[item.record.parentId] === undefined) parentIdMap[item.record.parentId] = index;
+        data.forEach(function (item, index) {
+          if (!item.record.parentId) {
+            if (parentIdMap[item.record.id] === undefined) parentIdMap[item.record.id] = index;
           }
         });
       }

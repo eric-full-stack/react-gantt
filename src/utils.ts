@@ -5,14 +5,14 @@ import { Gantt } from './types'
  *
  * @param {any} arr 数据源
  */
-export function flattenDeep(array: Gantt.Item[] = [], depth = 0, parent?: Gantt.Item | undefined): Gantt.Item[] {
+export function flattenDeep(array: Gantt.Item[] = [], depth = 0, parent?: Gantt.Item | undefined, isTimeline?: boolean): Gantt.Item[] {
   let index = 0
   return array.reduce((flat: Gantt.Item[], item) => {
     item._depth = depth
     item._parent = parent
     item._index = index
     index += 1
-    return [...flat, item, ...(item.children && !item.collapsed ? flattenDeep(item.children, depth + 1, item) : [])]
+    return [...flat, item, ...(((item.children && !item.collapsed) || isTimeline) ? flattenDeep(isTimeline ? item.children_hidden : item.children, depth + 1, item) : [])]
   }, [])
 }
 

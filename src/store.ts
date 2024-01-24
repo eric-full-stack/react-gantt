@@ -650,15 +650,15 @@ class GanttStore {
       return `${startDate.diff(endDate, 'day') + 1}`
     }
 
-    const flattenData = flattenDeep(data)
+    const flattenData = flattenDeep(data, 0, undefined, this.isTimeline)
 
     const parentIdMap: { [key: string]: number } = {}
     if(this.isTimeline) {
       //if isTimeline create a object map with parentId as key and a index as value
-      flattenData.forEach((item, index) => {
-        if (item.record.parentId) {
-          if(parentIdMap[item.record.parentId] === undefined) 
-            parentIdMap[item.record.parentId] = index
+      data.forEach((item, index) => {
+        if (!item.record.parentId) {
+          if(parentIdMap[item.record.id] === undefined) 
+            parentIdMap[item.record.id] = index
         }
       })
     }
