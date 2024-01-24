@@ -650,8 +650,9 @@ class GanttStore {
       return `${startDate.diff(endDate, 'day') + 1}`
     }
 
+    console.log(data)
     const flattenData = flattenDeep(data, 0, undefined, this.isTimeline)
-
+    console.log("flattenData", flattenData)
     const parentIdMap: { [key: string]: number } = {}
     if(this.isTimeline) {
       //if isTimeline create a object map with parentId as key and a index as value
@@ -662,6 +663,8 @@ class GanttStore {
         }
       })
     }
+
+    console.log("parentIdMap", parentIdMap)
 
     const barList = flattenData.map((item, index) => {
       const valid = item.startDate && item.endDate
@@ -686,6 +689,7 @@ class GanttStore {
       const width = valid ? (endAmp - startAmp) / pxUnitAmp : 0
       const translateX = valid ? startAmp / pxUnitAmp : 0
       const indexMultiplier = this.isTimeline ? parentIdMap[item.record.parentId] : index
+      console.log("indexMultiplier", indexMultiplier)
       const translateY = baseTop + indexMultiplier * topStep
       const { _parent } = item
       const record = { ...item.record, disabled: this.disabled }

@@ -12,7 +12,7 @@ export function flattenDeep(array: Gantt.Item[] = [], depth = 0, parent?: Gantt.
     item._parent = parent
     item._index = index
     index += 1
-    return [...flat, item, ...(((item.children && !item.collapsed) || isTimeline) ? flattenDeep(isTimeline ? item.children_hidden : item.children, depth + 1, item) : [])]
+    return [...flat, item, ...(((item.children && !item.collapsed) || isTimeline) ? flattenDeep(isTimeline ? item.children_hidden : item.children, depth + 1, item, isTimeline) : [])]
   }, [])
 }
 
