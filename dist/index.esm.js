@@ -153,11 +153,13 @@ function flattenDeep() {
   var isTimeline = arguments.length > 3 ? arguments[3] : undefined;
   var index = 0;
   return array.reduce(function (flat, item) {
+    var _a, _b;
+
     item._depth = depth;
     item._parent = parent;
     item._index = index;
     index += 1;
-    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline ? flattenDeep(isTimeline ? item.record.children_hidden : item.children, depth + 1, item, isTimeline) : []));
+    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : []));
   }, []);
 }
 function getMaxRange(bar) {
