@@ -652,13 +652,13 @@ class GanttStore {
 
     const flattenData = flattenDeep(data)
 
-    const constructionIdMap: { [key: string]: number } = {}
+    const parentIdMap: { [key: string]: number } = {}
     if(this.isTimeline) {
-      //if isTimeline create a object map with constructionId as key and a index as value
+      //if isTimeline create a object map with parentId as key and a index as value
       flattenData.forEach((item, index) => {
-        if (item.record.constructionId) {
-          if(constructionIdMap[item.record.constructionId] === undefined) 
-            constructionIdMap[item.record.constructionId] = index
+        if (item.record.parentId) {
+          if(parentIdMap[item.record.parentId] === undefined) 
+            parentIdMap[item.record.parentId] = index
         }
       })
     }
@@ -685,7 +685,7 @@ class GanttStore {
 
       const width = valid ? (endAmp - startAmp) / pxUnitAmp : 0
       const translateX = valid ? startAmp / pxUnitAmp : 0
-      const indexMultiplier = this.isTimeline ? constructionIdMap[item.record.constructionId] : index
+      const indexMultiplier = this.isTimeline ? parentIdMap[item.record.parentId] : index
       const translateY = baseTop + indexMultiplier * topStep
       const { _parent } = item
       const record = { ...item.record, disabled: this.disabled }

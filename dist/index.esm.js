@@ -5398,13 +5398,13 @@ var GanttStore = /*#__PURE__*/function () {
       };
 
       var flattenData = flattenDeep(data);
-      var constructionIdMap = {};
+      var parentIdMap = {};
 
       if (this.isTimeline) {
-        //if isTimeline create a object map with constructionId as key and a index as value
+        //if isTimeline create a object map with parentId as key and a index as value
         flattenData.forEach(function (item, index) {
-          if (item.record.constructionId) {
-            if (constructionIdMap[item.record.constructionId] === undefined) constructionIdMap[item.record.constructionId] = index;
+          if (item.record.parentId) {
+            if (parentIdMap[item.record.parentId] === undefined) parentIdMap[item.record.parentId] = index;
           }
         });
       }
@@ -5421,7 +5421,7 @@ var GanttStore = /*#__PURE__*/function () {
 
         var width = valid ? (endAmp - startAmp) / pxUnitAmp : 0;
         var translateX = valid ? startAmp / pxUnitAmp : 0;
-        var indexMultiplier = _this4.isTimeline ? constructionIdMap[item.record.constructionId] : index;
+        var indexMultiplier = _this4.isTimeline ? parentIdMap[item.record.parentId] : index;
         var translateY = baseTop + indexMultiplier * topStep;
         var _parent = item._parent;
 
@@ -5800,7 +5800,8 @@ var TaskBar = function TaskBar(_ref) {
   var selectionIndicatorTop = store.selectionIndicatorTop,
       showSelectionIndicator = store.showSelectionIndicator,
       rowHeight = store.rowHeight,
-      locale = store.locale;
+      locale = store.locale,
+      isTimeline = store.isTimeline;
   var showDragBar = useMemo(function () {
     if (!showSelectionIndicator) return false; // 差值
 
@@ -5941,7 +5942,7 @@ var TaskBar = function TaskBar(_ref) {
     fill: record.backgroundColor || getBarColor && getBarColor(record).backgroundColor || themeColor[0],
     stroke: record.borderColor || getBarColor && getBarColor(record).borderColor || themeColor[1],
     d: "\n              M".concat(width - 2, ",0.5\n              l-").concat(width - 5, ",0\n              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n              l0,5.3\n\n              c0.03256,0.38255 0.20896,0.724 0.47457,0.97045\n              c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013\n              l4,0\n\n              l").concat(width - 12, ",0\n\n              l4,0\n              c0.41421,0 0.78921,-0.16789 1.06066,-0.43934\n              c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066\n\n              l0,-5.3\n              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n            ")
-  })))), (allowDrag || disabled || alwaysShowTaskBar) && /*#__PURE__*/React.createElement("div", {
+  })))), (allowDrag || disabled || alwaysShowTaskBar) && !isTimeline && /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-label"),
     style: {
       left: width / 2 - 10

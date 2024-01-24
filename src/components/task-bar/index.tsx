@@ -42,7 +42,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
 
   const prefixClsTaskBar = `${prefixCls}-task-bar`
 
-  const { selectionIndicatorTop, showSelectionIndicator, rowHeight, locale } = store
+  const { selectionIndicatorTop, showSelectionIndicator, rowHeight, locale, isTimeline } = store
 
   const showDragBar = useMemo(() => {
     if (!showSelectionIndicator) return false
@@ -256,7 +256,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
           )}
         </DragResize>
       </div>
-      {(allowDrag || disabled || alwaysShowTaskBar) && (
+      {(allowDrag || disabled || alwaysShowTaskBar) && !isTimeline && (
         <div className={`${prefixClsTaskBar}-label`} style={{ left: width / 2 - 10 }}>
           {days}
         </div>
