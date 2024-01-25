@@ -12,7 +12,7 @@ export function flattenDeep(array: Gantt.Item[] = [], depth = 0, parent?: Gantt.
     item._parent = parent
     item._index = index
     index += 1
-    return [...flat, isTimeline && item.record ? undefined : item, ...(((item.children && !item.collapsed) || (isTimeline && item.record?.children_hidden)) ? flattenDeep(isTimeline ? item.record?.children_hidden : item.children, depth + 1, item, isTimeline) : [])].filter(Boolean)
+    return [...flat, item, ...(((item.children && !item.collapsed) || (isTimeline && item.record?.children_hidden)) ? flattenDeep(isTimeline ? item.record?.children_hidden : item.children, depth + 1, item, isTimeline) : [])].filter(Boolean)
   }, [])
 }
 
@@ -60,6 +60,7 @@ export function transverseData(data: Gantt.Record[] = [], startDateKey: string, 
       endDate: record[endDateKey] || '',
       collapsed: record.collapsed || false,
       children: transverseData(record.children || [], startDateKey, endDateKey),
+      children_hidden: transverseData(record.children_hidden || [], startDateKey, endDateKey),
     }
     result.push(item)
   }

@@ -71,6 +71,7 @@ export namespace Gantt {
     collapsed: boolean
     group?: boolean
     children?: Item<RecordType>[]
+    children_hidden?: Item<RecordType>[]
     parentId?: string
     _parent?: Item<RecordType>
     _bar?: Bar<RecordType>

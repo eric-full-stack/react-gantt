@@ -159,7 +159,7 @@ function flattenDeep() {
     item._parent = parent;
     item._index = index;
     index += 1;
-    return [].concat(_toConsumableArray(flat), [isTimeline && item.record ? undefined : item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : [])).filter(Boolean);
+    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : [])).filter(Boolean);
   }, []);
 }
 function getMaxRange(bar) {
@@ -233,7 +233,8 @@ function transverseData() {
         startDate: record[startDateKey] || '',
         endDate: record[endDateKey] || '',
         collapsed: record.collapsed || false,
-        children: transverseData(record.children || [], startDateKey, endDateKey)
+        children: transverseData(record.children || [], startDateKey, endDateKey),
+        children_hidden: transverseData(record.children_hidden || [], startDateKey, endDateKey)
       };
       result.push(item);
     }
@@ -5416,6 +5417,8 @@ var GanttStore = /*#__PURE__*/function () {
 
       console.log("parentIdMap", parentIdMap);
       var barList = flattenData.map(function (item, index) {
+        var _a;
+
         var valid = item.startDate && item.endDate;
         var startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
         var endAmp = dayjs(item.endDate || 0).endOf('day').valueOf(); // 开始结束日期相同默认一天
@@ -5427,7 +5430,7 @@ var GanttStore = /*#__PURE__*/function () {
 
         var width = valid ? (endAmp - startAmp) / pxUnitAmp : 0;
         var translateX = valid ? startAmp / pxUnitAmp : 0;
-        var indexMultiplier = _this4.isTimeline && item.parentId ? parentIdMap[item.parentId] : index;
+        var indexMultiplier = _this4.isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.parentId) ? parentIdMap[item.record.parentId] : index;
         console.log("indexMultiplier", indexMultiplier);
         var translateY = baseTop + indexMultiplier * topStep;
         var _parent = item._parent;
