@@ -27,6 +27,18 @@ const TableRows = () => {
       </div>
     )
   }
+
+  const parentIdMap = {}
+  if(isTimeline) {
+    //if isTimeline create a object map with parentId as key and a index as value
+    barList.forEach((item, index) => {
+      if (!item.record.parentId) {
+        if(parentIdMap[item.record.id] === undefined) 
+          parentIdMap[item.record.id] = index
+      }
+    })
+  }
+
   return (
     <>
       {barList.slice(start, start + count).map((bar, rowIndex) => {
@@ -37,7 +49,10 @@ const TableRows = () => {
         if (parentItem?.children && parentItem.children[parentItem.children.length - 1] === bar._parent)
           isLastChild = true
 
+        const topIndex = isTimeline && !bar.task.parentId ? parentIdMap[bar.record.id] : rowIndex
+
         if(isTimeline && bar.task.parentId) return null;
+        
 
         return (
           <div
@@ -46,7 +61,7 @@ const TableRows = () => {
             className={`${prefixClsTableBody}-row`}
             style={{
               height: rowHeight,
-              top: (rowIndex + start) * rowHeight + TOP_PADDING,
+              top: (topIndex + start) * rowHeight + TOP_PADDING,
             }}
             onClick={() => {
               onRow?.onClick(bar.record)

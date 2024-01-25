@@ -6663,12 +6663,24 @@ var TableRows = function TableRows() {
     }, "Nada encontrado.");
   }
 
+  var parentIdMap = {};
+
+  if (isTimeline) {
+    //if isTimeline create a object map with parentId as key and a index as value
+    barList.forEach(function (item, index) {
+      if (!item.record.parentId) {
+        if (parentIdMap[item.record.id] === undefined) parentIdMap[item.record.id] = index;
+      }
+    });
+  }
+
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
     // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
     var parent = bar._parent;
     var parentItem = parent === null || parent === void 0 ? void 0 : parent._parent;
     var isLastChild = false;
     if ((parentItem === null || parentItem === void 0 ? void 0 : parentItem.children) && parentItem.children[parentItem.children.length - 1] === bar._parent) isLastChild = true;
+    var topIndex = isTimeline && !bar.task.parentId ? parentIdMap[bar.record.id] : rowIndex;
     if (isTimeline && bar.task.parentId) return null;
     return /*#__PURE__*/React.createElement("div", {
       key: bar.key,
@@ -6676,7 +6688,7 @@ var TableRows = function TableRows() {
       className: "".concat(prefixClsTableBody, "-row"),
       style: {
         height: rowHeight,
-        top: (rowIndex + start) * rowHeight + TOP_PADDING
+        top: (topIndex + start) * rowHeight + TOP_PADDING
       },
       onClick: function onClick() {
         onRow === null || onRow === void 0 ? void 0 : onRow.onClick(bar.record);
