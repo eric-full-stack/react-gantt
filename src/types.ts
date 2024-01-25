@@ -63,6 +63,7 @@ export namespace Gantt {
     _parent?: Item<RecordType>
   }
   export interface Item<RecordType = DefaultRecordType> {
+    id?: string
     record: Record<RecordType>
     key: React.Key
     startDate: string | null

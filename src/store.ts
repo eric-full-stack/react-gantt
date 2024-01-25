@@ -691,7 +691,7 @@ class GanttStore {
       const { _parent } = item
       const record = { ...item.record, disabled: this.disabled }
       const bar: Gantt.Bar = {
-        key: item.key,
+        key: Math.random().toString(36).substr(2, 9),
         task: item,
         record,
         translateX,
@@ -713,7 +713,7 @@ class GanttStore {
       item._bar = bar
       return bar
     })
-    // 进行展开扁平
+    console.log(barList)
     return observable(barList)
   }
 

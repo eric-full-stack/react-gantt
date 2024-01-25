@@ -159,7 +159,7 @@ function flattenDeep() {
     item._parent = parent;
     item._index = index;
     index += 1;
-    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : []));
+    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : [])).filter(Boolean);
   }, []);
 }
 function getMaxRange(bar) {
@@ -206,6 +206,13 @@ function getMaxRange(bar) {
   };
 }
 
+var genKey = function () {
+  var key = 0;
+  return function () {
+    return key++;
+  };
+}();
+
 function transverseData() {
   var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var startDateKey = arguments.length > 1 ? arguments[1] : undefined;
@@ -219,7 +226,8 @@ function transverseData() {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var record = _step2.value;
       var item = {
-        key: Math.random().toString(36).substr(2, 9),
+        //random key
+        key: genKey(),
         record: record,
         content: '',
         group: record.group,
@@ -5427,7 +5435,7 @@ var GanttStore = /*#__PURE__*/function () {
         });
 
         var bar = {
-          key: item.key,
+          key: Math.random().toString(36).substr(2, 9),
           task: item,
           record: record,
           translateX: translateX,
@@ -5449,8 +5457,8 @@ var GanttStore = /*#__PURE__*/function () {
         };
         item._bar = bar;
         return bar;
-      }); // 进行展开扁平
-
+      });
+      console.log(barList);
       return observable(barList);
     } // 虚拟滚动
 
@@ -5971,14 +5979,14 @@ var BarList = function BarList() {
       start = _store$getVisibleRows.start;
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
     if (bar._group) return /*#__PURE__*/React.createElement(GroupBar$1, {
-      key: bar.key + '_groupBar',
+      key: bar.key,
       data: bar
     });
     return bar.invalidDateRange ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
-      key: bar.key + '__invalidTaskBar',
+      key: bar.key,
       data: bar
     }) : /*#__PURE__*/React.createElement(TaskBar$1, {
-      key: bar.key + '__taskBar_',
+      key: bar.key,
       data: bar
     });
   }));
