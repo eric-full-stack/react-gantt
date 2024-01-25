@@ -37,7 +37,7 @@ const TableRows = () => {
         if (parentItem?.children && parentItem.children[parentItem.children.length - 1] === bar._parent)
           isLastChild = true
 
-        if(isTimeline && bar._childrenCount === 0) return null;
+        if(isTimeline && bar.task.parentId) return null;
 
         return (
           <div

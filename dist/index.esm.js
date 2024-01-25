@@ -6669,7 +6669,7 @@ var TableRows = function TableRows() {
     var parentItem = parent === null || parent === void 0 ? void 0 : parent._parent;
     var isLastChild = false;
     if ((parentItem === null || parentItem === void 0 ? void 0 : parentItem.children) && parentItem.children[parentItem.children.length - 1] === bar._parent) isLastChild = true;
-    if (isTimeline && bar._childrenCount === 0) return null;
+    if (isTimeline && bar.task.parentId) return null;
     return /*#__PURE__*/React.createElement("div", {
       key: bar.key,
       role: 'none',
