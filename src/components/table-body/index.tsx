@@ -8,7 +8,7 @@ import './index.less'
 
 const TableRows = () => {
   const { store, onRow, tableIndent, expandIcon, prefixCls, onExpand } = useContext(Context)
-  const { columns, rowHeight } = store
+  const { columns, rowHeight, isTimeline } = store
   const columnsWidth = store.getColumnsWidth
   const barList = store.getBarList
 
@@ -63,7 +63,7 @@ const TableRows = () => {
                   ...column.style,
                 }}
               >
-                {index === 0 &&
+                {index === 0 && !isTimeline &&
                   // eslint-disable-next-line unicorn/no-new-array
                   new Array(bar._depth).fill(0).map((_, i) => (
                     <div
@@ -80,7 +80,7 @@ const TableRows = () => {
                       }}
                     />
                   ))}
-                {index === 0 && bar._childrenCount > 0 && (
+                {index === 0 && !isTimeline && bar._childrenCount > 0 && (
                   <div
                     style={{
                       position: 'absolute',

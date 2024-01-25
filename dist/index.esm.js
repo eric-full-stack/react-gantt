@@ -6644,7 +6644,8 @@ var TableRows = function TableRows() {
       onExpand = _useContext.onExpand;
 
   var columns = store.columns,
-      rowHeight = store.rowHeight;
+      rowHeight = store.rowHeight,
+      isTimeline = store.isTimeline;
   var columnsWidth = store.getColumnsWidth;
   var barList = store.getBarList;
   var _store$getVisibleRows = store.getVisibleRows,
@@ -6690,7 +6691,7 @@ var TableRows = function TableRows() {
           textAlign: column.align ? column.align : 'left',
           paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 12
         }, column.style)
-      }, index === 0 && // eslint-disable-next-line unicorn/no-new-array
+      }, index === 0 && !isTimeline && // eslint-disable-next-line unicorn/no-new-array
       new Array(bar._depth).fill(0).map(function (_, i) {
         var _classNames;
 
@@ -6704,7 +6705,7 @@ var TableRows = function TableRows() {
             width: tableIndent * 1.5 + 5
           }
         });
-      }), index === 0 && bar._childrenCount > 0 && /*#__PURE__*/React.createElement("div", {
+      }), index === 0 && !isTimeline && bar._childrenCount > 0 && /*#__PURE__*/React.createElement("div", {
         style: {
           position: 'absolute',
           left: tableIndent * bar._depth + 15,
