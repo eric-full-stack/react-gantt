@@ -5971,14 +5971,14 @@ var BarList = function BarList() {
       start = _store$getVisibleRows.start;
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
     if (bar._group) return /*#__PURE__*/React.createElement(GroupBar$1, {
-      key: bar.key,
+      key: bar.key + '_groupBar',
       data: bar
     });
     return bar.invalidDateRange ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
-      key: bar.key,
+      key: bar.key + '__invalidTaskBar',
       data: bar
     }) : /*#__PURE__*/React.createElement(TaskBar$1, {
-      key: bar.key,
+      key: bar.key + '__taskBar_',
       data: bar
     });
   }));
