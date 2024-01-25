@@ -6665,7 +6665,7 @@ var TableRows = function TableRows() {
   if (isTimeline) {
     //if isTimeline create a object map with parentId as key and a index as value
     barList.forEach(function (item) {
-      if (!item.record.parentId) {
+      if (item.record.parentId === null) {
         if (parentIdMap[item.record.id] === undefined) {
           parentIdMap[item.record.id] = countParent;
           countParent++;
@@ -6674,7 +6674,7 @@ var TableRows = function TableRows() {
     });
   }
 
-  console.log(barList);
+  console.log(barList, parentIdMap);
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
     // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
     var parent = bar._parent;
