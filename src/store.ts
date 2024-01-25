@@ -688,7 +688,7 @@ class GanttStore {
 
       const width = valid ? (endAmp - startAmp) / pxUnitAmp : 0
       const translateX = valid ? startAmp / pxUnitAmp : 0
-      const indexMultiplier = this.isTimeline && item.record.parentId ? parentIdMap[item.record.parentId] : index
+      const indexMultiplier = this.isTimeline && item.parentId ? parentIdMap[item.parentId] : index
       console.log("indexMultiplier", indexMultiplier)
       const translateY = baseTop + indexMultiplier * topStep
       const { _parent } = item

@@ -68,6 +68,7 @@ export declare namespace Gantt {
         collapsed: boolean;
         group?: boolean;
         children?: Item<RecordType>[];
+        parentId?: string;
         _parent?: Item<RecordType>;
         _bar?: Bar<RecordType>;
         _depth?: number;
