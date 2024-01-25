@@ -29,15 +29,20 @@ const TableRows = () => {
   }
 
   const parentIdMap = {}
+  let countParent = 0
   if(isTimeline) {
     //if isTimeline create a object map with parentId as key and a index as value
-    barList.forEach((item, index) => {
+    barList.forEach((item, ) => {
       if (!item.record.parentId) {
-        if(parentIdMap[item.record.id] === undefined) 
-          parentIdMap[item.record.id] = index
+        if(parentIdMap[item.record.id] === undefined) {
+          parentIdMap[item.record.id] = countParent
+          countParent++
+        }
       }
     })
   }
+
+  console.log(barList)
 
   return (
     <>

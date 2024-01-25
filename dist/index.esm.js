@@ -5401,9 +5401,7 @@ var GanttStore = /*#__PURE__*/function () {
         return "".concat(startDate.diff(endDate, 'day') + 1);
       };
 
-      console.log(data);
       var flattenData = flattenDeep(data, 0, undefined, this.isTimeline);
-      console.log("flattenData", flattenData);
       var parentIdMap = {};
 
       if (this.isTimeline) {
@@ -5415,7 +5413,6 @@ var GanttStore = /*#__PURE__*/function () {
         });
       }
 
-      console.log("parentIdMap", parentIdMap);
       var barList = flattenData.map(function (item, index) {
         var valid = item.startDate && item.endDate;
         var startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
@@ -5429,7 +5426,6 @@ var GanttStore = /*#__PURE__*/function () {
         var width = valid ? (endAmp - startAmp) / pxUnitAmp : 0;
         var translateX = valid ? startAmp / pxUnitAmp : 0;
         var indexMultiplier = _this4.isTimeline && item.parentId ? parentIdMap[item.parentId] : index;
-        console.log("indexMultiplier", indexMultiplier);
         var translateY = baseTop + indexMultiplier * topStep;
         var _parent = item._parent;
 
@@ -6664,16 +6660,21 @@ var TableRows = function TableRows() {
   }
 
   var parentIdMap = {};
+  var countParent = 0;
 
   if (isTimeline) {
     //if isTimeline create a object map with parentId as key and a index as value
-    barList.forEach(function (item, index) {
+    barList.forEach(function (item) {
       if (!item.record.parentId) {
-        if (parentIdMap[item.record.id] === undefined) parentIdMap[item.record.id] = index;
+        if (parentIdMap[item.record.id] === undefined) {
+          parentIdMap[item.record.id] = countParent;
+          countParent++;
+        }
       }
     });
   }
 
+  console.log(barList);
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
     // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
     var parent = bar._parent;
