@@ -649,7 +649,6 @@ class GanttStore {
       const endDate = dayjs(endX * pxUnitAmp)
       return `${startDate.diff(endDate, 'day') + 1}`
     }
-
     
     const flattenData = flattenDeep(data, 0, undefined, this.isTimeline)
     
@@ -662,9 +661,7 @@ class GanttStore {
             parentIdMap[item.record.id] = index
         }
       })
-    }
-
-    
+    }   
 
     const barList = flattenData.map((item, index) => {
       const valid = item.startDate && item.endDate

@@ -12,7 +12,7 @@ export function flattenDeep(array: Gantt.Item[] = [], depth = 0, parent?: Gantt.
     item._parent = parent
     item._index = index
     index += 1
-    return [...flat, item, ...(((item.children && !item.collapsed) || (isTimeline && item.record?.children_hidden)) ? flattenDeep(isTimeline ? item.record?.children_hidden : item.children, depth + 1, item, isTimeline) : [])].filter(Boolean)
+    return [...flat, item, ...(((item.children && !item.collapsed) || (isTimeline && item.record?.children_hidden)) ? flattenDeep(isTimeline ? item.record?.children_hidden : item.children, depth + 1, item, isTimeline) : [])]
   }, [])
 }
 
@@ -52,7 +52,7 @@ export function transverseData(data: Gantt.Record[] = [], startDateKey: string, 
 
   for (const record of data) {
     const item: Gantt.Item = {
-      key: genKey(),
+      key: Math.random().toString(36).substr(2, 9),
       record,
       content: '',
       group: record.group,

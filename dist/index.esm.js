@@ -159,7 +159,7 @@ function flattenDeep() {
     item._parent = parent;
     item._index = index;
     index += 1;
-    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : [])).filter(Boolean);
+    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : []));
   }, []);
 }
 function getMaxRange(bar) {
@@ -206,13 +206,6 @@ function getMaxRange(bar) {
   };
 }
 
-var genKey = function () {
-  var key = 0;
-  return function () {
-    return key++;
-  };
-}();
-
 function transverseData() {
   var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var startDateKey = arguments.length > 1 ? arguments[1] : undefined;
@@ -226,7 +219,7 @@ function transverseData() {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var record = _step2.value;
       var item = {
-        key: genKey(),
+        key: Math.random().toString(36).substr(2, 9),
         record: record,
         content: '',
         group: record.group,
@@ -6674,7 +6667,6 @@ var TableRows = function TableRows() {
     });
   }
 
-  console.log(barList, parentIdMap);
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
     // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
     var parent = bar._parent;
