@@ -159,7 +159,7 @@ function flattenDeep() {
     item._parent = parent;
     item._index = index;
     index += 1;
-    return [].concat(_toConsumableArray(flat), [isTimeline ? undefined : item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : [])).filter(Boolean);
+    return [].concat(_toConsumableArray(flat), [isTimeline && item.record ? undefined : item], _toConsumableArray(item.children && !item.collapsed || isTimeline && ((_a = item.record) === null || _a === void 0 ? void 0 : _a.children_hidden) ? flattenDeep(isTimeline ? (_b = item.record) === null || _b === void 0 ? void 0 : _b.children_hidden : item.children, depth + 1, item, isTimeline) : [])).filter(Boolean);
   }, []);
 }
 function getMaxRange(bar) {
