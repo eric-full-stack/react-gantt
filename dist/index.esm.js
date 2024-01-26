@@ -5135,7 +5135,10 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "bodyScrollHeight",
     get: function get() {
-      var height = this.getBarList.length * this.rowHeight + TOP_PADDING;
+      var barListLength = this.isTimeline ? this.getBarList.filter(function (bar) {
+        return bar.record.parentId === null;
+      }).length : this.getBarList.length;
+      var height = barListLength * this.rowHeight + TOP_PADDING;
       if (height < this.bodyClientHeight) height = this.bodyClientHeight;
       return height;
     } // 1px对应的毫秒数

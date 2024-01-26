@@ -329,7 +329,8 @@ class GanttStore {
 
   // 内容区滚动区域域高度
   @computed get bodyScrollHeight() {
-    let height = this.getBarList.length * this.rowHeight + TOP_PADDING
+    const barListLength = this.isTimeline ? this.getBarList.filter(bar => bar.record.parentId === null).length : this.getBarList.length
+    let height = barListLength * this.rowHeight + TOP_PADDING
     if (height < this.bodyClientHeight) height = this.bodyClientHeight
 
     return height
