@@ -5465,13 +5465,12 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "getVisibleRows",
     get: function get() {
-      var visibleHeight = this.bodyClientHeight; // 多渲染几个，减少空白
-
+      var visibleHeight = this.bodyClientHeight;
       var visibleRowCount = Math.ceil(visibleHeight / this.rowHeight) + 10;
       var start = Math.max(Math.ceil(this.scrollTop / this.rowHeight) - 5, 0);
       return {
-        start: start,
-        count: visibleRowCount
+        start: this.isTimeline ? 0 : start,
+        count: this.isTimeline ? this.getBarList.length : visibleRowCount
       };
     }
   }, {
