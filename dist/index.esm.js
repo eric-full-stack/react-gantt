@@ -6544,7 +6544,7 @@ var ScrollBar = function ScrollBar() {
 
 var ScrollBar$1 = /*#__PURE__*/memo(observer(ScrollBar));
 
-var css_248z$8 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('./Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('./Top_hover.svg');\n}\n";
+var css_248z$8 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('/Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('/Top_hover.svg');\n}\n";
 styleInject(css_248z$8);
 
 var ScrollTop = function ScrollTop() {
