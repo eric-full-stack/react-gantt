@@ -9,6 +9,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     renderCustomHeaderFilter?: GanttContext<RecordType>['renderCustomHeaderFilter'];
     dependencies?: Gantt.Dependence[];
     isTimeline?: boolean;
+    workdays?: 'business_days' | 'all_days';
     onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>;
     startDateKey?: string;
     endDateKey?: string;
