@@ -656,6 +656,7 @@ class GanttStore {
     const getDateWidth = (start: number, endX: number) => {
       const startDate = dayjs(start * pxUnitAmp)
       const endDate = dayjs(endX * pxUnitAmp)
+      // @ts-ignore
       const diff = this.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1
       return `${diff}`
     }

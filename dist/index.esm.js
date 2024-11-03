@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { createPortal } from 'react-dom';
 import dayjs from 'dayjs';
 import { observable, action, computed, runInAction, toJS } from 'mobx';
+import dayjsBusinessDays from 'dayjs-business-days';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -4750,6 +4751,7 @@ dayjs.extend(quarterOfYear);
 dayjs.extend(advancedFormat);
 dayjs.extend(isBetween);
 dayjs.extend(isLeapYear);
+dayjs.extend(dayjsBusinessDays);
 var ONE_DAY_MS = 86400000; // 视图日视图、周视图、月视图、季视图、年视图
 
 var getViewTypeList = function getViewTypeList(locale) {
@@ -4800,6 +4802,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.dependencies = [];
     this.scrolling = false;
     this.isTimeline = false;
+    this.workdays = 'all_days';
     this.scrollTop = 0;
     this.collapse = false;
     this.showSelectionIndicator = false;
@@ -4983,6 +4986,11 @@ var GanttStore = /*#__PURE__*/function () {
     key: "setTimeline",
     value: function setTimeline(active) {
       this.isTimeline = active;
+    }
+  }, {
+    key: "setWorkdays",
+    value: function setWorkdays(workdays) {
+      this.workdays = workdays;
     }
   }, {
     key: "setHideTable",
@@ -5401,8 +5409,10 @@ var GanttStore = /*#__PURE__*/function () {
 
       var getDateWidth = function getDateWidth(start, endX) {
         var startDate = dayjs(start * pxUnitAmp);
-        var endDate = dayjs(endX * pxUnitAmp);
-        return "".concat(startDate.diff(endDate, 'day') + 1);
+        var endDate = dayjs(endX * pxUnitAmp); // @ts-ignore
+
+        var diff = _this4.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1;
+        return "".concat(diff);
       };
 
       var flattenData = flattenDeep(data, 0, undefined, this.isTimeline);
@@ -5461,7 +5471,6 @@ var GanttStore = /*#__PURE__*/function () {
         item._bar = bar;
         return bar;
       });
-      console.log(barList);
       return observable(barList);
     } // 虚拟滚动
 
@@ -5666,6 +5675,8 @@ __decorate([observable], GanttStore.prototype, "scrolling", void 0);
 
 __decorate([observable], GanttStore.prototype, "isTimeline", void 0);
 
+__decorate([observable], GanttStore.prototype, "workdays", void 0);
+
 __decorate([observable], GanttStore.prototype, "scrollTop", void 0);
 
 __decorate([observable], GanttStore.prototype, "collapse", void 0);
@@ -5707,6 +5718,8 @@ __decorate([action], GanttStore.prototype, "setColumns", null);
 __decorate([action], GanttStore.prototype, "setDependencies", null);
 
 __decorate([action], GanttStore.prototype, "setTimeline", null);
+
+__decorate([action], GanttStore.prototype, "setWorkdays", null);
 
 __decorate([action], GanttStore.prototype, "setHideTable", null);
 
@@ -7215,7 +7228,9 @@ var GanttComponent = function GanttComponent(props) {
       _props$locale = props.locale,
       locale = _props$locale === void 0 ? _objectSpread2({}, defaultLocale) : _props$locale,
       _props$hideTable = props.hideTable,
-      hideTable = _props$hideTable === void 0 ? false : _props$hideTable;
+      hideTable = _props$hideTable === void 0 ? false : _props$hideTable,
+      _props$workdays = props.workdays,
+      workdays = _props$workdays === void 0 ? 'all_days' : _props$workdays;
   var store = useMemo(function () {
     return new GanttStore({
       rowHeight: rowHeight,
@@ -7239,6 +7254,9 @@ var GanttComponent = function GanttComponent(props) {
   useEffect(function () {
     store.setTimeline(isTimeline);
   }, [isTimeline, store]);
+  useEffect(function () {
+    store.setWorkdays(workdays);
+  }, [workdays, store]);
   useEffect(function () {
     store.setHideTable(hideTable);
   }, [hideTable]);
