@@ -15,6 +15,7 @@ import { GanttProps as GanttProperties, GanttLocale, defaultLocale } from './Gan
 import { Gantt } from './types'
 import { flattenDeep, transverseData } from './utils'
 import ptBR from "dayjs/locale/pt-br"
+import dayjsBusinessDays from 'dayjs-business-days';
 
 dayjs.locale(ptBR)
 dayjs.extend(weekday)
@@ -23,6 +24,7 @@ dayjs.extend(quarterOfYear)
 dayjs.extend(advancedFormat)
 dayjs.extend(isBetween)
 dayjs.extend(isLeapYear)
+dayjs.extend(dayjsBusinessDays)
 export const ONE_DAY_MS = 86400000
 // 视图日视图、周视图、月视图、季视图、年视图
 export const getViewTypeList = locale => {
@@ -106,6 +108,8 @@ class GanttStore {
   @observable scrolling = false
 
   @observable isTimeline = false
+
+  @observable workdays: 'business_days' | 'all_days' = 'all_days'
 
   @observable scrollTop = 0
 
@@ -207,6 +211,10 @@ class GanttStore {
   @action
   setTimeline(active: boolean) {
     this.isTimeline = active
+  }
+  @action
+  setWorkdays(workdays: 'business_days' | 'all_days') {
+    this.workdays = workdays
   }
 
   @action
@@ -648,7 +656,8 @@ class GanttStore {
     const getDateWidth = (start: number, endX: number) => {
       const startDate = dayjs(start * pxUnitAmp)
       const endDate = dayjs(endX * pxUnitAmp)
-      return `${startDate.diff(endDate, 'day') + 1}`
+      const diff = this.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1
+      return `${diff}`
     }
     
     const flattenData = flattenDeep(data, 0, undefined, this.isTimeline)
@@ -714,7 +723,7 @@ class GanttStore {
       item._bar = bar
       return bar
     })
-    console.log(barList)
+ 
     return observable(barList)
   }
 

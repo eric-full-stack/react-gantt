@@ -39,6 +39,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   renderCustomHeaderFilter?: GanttContext<RecordType>['renderCustomHeaderFilter']
   dependencies?: Gantt.Dependence[]
   isTimeline?: boolean
+  workdays?: 'business_days' | 'all_days'
   onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>
   startDateKey?: string
   endDateKey?: string
@@ -143,6 +144,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     customSights = [],
     locale = {...defaultLocale},
     hideTable = false,
+    workdays = 'all_days',
   } = props
 
   const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale }), [rowHeight])
@@ -165,6 +167,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   useEffect(() => {
     store.setTimeline(isTimeline)
   }, [isTimeline, store])
+
+  useEffect(() => {
+    store.setWorkdays(workdays)
+  }, [workdays, store])
 
   useEffect(() => {
     store.setHideTable(hideTable)
