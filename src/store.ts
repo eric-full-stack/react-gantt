@@ -217,7 +217,6 @@ class GanttStore {
   
   @action
   setWorkdays(workdays: 'business_days' | 'all_days') {
-    console.log(this.workdays, workdays)
     this.workdays = workdays
   }
 
@@ -660,7 +659,6 @@ class GanttStore {
     const getDateWidth = (start: number, endX: number) => {
       const startDate = dayjs(start * pxUnitAmp)
       const endDate = dayjs(endX * pxUnitAmp)
-      console.log(this.workdays)
       // @ts-ignore
       const diff = this.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1
       return `${diff}`
