@@ -204,16 +204,20 @@ class GanttStore {
   setColumns(columns: Gantt.Column[]) {
     this.columns = columns
   }
+
   @action
   setDependencies(dependencies: Gantt.Dependence[]) {
     this.dependencies = dependencies
   }
+  
   @action
   setTimeline(active: boolean) {
     this.isTimeline = active
   }
+  
   @action
   setWorkdays(workdays: 'business_days' | 'all_days') {
+    console.log(this.workdays, workdays)
     this.workdays = workdays
   }
 

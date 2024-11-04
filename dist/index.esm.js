@@ -4990,6 +4990,7 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "setWorkdays",
     value: function setWorkdays(workdays) {
+      console.log(this.workdays, workdays);
       this.workdays = workdays;
     }
   }, {
