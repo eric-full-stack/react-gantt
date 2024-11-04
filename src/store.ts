@@ -662,7 +662,7 @@ class GanttStore {
       const endDate = dayjs(endX * pxUnitAmp)
       console.log(this.workdays)
       // @ts-ignore
-      const diff = this.workdays === 'business_days' ? startDate.businessDiff(endDate) + 1 : startDate.diff(endDate, 'day') + 1
+      const diff = this.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1
       return `${diff}`
     }
     

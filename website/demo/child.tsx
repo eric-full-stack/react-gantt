@@ -10,7 +10,7 @@ interface Data {
 
 const node = {
   name: '一个名称一个名称一个名称一个名称',
-  startDate: dayjs().format('YYYY-MM-DD'),
+  startDate: dayjs('2024-11-01').format('YYYY-MM-DD'),
   endDate: dayjs().add(1, 'week').format('YYYY-MM-DD'),
   collapsed: true,
 }
@@ -39,6 +39,7 @@ const App = () => (
     <RcGantt<Data>
       data={data}
       onExpand={onExpand}
+      workdays="business_days"
       columns={[
         {
           name: 'name',

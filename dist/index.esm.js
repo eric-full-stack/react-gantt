@@ -5413,7 +5413,7 @@ var GanttStore = /*#__PURE__*/function () {
         var endDate = dayjs(endX * pxUnitAmp);
         console.log(_this4.workdays); // @ts-ignore
 
-        var diff = _this4.workdays === 'business_days' ? startDate.businessDiff(endDate) + 1 : startDate.diff(endDate, 'day') + 1;
+        var diff = _this4.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1;
         return "".concat(diff);
       };
 
