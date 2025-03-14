@@ -10,6 +10,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     dependencies?: Gantt.Dependence[];
     isTimeline?: boolean;
     workdays?: 'business_days' | 'all_days';
+    durationFn?: (startDate: string, endDate: string) => number;
     onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>;
     startDateKey?: string;
     endDateKey?: string;

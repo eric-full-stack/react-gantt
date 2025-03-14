@@ -40,6 +40,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   dependencies?: Gantt.Dependence[]
   isTimeline?: boolean
   workdays?: 'business_days' | 'all_days'
+  durationFn?: (startDate: string, endDate: string) => number
   onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>
   startDateKey?: string
   endDateKey?: string
@@ -145,6 +146,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     locale = {...defaultLocale},
     hideTable = false,
     workdays = 'all_days',
+    durationFn,
   } = props
 
   const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale }), [rowHeight])
@@ -171,6 +173,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   useEffect(() => {
     store.setWorkdays(workdays)
   }, [workdays, store])
+
+  useEffect(() => {
+    store.setDurationFn(durationFn)
+  }, [durationFn, store])
 
   useEffect(() => {
     store.setHideTable(hideTable)

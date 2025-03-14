@@ -111,6 +111,8 @@ class GanttStore {
 
   @observable workdays: 'business_days' | 'all_days' = 'all_days'
 
+  @observable durationFn: (startDate: string, endDate: string) => number
+
   @observable scrollTop = 0
 
   @observable collapse = false
@@ -218,6 +220,11 @@ class GanttStore {
   @action
   setWorkdays(workdays: 'business_days' | 'all_days') {
     this.workdays = workdays
+  }
+
+  @action
+  setDurationFn(durationFn: (startDate: string, endDate: string) => number) {
+    this.durationFn = durationFn
   }
 
   @action
@@ -660,7 +667,8 @@ class GanttStore {
       const startDate = dayjs(start * pxUnitAmp)
       const endDate = dayjs(endX * pxUnitAmp)
       // @ts-ignore
-      const diff = this.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1
+      const diff = this.durationFn ? this.durationFn(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')) : (this.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1)
+
       return `${diff}`
     }
     

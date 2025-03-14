@@ -1,5 +1,5 @@
-import React from 'react';
-interface DragResizeProps extends React.HTMLProps<HTMLDivElement> {
+import React, { HTMLProps } from 'react';
+interface DragResizeProps extends Omit<HTMLProps<HTMLDivElement>, 'onResize'> {
     onResize: ({ width, x }: {
         width: number;
         x: number;

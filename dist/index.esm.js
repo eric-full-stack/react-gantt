@@ -4993,6 +4993,11 @@ var GanttStore = /*#__PURE__*/function () {
       this.workdays = workdays;
     }
   }, {
+    key: "setDurationFn",
+    value: function setDurationFn(durationFn) {
+      this.durationFn = durationFn;
+    }
+  }, {
     key: "setHideTable",
     value: function setHideTable() {
       var isHidden = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -5411,7 +5416,7 @@ var GanttStore = /*#__PURE__*/function () {
         var startDate = dayjs(start * pxUnitAmp);
         var endDate = dayjs(endX * pxUnitAmp); // @ts-ignore
 
-        var diff = _this4.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1;
+        var diff = _this4.durationFn ? _this4.durationFn(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')) : _this4.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1;
         return "".concat(diff);
       };
 
@@ -5677,6 +5682,8 @@ __decorate([observable], GanttStore.prototype, "isTimeline", void 0);
 
 __decorate([observable], GanttStore.prototype, "workdays", void 0);
 
+__decorate([observable], GanttStore.prototype, "durationFn", void 0);
+
 __decorate([observable], GanttStore.prototype, "scrollTop", void 0);
 
 __decorate([observable], GanttStore.prototype, "collapse", void 0);
@@ -5720,6 +5727,8 @@ __decorate([action], GanttStore.prototype, "setDependencies", null);
 __decorate([action], GanttStore.prototype, "setTimeline", null);
 
 __decorate([action], GanttStore.prototype, "setWorkdays", null);
+
+__decorate([action], GanttStore.prototype, "setDurationFn", null);
 
 __decorate([action], GanttStore.prototype, "setHideTable", null);
 
@@ -5975,7 +5984,7 @@ var TaskBar = function TaskBar(_ref) {
   }, renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)), /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-date-text"),
     style: {
-      right: width + 16
+      right: 16
     }
   }, renderLeftText ? renderLeftText(data) : dateTextFormat(translateX))));
 };
@@ -7230,7 +7239,8 @@ var GanttComponent = function GanttComponent(props) {
       _props$hideTable = props.hideTable,
       hideTable = _props$hideTable === void 0 ? false : _props$hideTable,
       _props$workdays = props.workdays,
-      workdays = _props$workdays === void 0 ? 'all_days' : _props$workdays;
+      workdays = _props$workdays === void 0 ? 'all_days' : _props$workdays,
+      durationFn = props.durationFn;
   var store = useMemo(function () {
     return new GanttStore({
       rowHeight: rowHeight,
@@ -7257,6 +7267,9 @@ var GanttComponent = function GanttComponent(props) {
   useEffect(function () {
     store.setWorkdays(workdays);
   }, [workdays, store]);
+  useEffect(function () {
+    store.setDurationFn(durationFn);
+  }, [durationFn, store]);
   useEffect(function () {
     store.setHideTable(hideTable);
   }, [hideTable]);

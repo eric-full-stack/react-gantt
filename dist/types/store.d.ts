@@ -47,6 +47,7 @@ declare class GanttStore {
     scrolling: boolean;
     isTimeline: boolean;
     workdays: 'business_days' | 'all_days';
+    durationFn: (startDate: string, endDate: string) => number;
     scrollTop: number;
     collapse: boolean;
     tableWidth: number;
@@ -83,6 +84,7 @@ declare class GanttStore {
     setDependencies(dependencies: Gantt.Dependence[]): void;
     setTimeline(active: boolean): void;
     setWorkdays(workdays: 'business_days' | 'all_days'): void;
+    setDurationFn(durationFn: (startDate: string, endDate: string) => number): void;
     setHideTable(isHidden?: boolean): void;
     handlePanMove(translateX: number): void;
     handlePanEnd(): void;

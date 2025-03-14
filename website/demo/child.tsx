@@ -39,7 +39,6 @@ const App = () => (
     <RcGantt<Data>
       data={data}
       onExpand={onExpand}
-      workdays="business_days"
       columns={[
         {
           name: 'name',
