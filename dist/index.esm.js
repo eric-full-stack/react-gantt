@@ -1,5 +1,5 @@
 import { usePersistFn, useClickAway, useSize } from 'ahooks';
-import React, { createContext, useContext, useState, useMemo, useRef, useCallback, createRef, memo, useEffect, useImperativeHandle } from 'react';
+import React, { createContext, useContext, useState, useMemo, useRef, useCallback, memo, useEffect, createRef, useImperativeHandle } from 'react';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
@@ -825,965 +825,306 @@ var BAR_HEIGHT = 8;
 var TOP_PADDING = 0;
 var TABLE_INDENT = 30; // 图表最小比例
 
-function _typeof(obj) {
-  "@babel/helpers - typeof";
+var css_248z$f = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
+styleInject(css_248z$f);
 
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, _typeof(obj);
-}
+var ONE_DAY_MS$1 = 86400000;
 
-function _regeneratorRuntime() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+var TaskBar = function TaskBar(_ref) {
+  var _classNames;
 
-  _regeneratorRuntime = function _regeneratorRuntime() {
-    return exports;
+  var data = _ref.data;
+
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      getBarColor = _useContext.getBarColor,
+      renderBar = _useContext.renderBar,
+      onBarClick = _useContext.onBarClick,
+      prefixCls = _useContext.prefixCls,
+      barHeight = _useContext.barHeight,
+      alwaysShowTaskBar = _useContext.alwaysShowTaskBar,
+      renderLeftText = _useContext.renderLeftText,
+      renderRightText = _useContext.renderRightText;
+
+  var width = data.width,
+      translateX = data.translateX,
+      translateY = data.translateY,
+      invalidDateRange = data.invalidDateRange,
+      stepGesture = data.stepGesture,
+      dateTextFormat = data.dateTextFormat,
+      record = data.record,
+      loading = data.loading,
+      getDateWidth = data.getDateWidth;
+
+  var _ref2 = record || {},
+      _ref2$disabled = _ref2.disabled,
+      disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
+
+  var prefixClsTaskBar = "".concat(prefixCls, "-task-bar");
+  var selectionIndicatorTop = store.selectionIndicatorTop,
+      showSelectionIndicator = store.showSelectionIndicator,
+      rowHeight = store.rowHeight,
+      locale = store.locale,
+      isTimeline = store.isTimeline;
+  var showDragBar = useMemo(function () {
+    if (!showSelectionIndicator) return false; // 差值
+
+    var baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2;
+    return selectionIndicatorTop === translateY - baseTop;
+  }, [showSelectionIndicator, selectionIndicatorTop, translateY, rowHeight, barHeight]);
+  var themeColor = useMemo(function () {
+    if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE'];
+    return ['#FD998F', '#F96B5D'];
+  }, [store.pxUnitAmp, translateX, width]);
+
+  var handleBeforeResize = function handleBeforeResize(type) {
+    return function () {
+      if (disabled) return;
+      store.handleDragStart(data, type);
+    };
   };
 
-  var exports = {},
-      Op = Object.prototype,
-      hasOwn = Op.hasOwnProperty,
-      $Symbol = "function" == typeof Symbol ? Symbol : {},
-      iteratorSymbol = $Symbol.iterator || "@@iterator",
-      asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-      toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj, key, value) {
-    return Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: !0,
-      configurable: !0,
-      writable: !0
-    }), obj[key];
-  }
-
-  try {
-    define({}, "");
-  } catch (err) {
-    define = function define(obj, key, value) {
-      return obj[key] = value;
-    };
-  }
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-        generator = Object.create(protoGenerator.prototype),
-        context = new Context(tryLocsList || []);
-    return generator._invoke = function (innerFn, self, context) {
-      var state = "suspendedStart";
-      return function (method, arg) {
-        if ("executing" === state) throw new Error("Generator is already running");
-
-        if ("completed" === state) {
-          if ("throw" === method) throw arg;
-          return doneResult();
-        }
-
-        for (context.method = method, context.arg = arg;;) {
-          var delegate = context.delegate;
-
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context);
-
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel) continue;
-              return delegateResult;
-            }
-          }
-
-          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-            if ("suspendedStart" === state) throw state = "completed", context.arg;
-            context.dispatchException(context.arg);
-          } else "return" === context.method && context.abrupt("return", context.arg);
-          state = "executing";
-          var record = tryCatch(innerFn, self, context);
-
-          if ("normal" === record.type) {
-            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-            return {
-              value: record.arg,
-              done: context.done
-            };
-          }
-
-          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-        }
-      };
-    }(innerFn, self, context), generator;
-  }
-
-  function tryCatch(fn, obj, arg) {
-    try {
-      return {
-        type: "normal",
-        arg: fn.call(obj, arg)
-      };
-    } catch (err) {
-      return {
-        type: "throw",
-        arg: err
-      };
-    }
-  }
-
-  exports.wrap = wrap;
-  var ContinueSentinel = {};
-
-  function Generator() {}
-
-  function GeneratorFunction() {}
-
-  function GeneratorFunctionPrototype() {}
-
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
-    return this;
-  });
-  var getProto = Object.getPrototypeOf,
-      NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
-        return this._invoke(method, arg);
-      });
+  var handleResize = useCallback(function (_ref3) {
+    var newWidth = _ref3.width,
+        x = _ref3.x;
+    if (disabled) return;
+    store.updateBarSize(data, {
+      width: newWidth,
+      x: x
     });
-  }
+  }, [data, store, disabled]);
+  var handleLeftResizeEnd = useCallback(function (oldSize) {
+    store.handleDragEnd();
+    store.updateTaskDate(data, oldSize, 'left');
+  }, [data, store]);
+  var handleRightResizeEnd = useCallback(function (oldSize) {
+    store.handleDragEnd();
+    store.updateTaskDate(data, oldSize, 'right');
+  }, [data, store]);
+  var handleMoveEnd = useCallback(function (oldSize) {
+    store.handleDragEnd();
+    store.updateTaskDate(data, oldSize, 'move');
+  }, [data, store]);
+  var handleAutoScroll = useCallback(function (delta) {
+    store.setTranslateX(store.translateX + delta);
+  }, [store]);
+  var allowDrag = showDragBar && !loading;
+  var handleClick = useCallback(function (e) {
+    e.stopPropagation();
+    if (onBarClick) onBarClick(data.record);
+  }, [data.record, onBarClick]);
+  var reachEdge = usePersistFn(function (position) {
+    return position === 'left' && store.translateX <= 0;
+  }); // 根据不同的视图确定拖动时的单位，在任何视图下都以一天为单位
 
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-
-      if ("throw" !== record.type) {
-        var result = record.arg,
-            value = result.value;
-        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
-          invoke("next", value, resolve, reject);
-        }, function (err) {
-          invoke("throw", err, resolve, reject);
-        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
-          result.value = unwrapped, resolve(result);
-        }, function (error) {
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-
-      reject(record.arg);
+  var grid = useMemo(function () {
+    return ONE_DAY_MS$1 / store.pxUnitAmp;
+  }, [store.pxUnitAmp]);
+  var moveCalc = -(width / store.pxUnitAmp);
+  var days = useMemo(function () {
+    var daysWidth = Number(getDateWidth(translateX + width + moveCalc, translateX));
+    return "".concat(daysWidth, " ").concat(daysWidth > 1 ? locale.days : locale.day);
+  }, [translateX, width, moveCalc, translateX]);
+  return /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: classNames(prefixClsTaskBar, (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTaskBar, "-invalid-date-range"), invalidDateRange), _defineProperty(_classNames, "".concat(prefixClsTaskBar, "-overdue"), !invalidDateRange), _classNames)),
+    style: {
+      transform: "translate(".concat(translateX, "px, ").concat(translateY, "px)")
+    },
+    onClick: handleClick
+  }, loading && /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTaskBar, "-loading")
+  }), /*#__PURE__*/React.createElement("div", null, allowDrag && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(DragResize$1, {
+    className: classNames("".concat(prefixClsTaskBar, "-resize-handle"), "".concat(prefixClsTaskBar, "-resize-handle-left"), _defineProperty({}, "".concat(prefixClsTaskBar, "-resize-handle-disabled"), disabled)),
+    style: {
+      left: -14
+    },
+    onResize: handleResize,
+    onResizeEnd: handleLeftResizeEnd,
+    defaultSize: {
+      x: translateX,
+      width: width
+    },
+    minWidth: 30,
+    grid: grid,
+    type: 'left',
+    scroller: store.chartElementRef.current || undefined,
+    onAutoScroll: handleAutoScroll,
+    reachEdge: reachEdge,
+    onBeforeResize: handleBeforeResize('left'),
+    disabled: disabled
+  }), /*#__PURE__*/React.createElement(DragResize$1, {
+    className: classNames("".concat(prefixClsTaskBar, "-resize-handle"), "".concat(prefixClsTaskBar, "-resize-handle-right"), _defineProperty({}, "".concat(prefixClsTaskBar, "-resize-handle-disabled"), disabled)),
+    style: {
+      left: width + 1
+    },
+    onResize: handleResize,
+    onResizeEnd: handleRightResizeEnd,
+    defaultSize: {
+      x: translateX,
+      width: width
+    },
+    minWidth: 30,
+    grid: grid,
+    type: 'right',
+    scroller: store.chartElementRef.current || undefined,
+    onAutoScroll: handleAutoScroll,
+    reachEdge: reachEdge,
+    onBeforeResize: handleBeforeResize('right'),
+    disabled: disabled
+  }), /*#__PURE__*/React.createElement("div", {
+    className: classNames("".concat(prefixClsTaskBar, "-resize-bg"), "".concat(prefixClsTaskBar, "-resize-bg-compact")),
+    style: {
+      width: width + 30,
+      left: -14
     }
-
-    var previousPromise;
-
-    this._invoke = function (method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
-    };
-  }
-
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-
-    if (undefined === method) {
-      if (context.delegate = null, "throw" === context.method) {
-        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
-        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
+  })), /*#__PURE__*/React.createElement(DragResize$1, {
+    className: "".concat(prefixClsTaskBar, "-bar"),
+    onResize: handleResize,
+    onResizeEnd: handleMoveEnd,
+    defaultSize: {
+      x: translateX,
+      width: width
+    },
+    minWidth: 30,
+    grid: grid,
+    type: 'move',
+    scroller: store.chartElementRef.current || undefined,
+    onAutoScroll: handleAutoScroll,
+    reachEdge: reachEdge,
+    onBeforeResize: handleBeforeResize('move')
+  }, renderBar ? renderBar(data, {
+    width: width + 1,
+    height: barHeight + 1
+  }) : /*#__PURE__*/React.createElement("svg", {
+    xmlns: 'http://www.w3.org/2000/svg',
+    version: '1.1',
+    width: width + 1,
+    height: barHeight + 1,
+    viewBox: "0 0 ".concat(width + 1, " ").concat(barHeight + 1)
+  }, /*#__PURE__*/React.createElement("path", {
+    fill: record.backgroundColor || getBarColor && getBarColor(record).backgroundColor || themeColor[0],
+    stroke: record.borderColor || getBarColor && getBarColor(record).borderColor || themeColor[1],
+    d: "\n              M".concat(width - 2, ",0.5\n              l-").concat(width - 5, ",0\n              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n              l0,5.3\n\n              c0.03256,0.38255 0.20896,0.724 0.47457,0.97045\n              c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013\n              l4,0\n\n              l").concat(width - 12, ",0\n\n              l4,0\n              c0.41421,0 0.78921,-0.16789 1.06066,-0.43934\n              c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066\n\n              l0,-5.3\n              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n            ")
+  })))), (allowDrag || disabled || alwaysShowTaskBar) && !isTimeline && /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTaskBar, "-label"),
+    style: {
+      left: width / 2 - 10
     }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
-    var info = record.arg;
-    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
-  }
-
-  function pushTryEntry(locs) {
-    var entry = {
-      tryLoc: locs[0]
-    };
-    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal", delete record.arg, entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    this.tryEntries = [{
-      tryLoc: "root"
-    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
-  }
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) return iteratorMethod.call(iterable);
-      if ("function" == typeof iterable.next) return iterable;
-
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-            next = function next() {
-          for (; ++i < iterable.length;) {
-            if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-          }
-
-          return next.value = undefined, next.done = !0, next;
-        };
-
-        return next.next = next;
-      }
+  }, days), (stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTaskBar, "-date-text"),
+    style: {
+      left: width + 16
     }
-
-    return {
-      next: doneResult
-    };
-  }
-
-  function doneResult() {
-    return {
-      value: undefined,
-      done: !0
-    };
-  }
-
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
-    var ctor = "function" == typeof genFun && genFun.constructor;
-    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
-  }, exports.mark = function (genFun) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
-  }, exports.awrap = function (arg) {
-    return {
-      __await: arg
-    };
-  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
-    return this;
-  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    void 0 === PromiseImpl && (PromiseImpl = Promise);
-    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
-    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
-      return result.done ? result.value : iter.next();
-    });
-  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
-    return this;
-  }), define(Gp, "toString", function () {
-    return "[object Generator]";
-  }), exports.keys = function (object) {
-    var keys = [];
-
-    for (var key in object) {
-      keys.push(key);
+  }, renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)), /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTaskBar, "-date-text"),
+    style: {
+      right: width + 16
     }
-
-    return keys.reverse(), function next() {
-      for (; keys.length;) {
-        var key = keys.pop();
-        if (key in object) return next.value = key, next.done = !1, next;
-      }
-
-      return next.done = !0, next;
-    };
-  }, exports.values = values, Context.prototype = {
-    constructor: Context,
-    reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
-    },
-    stop: function stop() {
-      this.done = !0;
-      var rootRecord = this.tryEntries[0].completion;
-      if ("throw" === rootRecord.type) throw rootRecord.arg;
-      return this.rval;
-    },
-    dispatchException: function dispatchException(exception) {
-      if (this.done) throw exception;
-      var context = this;
-
-      function handle(loc, caught) {
-        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i],
-            record = entry.completion;
-        if ("root" === entry.tryLoc) return handle("end");
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc"),
-              hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-          } else {
-            if (!hasFinally) throw new Error("try statement without catch or finally");
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          }
-        }
-      }
-    },
-    abrupt: function abrupt(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
-      var record = finallyEntry ? finallyEntry.completion : {};
-      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
-    },
-    complete: function complete(record, afterLoc) {
-      if ("throw" === record.type) throw record.arg;
-      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
-    },
-    finish: function finish(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
-      }
-    },
-    "catch": function _catch(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-
-          if ("throw" === record.type) {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-
-          return thrown;
-        }
-      }
-
-      throw new Error("illegal catch attempt");
-    },
-    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
-      return this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
-    }
-  }, exports;
-}
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
-}
-
-/******************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-function __decorate(decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-}
-
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function createCommonjsModule(fn) {
-  var module = { exports: {} };
-	return fn(module, module.exports), module.exports;
-}
-
-var advancedFormat = createCommonjsModule(function (module, exports) {
-!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t,r){var n=t.prototype,s=n.format;r.en.ordinal=function(e){var t=["th","st","nd","rd"],r=e%100;return "["+e+(t[(r-20)%10]||t[r]||t[0])+"]"},n.format=function(e){var t=this,r=this.$locale();if(!this.isValid())return s.bind(this)(e);var n=this.$utils(),a=(e||"YYYY-MM-DDTHH:mm:ssZ").replace(/\[([^\]]+)]|Q|wo|ww|w|WW|W|zzz|z|gggg|GGGG|Do|X|x|k{1,2}|S/g,(function(e){switch(e){case"Q":return Math.ceil((t.$M+1)/3);case"Do":return r.ordinal(t.$D);case"gggg":return t.weekYear();case"GGGG":return t.isoWeekYear();case"wo":return r.ordinal(t.week(),"W");case"w":case"ww":return n.s(t.week(),"w"===e?1:2,"0");case"W":case"WW":return n.s(t.isoWeek(),"W"===e?1:2,"0");case"k":case"kk":return n.s(String(0===t.$H?24:t.$H),"k"===e?1:2,"0");case"X":return Math.floor(t.$d.getTime()/1e3);case"x":return t.$d.getTime();case"z":return "["+t.offsetName()+"]";case"zzz":return "["+t.offsetName("long")+"]";default:return e}}));return s.bind(this)(a)};}}));
-});
-
-var isBetween = createCommonjsModule(function (module, exports) {
-!function(e,i){module.exports=i();}(commonjsGlobal,(function(){return function(e,i,t){i.prototype.isBetween=function(e,i,s,f){var n=t(e),o=t(i),r="("===(f=f||"()")[0],u=")"===f[1];return (r?this.isAfter(n,s):!this.isBefore(n,s))&&(u?this.isBefore(o,s):!this.isAfter(o,s))||(r?this.isBefore(n,s):!this.isAfter(n,s))&&(u?this.isAfter(o,s):!this.isBefore(o,s))};}}));
-});
-
-var isLeapYear = createCommonjsModule(function (module, exports) {
-!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t){t.prototype.isLeapYear=function(){return this.$y%4==0&&this.$y%100!=0||this.$y%400==0};}}));
-});
-
-var quarterOfYear = createCommonjsModule(function (module, exports) {
-!function(t,n){module.exports=n();}(commonjsGlobal,(function(){var t="month",n="quarter";return function(e,i){var r=i.prototype;r.quarter=function(t){return this.$utils().u(t)?Math.ceil((this.month()+1)/3):this.month(this.month()%3+3*(t-1))};var s=r.add;r.add=function(e,i){return e=Number(e),this.$utils().p(i)===n?this.add(3*e,t):s.bind(this)(e,i)};var u=r.startOf;r.startOf=function(e,i){var r=this.$utils(),s=!!r.u(i)||i;if(r.p(e)===n){var o=this.quarter()-1;return s?this.month(3*o).startOf(t).startOf("day"):this.month(3*o+2).endOf(t).endOf("day")}return u.bind(this)(e,i)};}}));
-});
-
-var weekday = createCommonjsModule(function (module, exports) {
-!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t){t.prototype.weekday=function(e){var t=this.$locale().weekStart||0,i=this.$W,n=(i<t?i+7:i)-t;return this.$utils().u(e)?n:this.subtract(n,"day").add(e,"day")};}}));
-});
-
-var weekOfYear = createCommonjsModule(function (module, exports) {
-!function(e,t){module.exports=t();}(commonjsGlobal,(function(){var e="week",t="year";return function(i,n,r){var f=n.prototype;f.week=function(i){if(void 0===i&&(i=null),null!==i)return this.add(7*(i-this.week()),"day");var n=this.$locale().yearStart||1;if(11===this.month()&&this.date()>25){var f=r(this).startOf(t).add(1,t).date(n),s=r(this).endOf(e);if(f.isBefore(s))return 1}var a=r(this).startOf(t).date(n).startOf(e).subtract(1,"millisecond"),o=this.diff(a,e,!0);return o<0?r(this).startOf("week").week():Math.ceil(o)},f.weeks=function(e){return void 0===e&&(e=null),this.week(e)};}}));
-});
-
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
- */
-function isObject(value) {
-  var type = typeof value;
-  return value != null && (type == 'object' || type == 'function');
-}
-
-var isObject_1 = isObject;
-
-/** Detect free variable `global` from Node.js. */
-
-var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
-
-var _freeGlobal = freeGlobal;
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = _freeGlobal || freeSelf || Function('return this')();
-
-var _root = root;
-
-/**
- * Gets the timestamp of the number of milliseconds that have elapsed since
- * the Unix epoch (1 January 1970 00:00:00 UTC).
- *
- * @static
- * @memberOf _
- * @since 2.4.0
- * @category Date
- * @returns {number} Returns the timestamp.
- * @example
- *
- * _.defer(function(stamp) {
- *   console.log(_.now() - stamp);
- * }, _.now());
- * // => Logs the number of milliseconds it took for the deferred invocation.
- */
-var now = function() {
-  return _root.Date.now();
+  }, renderLeftText ? renderLeftText(data) : dateTextFormat(translateX))));
 };
 
-var now_1 = now;
+var TaskBar$1 = observer(TaskBar);
 
-/** Used to match a single whitespace character. */
-var reWhitespace = /\s/;
+/* eslint-disable no-underscore-dangle */
 
-/**
- * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
- * character of `string`.
- *
- * @private
- * @param {string} string The string to inspect.
- * @returns {number} Returns the index of the last non-whitespace character.
- */
-function trimmedEndIndex(string) {
-  var index = string.length;
+var BarList = function BarList() {
+  var _useContext = useContext(context),
+      store = _useContext.store;
 
-  while (index-- && reWhitespace.test(string.charAt(index))) {}
-  return index;
-}
+  var barList = store.getBarList;
+  var _store$getVisibleRows = store.getVisibleRows,
+      count = _store$getVisibleRows.count,
+      start = _store$getVisibleRows.start;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
+    if (bar._group) return /*#__PURE__*/React.createElement(GroupBar$1, {
+      key: bar.key,
+      data: bar
+    });
+    return bar.invalidDateRange ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
+      key: bar.key,
+      data: bar
+    }) : /*#__PURE__*/React.createElement(TaskBar$1, {
+      key: bar.key,
+      data: bar
+    });
+  }));
+};
 
-var _trimmedEndIndex = trimmedEndIndex;
+var BarList$1 = observer(BarList);
 
-/** Used to match leading whitespace. */
-var reTrimStart = /^\s+/;
+var css_248z$e = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@-webkit-keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n";
+styleInject(css_248z$e);
 
-/**
- * The base implementation of `_.trim`.
- *
- * @private
- * @param {string} string The string to trim.
- * @returns {string} Returns the trimmed string.
- */
-function baseTrim(string) {
-  return string
-    ? string.slice(0, _trimmedEndIndex(string) + 1).replace(reTrimStart, '')
-    : string;
-}
+var TaskBarThumb = function TaskBarThumb(_ref) {
+  var _classNames;
 
-var _baseTrim = baseTrim;
+  var data = _ref.data;
 
-/** Built-in value references. */
-var Symbol$1 = _root.Symbol;
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      renderBarThumb = _useContext.renderBarThumb,
+      prefixCls = _useContext.prefixCls,
+      getBarColor = _useContext.getBarColor;
 
-var _Symbol = Symbol$1;
+  var prefixClsTaskBarThumb = "".concat(prefixCls, "-task-bar-thumb");
+  var viewTranslateX = store.translateX,
+      viewWidth = store.viewWidth;
+  var translateX = data.translateX,
+      translateY = data.translateY,
+      label = data.label,
+      record = data.record;
+  var type = useMemo(function () {
+    var rightSide = viewTranslateX + viewWidth;
+    return translateX - rightSide > 0 ? 'right' : 'left';
+  }, [translateX, viewTranslateX, viewWidth]);
+  var left = useMemo(function () {
+    return type === 'right' ? viewTranslateX + viewWidth - 5 : viewTranslateX + 2;
+  }, [type, viewTranslateX, viewWidth]);
+  var handleClick = useCallback(function (e) {
+    e.stopPropagation();
+    store.scrollToBar(data, type);
+  }, [data, store, type]);
+  useMemo(function () {
+    return record.backgroundColor || getBarColor && getBarColor(record).backgroundColor;
+  }, [record]);
+  return /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: classNames(prefixClsTaskBarThumb, (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTaskBarThumb, "-left"), type === 'left'), _defineProperty(_classNames, "".concat(prefixClsTaskBarThumb, "-right"), type === 'right'), _classNames)),
+    style: {
+      left: left,
+      top: translateY - 5
+    },
+    onClick: handleClick
+  }, type === 'left' && /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTaskBarThumb, "-circle-left")
+  }), renderBarThumb ? renderBarThumb(data.record, type) : label, type === 'right' && /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTaskBarThumb, "-circle-right")
+  }));
+};
 
-/** Used for built-in method references. */
-var objectProto$b = Object.prototype;
+var TaskBarThumb$1 = observer(TaskBarThumb);
 
-/** Used to check objects for own properties. */
-var hasOwnProperty$8 = objectProto$b.hasOwnProperty;
+/* eslint-disable no-underscore-dangle */
 
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var nativeObjectToString$1 = objectProto$b.toString;
+var BarThumbList = function BarThumbList() {
+  var _useContext = useContext(context),
+      store = _useContext.store;
 
-/** Built-in value references. */
-var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
+  var barList = store.getBarList;
+  var _store$getVisibleRows = store.getVisibleRows,
+      count = _store$getVisibleRows.count,
+      start = _store$getVisibleRows.start;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
+    if (store.getTaskBarThumbVisible(bar)) return /*#__PURE__*/React.createElement(TaskBarThumb$1, {
+      data: bar,
+      key: bar.key
+    });
+    return null;
+  }));
+};
 
-/**
- * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the raw `toStringTag`.
- */
-function getRawTag(value) {
-  var isOwn = hasOwnProperty$8.call(value, symToStringTag$1),
-      tag = value[symToStringTag$1];
-
-  try {
-    value[symToStringTag$1] = undefined;
-    var unmasked = true;
-  } catch (e) {}
-
-  var result = nativeObjectToString$1.call(value);
-  if (unmasked) {
-    if (isOwn) {
-      value[symToStringTag$1] = tag;
-    } else {
-      delete value[symToStringTag$1];
-    }
-  }
-  return result;
-}
-
-var _getRawTag = getRawTag;
-
-/** Used for built-in method references. */
-var objectProto$a = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var nativeObjectToString = objectProto$a.toString;
-
-/**
- * Converts `value` to a string using `Object.prototype.toString`.
- *
- * @private
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
- */
-function objectToString(value) {
-  return nativeObjectToString.call(value);
-}
-
-var _objectToString = objectToString;
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? _getRawTag(value)
-    : _objectToString(value);
-}
-
-var _baseGetTag = baseGetTag;
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return value != null && typeof value == 'object';
-}
-
-var isObjectLike_1 = isObjectLike;
-
-/** `Object#toString` result references. */
-var symbolTag$1 = '[object Symbol]';
-
-/**
- * Checks if `value` is classified as a `Symbol` primitive or object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
- * @example
- *
- * _.isSymbol(Symbol.iterator);
- * // => true
- *
- * _.isSymbol('abc');
- * // => false
- */
-function isSymbol(value) {
-  return typeof value == 'symbol' ||
-    (isObjectLike_1(value) && _baseGetTag(value) == symbolTag$1);
-}
-
-var isSymbol_1 = isSymbol;
-
-/** Used as references for various `Number` constants. */
-var NAN = 0 / 0;
-
-/** Used to detect bad signed hexadecimal string values. */
-var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-
-/** Used to detect binary string values. */
-var reIsBinary = /^0b[01]+$/i;
-
-/** Used to detect octal string values. */
-var reIsOctal = /^0o[0-7]+$/i;
-
-/** Built-in method references without a dependency on `root`. */
-var freeParseInt = parseInt;
-
-/**
- * Converts `value` to a number.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to process.
- * @returns {number} Returns the number.
- * @example
- *
- * _.toNumber(3.2);
- * // => 3.2
- *
- * _.toNumber(Number.MIN_VALUE);
- * // => 5e-324
- *
- * _.toNumber(Infinity);
- * // => Infinity
- *
- * _.toNumber('3.2');
- * // => 3.2
- */
-function toNumber(value) {
-  if (typeof value == 'number') {
-    return value;
-  }
-  if (isSymbol_1(value)) {
-    return NAN;
-  }
-  if (isObject_1(value)) {
-    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-    value = isObject_1(other) ? (other + '') : other;
-  }
-  if (typeof value != 'string') {
-    return value === 0 ? value : +value;
-  }
-  value = _baseTrim(value);
-  var isBinary = reIsBinary.test(value);
-  return (isBinary || reIsOctal.test(value))
-    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-    : (reIsBadHex.test(value) ? NAN : +value);
-}
-
-var toNumber_1 = toNumber;
-
-/** Error message constants. */
-var FUNC_ERROR_TEXT$2 = 'Expected a function';
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeMax$1 = Math.max,
-    nativeMin = Math.min;
-
-/**
- * Creates a debounced function that delays invoking `func` until after `wait`
- * milliseconds have elapsed since the last time the debounced function was
- * invoked. The debounced function comes with a `cancel` method to cancel
- * delayed `func` invocations and a `flush` method to immediately invoke them.
- * Provide `options` to indicate whether `func` should be invoked on the
- * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
- * with the last arguments provided to the debounced function. Subsequent
- * calls to the debounced function return the result of the last `func`
- * invocation.
- *
- * **Note:** If `leading` and `trailing` options are `true`, `func` is
- * invoked on the trailing edge of the timeout only if the debounced function
- * is invoked more than once during the `wait` timeout.
- *
- * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
- * until to the next tick, similar to `setTimeout` with a timeout of `0`.
- *
- * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
- * for details over the differences between `_.debounce` and `_.throttle`.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Function
- * @param {Function} func The function to debounce.
- * @param {number} [wait=0] The number of milliseconds to delay.
- * @param {Object} [options={}] The options object.
- * @param {boolean} [options.leading=false]
- *  Specify invoking on the leading edge of the timeout.
- * @param {number} [options.maxWait]
- *  The maximum time `func` is allowed to be delayed before it's invoked.
- * @param {boolean} [options.trailing=true]
- *  Specify invoking on the trailing edge of the timeout.
- * @returns {Function} Returns the new debounced function.
- * @example
- *
- * // Avoid costly calculations while the window size is in flux.
- * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
- *
- * // Invoke `sendMail` when clicked, debouncing subsequent calls.
- * jQuery(element).on('click', _.debounce(sendMail, 300, {
- *   'leading': true,
- *   'trailing': false
- * }));
- *
- * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
- * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
- * var source = new EventSource('/stream');
- * jQuery(source).on('message', debounced);
- *
- * // Cancel the trailing debounced invocation.
- * jQuery(window).on('popstate', debounced.cancel);
- */
-function debounce(func, wait, options) {
-  var lastArgs,
-      lastThis,
-      maxWait,
-      result,
-      timerId,
-      lastCallTime,
-      lastInvokeTime = 0,
-      leading = false,
-      maxing = false,
-      trailing = true;
-
-  if (typeof func != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT$2);
-  }
-  wait = toNumber_1(wait) || 0;
-  if (isObject_1(options)) {
-    leading = !!options.leading;
-    maxing = 'maxWait' in options;
-    maxWait = maxing ? nativeMax$1(toNumber_1(options.maxWait) || 0, wait) : maxWait;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
-  }
-
-  function invokeFunc(time) {
-    var args = lastArgs,
-        thisArg = lastThis;
-
-    lastArgs = lastThis = undefined;
-    lastInvokeTime = time;
-    result = func.apply(thisArg, args);
-    return result;
-  }
-
-  function leadingEdge(time) {
-    // Reset any `maxWait` timer.
-    lastInvokeTime = time;
-    // Start the timer for the trailing edge.
-    timerId = setTimeout(timerExpired, wait);
-    // Invoke the leading edge.
-    return leading ? invokeFunc(time) : result;
-  }
-
-  function remainingWait(time) {
-    var timeSinceLastCall = time - lastCallTime,
-        timeSinceLastInvoke = time - lastInvokeTime,
-        timeWaiting = wait - timeSinceLastCall;
-
-    return maxing
-      ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
-      : timeWaiting;
-  }
-
-  function shouldInvoke(time) {
-    var timeSinceLastCall = time - lastCallTime,
-        timeSinceLastInvoke = time - lastInvokeTime;
-
-    // Either this is the first call, activity has stopped and we're at the
-    // trailing edge, the system time has gone backwards and we're treating
-    // it as the trailing edge, or we've hit the `maxWait` limit.
-    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
-      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
-  }
-
-  function timerExpired() {
-    var time = now_1();
-    if (shouldInvoke(time)) {
-      return trailingEdge(time);
-    }
-    // Restart the timer.
-    timerId = setTimeout(timerExpired, remainingWait(time));
-  }
-
-  function trailingEdge(time) {
-    timerId = undefined;
-
-    // Only invoke if we have `lastArgs` which means `func` has been
-    // debounced at least once.
-    if (trailing && lastArgs) {
-      return invokeFunc(time);
-    }
-    lastArgs = lastThis = undefined;
-    return result;
-  }
-
-  function cancel() {
-    if (timerId !== undefined) {
-      clearTimeout(timerId);
-    }
-    lastInvokeTime = 0;
-    lastArgs = lastCallTime = lastThis = timerId = undefined;
-  }
-
-  function flush() {
-    return timerId === undefined ? result : trailingEdge(now_1());
-  }
-
-  function debounced() {
-    var time = now_1(),
-        isInvoking = shouldInvoke(time);
-
-    lastArgs = arguments;
-    lastThis = this;
-    lastCallTime = time;
-
-    if (isInvoking) {
-      if (timerId === undefined) {
-        return leadingEdge(lastCallTime);
-      }
-      if (maxing) {
-        // Handle invocations in a tight loop.
-        clearTimeout(timerId);
-        timerId = setTimeout(timerExpired, wait);
-        return invokeFunc(lastCallTime);
-      }
-    }
-    if (timerId === undefined) {
-      timerId = setTimeout(timerExpired, wait);
-    }
-    return result;
-  }
-  debounced.cancel = cancel;
-  debounced.flush = flush;
-  return debounced;
-}
-
-var debounce_1 = debounce;
+var BarThumbList$1 = observer(BarThumbList);
 
 /**
  * Removes all key-value entries from the list cache.
@@ -2038,6 +1379,157 @@ function stackHas(key) {
 }
 
 var _stackHas = stackHas;
+
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function createCommonjsModule(fn) {
+  var module = { exports: {} };
+	return fn(module, module.exports), module.exports;
+}
+
+/** Detect free variable `global` from Node.js. */
+
+var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+
+var _freeGlobal = freeGlobal;
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = _freeGlobal || freeSelf || Function('return this')();
+
+var _root = root;
+
+/** Built-in value references. */
+var Symbol$1 = _root.Symbol;
+
+var _Symbol = Symbol$1;
+
+/** Used for built-in method references. */
+var objectProto$b = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$8 = objectProto$b.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString$1 = objectProto$b.toString;
+
+/** Built-in value references. */
+var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty$8.call(value, symToStringTag$1),
+      tag = value[symToStringTag$1];
+
+  try {
+    value[symToStringTag$1] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString$1.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag$1] = tag;
+    } else {
+      delete value[symToStringTag$1];
+    }
+  }
+  return result;
+}
+
+var _getRawTag = getRawTag;
+
+/** Used for built-in method references. */
+var objectProto$a = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto$a.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+var _objectToString = objectToString;
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? _getRawTag(value)
+    : _objectToString(value);
+}
+
+var _baseGetTag = baseGetTag;
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+var isObject_1 = isObject;
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -2771,7 +2263,7 @@ var boolTag$1 = '[object Boolean]',
     regexpTag$1 = '[object RegExp]',
     setTag$2 = '[object Set]',
     stringTag$1 = '[object String]',
-    symbolTag = '[object Symbol]';
+    symbolTag$1 = '[object Symbol]';
 
 var arrayBufferTag$1 = '[object ArrayBuffer]',
     dataViewTag$2 = '[object DataView]';
@@ -2854,7 +2346,7 @@ function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
       stack['delete'](object);
       return result;
 
-    case symbolTag:
+    case symbolTag$1:
       if (symbolValueOf) {
         return symbolValueOf.call(object) == symbolValueOf.call(other);
       }
@@ -3028,6 +2520,36 @@ function baseTimes(n, iteratee) {
 }
 
 var _baseTimes = baseTimes;
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+var isObjectLike_1 = isObjectLike;
 
 /** `Object#toString` result references. */
 var argsTag$2 = '[object Arguments]';
@@ -3911,6 +3433,33 @@ function baseMatches(source) {
 
 var _baseMatches = baseMatches;
 
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike_1(value) && _baseGetTag(value) == symbolTag);
+}
+
+var isSymbol_1 = isSymbol;
+
 /** Used to match property names within property paths. */
 var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
     reIsPlainProp = /^\w*$/;
@@ -3939,7 +3488,7 @@ function isKey(value, object) {
 var _isKey = isKey;
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$1 = 'Expected a function';
+var FUNC_ERROR_TEXT$2 = 'Expected a function';
 
 /**
  * Creates a function that memoizes the result of `func`. If `resolver` is
@@ -3987,7 +3536,7 @@ var FUNC_ERROR_TEXT$1 = 'Expected a function';
  */
 function memoize(func, resolver) {
   if (typeof func != 'function' || (resolver != null && typeof resolver != 'function')) {
-    throw new TypeError(FUNC_ERROR_TEXT$1);
+    throw new TypeError(FUNC_ERROR_TEXT$2);
   }
   var memoized = function() {
     var args = arguments,
@@ -4492,6 +4041,105 @@ function baseFindIndex(array, predicate, fromIndex, fromRight) {
 
 var _baseFindIndex = baseFindIndex;
 
+/** Used to match a single whitespace character. */
+var reWhitespace = /\s/;
+
+/**
+ * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+ * character of `string`.
+ *
+ * @private
+ * @param {string} string The string to inspect.
+ * @returns {number} Returns the index of the last non-whitespace character.
+ */
+function trimmedEndIndex(string) {
+  var index = string.length;
+
+  while (index-- && reWhitespace.test(string.charAt(index))) {}
+  return index;
+}
+
+var _trimmedEndIndex = trimmedEndIndex;
+
+/** Used to match leading whitespace. */
+var reTrimStart = /^\s+/;
+
+/**
+ * The base implementation of `_.trim`.
+ *
+ * @private
+ * @param {string} string The string to trim.
+ * @returns {string} Returns the trimmed string.
+ */
+function baseTrim(string) {
+  return string
+    ? string.slice(0, _trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+    : string;
+}
+
+var _baseTrim = baseTrim;
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol_1(value)) {
+    return NAN;
+  }
+  if (isObject_1(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject_1(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = _baseTrim(value);
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+var toNumber_1 = toNumber;
+
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0,
     MAX_INTEGER = 1.7976931348623157e+308;
@@ -4569,7 +4217,7 @@ function toInteger(value) {
 var toInteger_1 = toInteger;
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeMax = Math.max;
+var nativeMax$1 = Math.max;
 
 /**
  * This method is like `_.find` except that it returns the index of the first
@@ -4613,7 +4261,7 @@ function findIndex(array, predicate, fromIndex) {
   }
   var index = fromIndex == null ? 0 : toInteger_1(fromIndex);
   if (index < 0) {
-    index = nativeMax(length + index, 0);
+    index = nativeMax$1(length + index, 0);
   }
   return _baseFindIndex(array, _baseIteratee(predicate), index);
 }
@@ -4659,6 +4307,1737 @@ var findIndex_1 = findIndex;
 var find = _createFind(findIndex_1);
 
 var find_1 = find;
+
+var css_248z$d = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
+styleInject(css_248z$d);
+
+var spaceX = 10;
+var spaceY = 10;
+/**
+ * 获取关键点
+ *
+ * @param from
+ * @param to
+ */
+
+function getPoints(from, to, type) {
+  var fromX = from.x,
+      fromY = from.y;
+  var toX = to.x,
+      toY = to.y;
+  var sameSide = type === 'finish_finish' || type === 'start_start'; // 同向，只需要两个关键点
+
+  if (sameSide) {
+    if (type === 'start_start') {
+      return [{
+        x: Math.min(fromX - spaceX, toX - spaceX),
+        y: fromY
+      }, {
+        x: Math.min(fromX - spaceX, toX - spaceX),
+        y: toY
+      }];
+    }
+
+    return [{
+      x: Math.max(fromX + spaceX, toX + spaceX),
+      y: fromY
+    }, {
+      x: Math.max(fromX + spaceX, toX + spaceX),
+      y: toY
+    }];
+  } // 不同向，需要四个关键点
+
+
+  return [{
+    x: type === 'finish_start' ? fromX + spaceX : fromX - spaceX,
+    y: fromY
+  }, {
+    x: type === 'finish_start' ? fromX + spaceX : fromX - spaceX,
+    y: toY - spaceY
+  }, {
+    x: type === 'finish_start' ? toX - spaceX : toX + spaceX,
+    y: toY - spaceY
+  }, {
+    x: type === 'finish_start' ? toX - spaceX : toX + spaceX,
+    y: toY
+  }];
+}
+
+var Dependence = function Dependence(_ref) {
+  var data = _ref.data;
+
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      barHeight = _useContext.barHeight;
+
+  var from = data.from,
+      to = data.to,
+      type = data.type,
+      _data$color = data.color,
+      color = _data$color === void 0 ? '#f87872' : _data$color;
+  var barList = store.getBarList;
+  var fromBar = find_1(barList, function (bar) {
+    return bar.record.id === from;
+  });
+  var toBar = find_1(barList, function (bar) {
+    return bar.record.id === to;
+  });
+  if (!fromBar || !toBar) return null;
+  var posY = barHeight / 2;
+
+  var _ref2 = function () {
+    return [{
+      x: type === 'finish_finish' || type === 'finish_start' ? fromBar.translateX + fromBar.width : fromBar.translateX,
+      y: fromBar.translateY + posY
+    }, {
+      x: type === 'finish_finish' || type === 'start_finish' ? toBar.translateX + toBar.width : toBar.translateX,
+      y: toBar.translateY + posY
+    }];
+  }(),
+      _ref3 = _slicedToArray(_ref2, 2),
+      start = _ref3[0],
+      end = _ref3[1];
+
+  var points = [].concat(_toConsumableArray(getPoints(start, end, type)), [end]);
+  var endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1;
+  return /*#__PURE__*/React.createElement("g", {
+    stroke: color,
+    className: css_248z$d['task-dependency-line']
+  }, /*#__PURE__*/React.createElement("path", {
+    style: {
+      stroke: color
+    },
+    d: "\n          M".concat(start.x, ",").concat(start.y, "\n          ").concat(points.map(function (point) {
+      return "L".concat(point.x, ",").concat(point.y);
+    }).join('\n'), "\n          L").concat(end.x, ",").concat(end.y, "\n          "),
+    strokeWidth: '1',
+    fill: 'none'
+  }), /*#__PURE__*/React.createElement("path", {
+    name: 'arrow',
+    strokeWidth: '1',
+    fill: color,
+    d: "\n        M".concat(end.x, ",").concat(end.y, " \n        L").concat(end.x - 4 * endPosition, ",").concat(end.y - 3 * endPosition, " \n        L").concat(end.x - 4 * endPosition, ",").concat(end.y + 3 * endPosition, " \n        Z")
+  }));
+};
+
+var Dependence$1 = observer(Dependence);
+
+var Dependencies = function Dependencies() {
+  var _useContext = useContext(context),
+      store = _useContext.store;
+
+  var dependencies = store.dependencies;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, dependencies.map(function (dependence) {
+    return /*#__PURE__*/React.createElement(Dependence$1, {
+      key: JSON.stringify(dependence),
+      data: dependence
+    });
+  }));
+};
+
+var Dependencies$1 = observer(Dependencies);
+
+/**
+ * 拖动时的提示条
+ */
+
+var DragPresent = function DragPresent() {
+  var _useContext = useContext(context),
+      store = _useContext.store;
+
+  var dragging = store.dragging,
+      draggingType = store.draggingType,
+      bodyScrollHeight = store.bodyScrollHeight;
+
+  if (!dragging) {
+    return null;
+  } // 和当前拖动的块一样长
+
+
+  var width = dragging.width,
+      translateX = dragging.translateX;
+  var left = translateX;
+  var right = translateX + width;
+  var leftLine = draggingType === 'left' || draggingType === 'move';
+  var rightLine = draggingType === 'right' || draggingType === 'move';
+  return /*#__PURE__*/React.createElement("g", {
+    fill: "#DAE0FF",
+    stroke: "#7B90FF"
+  }, leftLine && /*#__PURE__*/React.createElement("path", {
+    d: "M".concat(left, ",0 L").concat(left, ",").concat(bodyScrollHeight)
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: left,
+    y: "0",
+    width: width,
+    height: bodyScrollHeight,
+    strokeWidth: "0"
+  }), rightLine && /*#__PURE__*/React.createElement("path", {
+    d: "M".concat(right, ",0 L").concat(right, ",").concat(bodyScrollHeight)
+  }));
+};
+
+var DragPresent$1 = observer(DragPresent);
+
+var css_248z$c = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
+styleInject(css_248z$c);
+
+var Today = function Today() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls;
+
+  return /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixCls, "-today"),
+    style: {
+      transform: "translate(".concat(store.todayTranslateX, "px)")
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixCls, "-today_line"),
+    style: {
+      height: store.bodyScrollHeight
+    }
+  }));
+};
+
+var Today$1 = observer(Today);
+
+var css_248z$b = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
+styleInject(css_248z$b);
+
+var Chart = function Chart() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls;
+
+  var tableWidth = store.tableWidth,
+      viewWidth = store.viewWidth,
+      bodyScrollHeight = store.bodyScrollHeight,
+      translateX = store.translateX,
+      chartElementRef = store.chartElementRef;
+  var minorList = store.getMinorList();
+  var handleMouseMove = useCallback(function (event) {
+    event.persist();
+    store.handleMouseMove(event);
+  }, [store]);
+  var handleMouseLeave = useCallback(function () {
+    store.handleMouseLeave();
+  }, [store]);
+  useEffect(function () {
+    var element = chartElementRef.current;
+    if (element) element.addEventListener('wheel', store.handleWheel);
+    return function () {
+      if (element) element.removeEventListener('wheel', store.handleWheel);
+    };
+  }, [chartElementRef, store]);
+  return /*#__PURE__*/React.createElement("div", {
+    ref: chartElementRef,
+    className: "".concat(prefixCls, "-chart"),
+    onMouseMove: handleMouseMove,
+    onMouseLeave: handleMouseLeave,
+    style: {
+      left: tableWidth,
+      width: viewWidth,
+      height: bodyScrollHeight
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "".concat(prefixCls, "-chart-svg-renderer"),
+    xmlns: 'http://www.w3.org/2000/svg',
+    version: '1.1',
+    width: viewWidth,
+    height: bodyScrollHeight,
+    viewBox: "".concat(translateX, " 0 ").concat(viewWidth, " ").concat(bodyScrollHeight)
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("pattern", {
+    id: 'repeat',
+    width: '4.5',
+    height: '10',
+    patternUnits: 'userSpaceOnUse',
+    patternTransform: 'rotate(70 50 50)'
+  }, /*#__PURE__*/React.createElement("line", {
+    stroke: '#c6c6c6',
+    strokeWidth: '1px',
+    y2: '10'
+  }))), minorList.map(function (item) {
+    return item.isWeek ? /*#__PURE__*/React.createElement("g", {
+      key: item.key,
+      stroke: '#f0f0f0'
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M".concat(item.left, ",0 L").concat(item.left, ",").concat(bodyScrollHeight)
+    }), /*#__PURE__*/React.createElement("rect", {
+      fill: 'url(#repeat)',
+      opacity: '0.5',
+      strokeWidth: '0',
+      x: item.left,
+      y: 0,
+      width: item.width,
+      height: bodyScrollHeight
+    })) : /*#__PURE__*/React.createElement("g", {
+      key: item.key,
+      stroke: '#f0f0f0'
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M".concat(item.left, ",0 L").concat(item.left, ",").concat(bodyScrollHeight)
+    }));
+  }), /*#__PURE__*/React.createElement(DragPresent$1, null), /*#__PURE__*/React.createElement(Dependencies$1, null)), /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixCls, "-render-chunk"),
+    style: {
+      height: bodyScrollHeight,
+      transform: "translateX(-".concat(translateX, "px")
+    }
+  }, /*#__PURE__*/React.createElement(BarThumbList$1, null), /*#__PURE__*/React.createElement(BarList$1, null), /*#__PURE__*/React.createElement(Today$1, null)));
+};
+
+var Chart$1 = /*#__PURE__*/memo(observer(Chart));
+
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, _typeof(obj);
+}
+
+function _regeneratorRuntime() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+
+  _regeneratorRuntime = function _regeneratorRuntime() {
+    return exports;
+  };
+
+  var exports = {},
+      Op = Object.prototype,
+      hasOwn = Op.hasOwnProperty,
+      $Symbol = "function" == typeof Symbol ? Symbol : {},
+      iteratorSymbol = $Symbol.iterator || "@@iterator",
+      asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
+      toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function define(obj, key, value) {
+    return Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: !0,
+      configurable: !0,
+      writable: !0
+    }), obj[key];
+  }
+
+  try {
+    define({}, "");
+  } catch (err) {
+    define = function define(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
+        generator = Object.create(protoGenerator.prototype),
+        context = new Context(tryLocsList || []);
+    return generator._invoke = function (innerFn, self, context) {
+      var state = "suspendedStart";
+      return function (method, arg) {
+        if ("executing" === state) throw new Error("Generator is already running");
+
+        if ("completed" === state) {
+          if ("throw" === method) throw arg;
+          return doneResult();
+        }
+
+        for (context.method = method, context.arg = arg;;) {
+          var delegate = context.delegate;
+
+          if (delegate) {
+            var delegateResult = maybeInvokeDelegate(delegate, context);
+
+            if (delegateResult) {
+              if (delegateResult === ContinueSentinel) continue;
+              return delegateResult;
+            }
+          }
+
+          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
+            if ("suspendedStart" === state) throw state = "completed", context.arg;
+            context.dispatchException(context.arg);
+          } else "return" === context.method && context.abrupt("return", context.arg);
+          state = "executing";
+          var record = tryCatch(innerFn, self, context);
+
+          if ("normal" === record.type) {
+            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+            return {
+              value: record.arg,
+              done: context.done
+            };
+          }
+
+          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+        }
+      };
+    }(innerFn, self, context), generator;
+  }
+
+  function tryCatch(fn, obj, arg) {
+    try {
+      return {
+        type: "normal",
+        arg: fn.call(obj, arg)
+      };
+    } catch (err) {
+      return {
+        type: "throw",
+        arg: err
+      };
+    }
+  }
+
+  exports.wrap = wrap;
+  var ContinueSentinel = {};
+
+  function Generator() {}
+
+  function GeneratorFunction() {}
+
+  function GeneratorFunctionPrototype() {}
+
+  var IteratorPrototype = {};
+  define(IteratorPrototype, iteratorSymbol, function () {
+    return this;
+  });
+  var getProto = Object.getPrototypeOf,
+      NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
+  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
+
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function (method) {
+      define(prototype, method, function (arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+
+      if ("throw" !== record.type) {
+        var result = record.arg,
+            value = result.value;
+        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
+          invoke("next", value, resolve, reject);
+        }, function (err) {
+          invoke("throw", err, resolve, reject);
+        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
+          result.value = unwrapped, resolve(result);
+        }, function (error) {
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+
+      reject(record.arg);
+    }
+
+    var previousPromise;
+
+    this._invoke = function (method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new PromiseImpl(function (resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+    };
+  }
+
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+
+    if (undefined === method) {
+      if (context.delegate = null, "throw" === context.method) {
+        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
+        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
+    var info = record.arg;
+    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
+  }
+
+  function pushTryEntry(locs) {
+    var entry = {
+      tryLoc: locs[0]
+    };
+    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal", delete record.arg, entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    this.tryEntries = [{
+      tryLoc: "root"
+    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
+  }
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) return iteratorMethod.call(iterable);
+      if ("function" == typeof iterable.next) return iterable;
+
+      if (!isNaN(iterable.length)) {
+        var i = -1,
+            next = function next() {
+          for (; ++i < iterable.length;) {
+            if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
+          }
+
+          return next.value = undefined, next.done = !0, next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    return {
+      next: doneResult
+    };
+  }
+
+  function doneResult() {
+    return {
+      value: undefined,
+      done: !0
+    };
+  }
+
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
+    var ctor = "function" == typeof genFun && genFun.constructor;
+    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
+  }, exports.mark = function (genFun) {
+    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
+  }, exports.awrap = function (arg) {
+    return {
+      __await: arg
+    };
+  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+    return this;
+  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    void 0 === PromiseImpl && (PromiseImpl = Promise);
+    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
+    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
+      return result.done ? result.value : iter.next();
+    });
+  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
+    return this;
+  }), define(Gp, "toString", function () {
+    return "[object Generator]";
+  }), exports.keys = function (object) {
+    var keys = [];
+
+    for (var key in object) {
+      keys.push(key);
+    }
+
+    return keys.reverse(), function next() {
+      for (; keys.length;) {
+        var key = keys.pop();
+        if (key in object) return next.value = key, next.done = !1, next;
+      }
+
+      return next.done = !0, next;
+    };
+  }, exports.values = values, Context.prototype = {
+    constructor: Context,
+    reset: function reset(skipTempReset) {
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
+        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
+      }
+    },
+    stop: function stop() {
+      this.done = !0;
+      var rootRecord = this.tryEntries[0].completion;
+      if ("throw" === rootRecord.type) throw rootRecord.arg;
+      return this.rval;
+    },
+    dispatchException: function dispatchException(exception) {
+      if (this.done) throw exception;
+      var context = this;
+
+      function handle(loc, caught) {
+        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i],
+            record = entry.completion;
+        if ("root" === entry.tryLoc) return handle("end");
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc"),
+              hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+          } else {
+            if (!hasFinally) throw new Error("try statement without catch or finally");
+            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+          }
+        }
+      }
+    },
+    abrupt: function abrupt(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+
+        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
+      var record = finallyEntry ? finallyEntry.completion : {};
+      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
+    },
+    complete: function complete(record, afterLoc) {
+      if ("throw" === record.type) throw record.arg;
+      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
+    },
+    finish: function finish(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
+      }
+    },
+    "catch": function _catch(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+
+          if ("throw" === record.type) {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+
+          return thrown;
+        }
+      }
+
+      throw new Error("illegal catch attempt");
+    },
+    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
+      return this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
+    }
+  }, exports;
+}
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+function useDragResize(handleResize, _ref) {
+  var initSize = _ref.initSize,
+      minWidthConfig = _ref.minWidth,
+      maxWidthConfig = _ref.maxWidth;
+
+  var _useState = useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      resizing = _useState2[0],
+      setResizing = _useState2[1];
+
+  var positionRef = useRef({
+    left: 0
+  });
+  var initSizeRef = useRef(initSize);
+  var handleMouseMove = usePersistFn( /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
+      var distance, width;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              distance = event.clientX - positionRef.current.left;
+              width = initSizeRef.current.width + distance;
+
+              if (minWidthConfig !== undefined) {
+                width = Math.max(width, minWidthConfig);
+              }
+
+              if (maxWidthConfig !== undefined) {
+                width = Math.min(width, maxWidthConfig);
+              }
+
+              handleResize({
+                width: width
+              });
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }());
+  var handleMouseUp = useCallback(function () {
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
+    setResizing(false);
+  }, [handleMouseMove]);
+  var handleMouseDown = useCallback(function (event) {
+    positionRef.current.left = event.clientX;
+    initSizeRef.current = initSize;
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    setResizing(true);
+  }, [handleMouseMove, handleMouseUp, initSize]);
+  return [handleMouseDown, resizing];
+}
+
+var css_248z$a = ".gantt-divider {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  cursor: col-resize;\n}\n.gantt-divider:hover hr {\n  border-color: #3b88f4;\n}\n.gantt-divider:hover hr:before {\n  background: #3b88f4;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper {\n  background-color: #3b88f4;\n  border-color: #3b88f4;\n  border-top: 0;\n  border-bottom: 0;\n  cursor: pointer;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper:after {\n  content: '';\n  right: -3px;\n  position: absolute;\n  width: 2px;\n  height: 30px;\n  background-color: transparent;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:after,\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:before {\n  background-color: #fff;\n}\n.gantt-divider > hr {\n  margin: 0;\n  height: 100%;\n  width: 0;\n  border: none;\n  border-right: 1px solid transparent;\n}\n.gantt-divider > .gantt-divider-icon-wrapper {\n  position: absolute;\n  left: 1px;\n  top: 50%;\n  transform: translateY(-50%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 14px;\n  height: 30px;\n  border-radius: 0 4px 4px 0;\n  border: 1px solid #f0f0f0;\n  border-left: 0;\n  background-color: #fff;\n}\n.gantt-divider-arrow:before {\n  bottom: -1px;\n  transform: rotate(30deg);\n}\n.gantt-divider-arrow:after {\n  top: -1px;\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow:after,\n.gantt-divider-arrow:before {\n  content: '';\n  display: block;\n  position: relative;\n  width: 2px;\n  height: 8px;\n  background-color: #bfbfbf;\n  border-radius: 1px;\n}\n.gantt-divider-arrow.gantt-divider-reverse:before {\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow.gantt-divider-reverse:after {\n  transform: rotate(30deg);\n}\n.gantt-divider_only > hr:before {\n  content: '';\n  position: absolute;\n  border-top: 7px solid white;\n  border-bottom: 7px solid white;\n  background: #a7add0;\n  z-index: 2;\n  height: 26px;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 2px;\n}\n.gantt-divider_only > hr {\n  border-color: #a7add0;\n}\n";
+styleInject(css_248z$a);
+
+var Divider = function Divider() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      tableCollapseAble = _useContext.tableCollapseAble,
+      prefixCls = _useContext.prefixCls;
+
+  var prefixClsDivider = "".concat(prefixCls, "-divider");
+  var tableWidth = store.tableWidth;
+  var handleClick = useCallback(function (event) {
+    event.stopPropagation();
+    store.toggleCollapse();
+  }, [store]);
+  var left = tableWidth;
+  var handleResize = useCallback(function (_ref) {
+    var width = _ref.width;
+    store.handleResizeTableWidth(width);
+  }, [store]);
+
+  var _useDragResize = useDragResize(handleResize, {
+    initSize: {
+      width: tableWidth
+    },
+    minWidth: 200,
+    maxWidth: store.width * 0.6
+  }),
+      _useDragResize2 = _slicedToArray(_useDragResize, 2),
+      handleMouseDown = _useDragResize2[0],
+      resizing = _useDragResize2[1];
+
+  return /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: classNames(prefixClsDivider, _defineProperty({}, "".concat(prefixClsDivider, "_only"), !tableCollapseAble)),
+    style: {
+      left: left - 1
+    },
+    onMouseDown: tableWidth === 0 ? undefined : handleMouseDown
+  }, resizing && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      zIndex: 9999,
+      cursor: 'col-resize'
+    }
+  }), /*#__PURE__*/React.createElement("hr", null), tableCollapseAble && /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsDivider, "-icon-wrapper"),
+    role: 'none',
+    onMouseDown: function onMouseDown(e) {
+      return e.stopPropagation();
+    },
+    onClick: handleClick
+  }, /*#__PURE__*/React.createElement("i", {
+    className: classNames("".concat(prefixClsDivider, "-arrow"), _defineProperty({}, "".concat(prefixClsDivider, "-reverse"), left <= 0))
+  })));
+};
+
+var Divider$1 = observer(Divider);
+
+var css_248z$9 = ".gantt-scroll_bar {\n  position: absolute;\n  bottom: 0;\n  left: 16px;\n  height: 12px;\n}\n.gantt-scroll_bar-thumb {\n  position: absolute;\n  height: 100%;\n  border-radius: 4px;\n  background-color: #262626;\n  opacity: 0.2;\n  cursor: pointer;\n  will-change: transform;\n}\n";
+styleInject(css_248z$9);
+
+var ScrollBar = function ScrollBar() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls;
+
+  var tableWidth = store.tableWidth,
+      viewWidth = store.viewWidth;
+  var width = store.scrollBarWidth;
+  var prefixClsScrollBar = "".concat(prefixCls, "-scroll_bar");
+
+  var _useState = useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      resizing = _useState2[0],
+      setResizing = _useState2[1];
+
+  var positionRef = useRef({
+    scrollLeft: 0,
+    left: 0,
+    translateX: 0
+  });
+  var handleMouseMove = usePersistFn(function (event) {
+    var distance = event.clientX - positionRef.current.left; // TODO 调整倍率
+
+    store.setTranslateX(distance * (store.viewWidth / store.scrollBarWidth) + positionRef.current.translateX);
+  });
+  var handleMouseUp = useCallback(function () {
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
+    setResizing(false);
+  }, [handleMouseMove]);
+  var handleMouseDown = useCallback(function (event) {
+    positionRef.current.left = event.clientX;
+    positionRef.current.translateX = store.translateX;
+    positionRef.current.scrollLeft = store.scrollLeft;
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    setResizing(true);
+  }, [handleMouseMove, handleMouseUp, store.scrollLeft, store.translateX]);
+  return /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: prefixClsScrollBar,
+    style: {
+      left: tableWidth,
+      width: viewWidth
+    },
+    onMouseDown: handleMouseDown
+  }, resizing && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      zIndex: 9999,
+      cursor: 'col-resize'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsScrollBar, "-thumb"),
+    style: {
+      width: width,
+      left: store.scrollLeft
+    }
+  }));
+};
+
+var ScrollBar$1 = /*#__PURE__*/memo(observer(ScrollBar));
+
+var css_248z$8 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('/Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('/Top_hover.svg');\n}\n";
+styleInject(css_248z$8);
+
+var ScrollTop = function ScrollTop() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      scrollTopConfig = _useContext.scrollTop,
+      prefixCls = _useContext.prefixCls;
+
+  var scrollTop = store.scrollTop;
+  var handleClick = useCallback(function () {
+    if (store.mainElementRef.current) {
+      store.mainElementRef.current.scrollTop = 0;
+    }
+  }, [store.mainElementRef]);
+
+  if (scrollTop <= 100 || !store.mainElementRef.current) {
+    return null;
+  }
+
+  var prefixClsScrollTop = "".concat(prefixCls, "-scroll_top");
+  return /*#__PURE__*/React.createElement("div", {
+    className: prefixClsScrollTop,
+    style: scrollTopConfig instanceof Object ? scrollTopConfig : undefined,
+    onClick: handleClick
+  });
+};
+
+var ScrollTop$1 = observer(ScrollTop);
+
+var css_248z$7 = ".gantt-selection-indicator {\n  position: absolute;\n  width: 100%;\n  background: rgba(0, 0, 0, 0.04);\n  pointer-events: none;\n  z-index: 10;\n}\n";
+styleInject(css_248z$7);
+
+/**
+ * 鼠标hover效果模拟
+ */
+
+var SelectionIndicator = function SelectionIndicator() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls;
+
+  var showSelectionIndicator = store.showSelectionIndicator,
+      selectionIndicatorTop = store.selectionIndicatorTop,
+      rowHeight = store.rowHeight;
+  var prefixClsSelectionIndicator = "".concat(prefixCls, "-selection-indicator");
+  return showSelectionIndicator ? /*#__PURE__*/React.createElement("div", {
+    className: prefixClsSelectionIndicator,
+    style: {
+      height: rowHeight,
+      top: selectionIndicatorTop
+    }
+  }) : null;
+};
+
+var SelectionIndicator$1 = observer(SelectionIndicator);
+
+var css_248z$6 = ".gantt-row-toggler {\n  width: 24px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: #d9d9d9;\n  cursor: pointer;\n  position: relative;\n  z-index: 5;\n}\n.gantt-row-toggler:hover {\n  color: #8c8c8c;\n}\n.gantt-row-toggler > i {\n  width: 20px;\n  height: 20px;\n  background: white;\n}\n.gantt-row-toggler > i > svg {\n  transition: transform 218ms;\n  fill: currentColor;\n}\n.gantt-row-toggler-collapsed > i > svg {\n  transform: rotate(-90deg);\n}\n";
+styleInject(css_248z$6);
+
+var RowToggler = function RowToggler(_ref) {
+  var onClick = _ref.onClick,
+      collapsed = _ref.collapsed,
+      level = _ref.level,
+      _ref$prefixCls = _ref.prefixCls,
+      prefixCls = _ref$prefixCls === void 0 ? '' : _ref$prefixCls;
+  var prefixClsRowToggler = "".concat(prefixCls, "-row-toggler");
+  return /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    onClick: onClick,
+    className: prefixClsRowToggler
+  }, /*#__PURE__*/React.createElement("div", {
+    className: classNames(prefixClsRowToggler, _defineProperty({}, "".concat(prefixClsRowToggler, "-collapsed"), collapsed))
+  }, /*#__PURE__*/React.createElement("i", {
+    "data-level": level
+  }, level <= 0 ? /*#__PURE__*/React.createElement("svg", {
+    viewBox: '0 0 1024 1024'
+  }, /*#__PURE__*/React.createElement("path", {
+    d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
+  })) : /*#__PURE__*/React.createElement("svg", {
+    viewBox: '0 0 1024 1024'
+  }, /*#__PURE__*/React.createElement("path", {
+    d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
+  })))));
+};
+
+var css_248z$5 = ".gantt-table-body {\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 0 8px;\n  font-size: 14px;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
+styleInject(css_248z$5);
+
+var TableRows = function TableRows() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      onRow = _useContext.onRow,
+      tableIndent = _useContext.tableIndent,
+      expandIcon = _useContext.expandIcon,
+      prefixCls = _useContext.prefixCls,
+      onExpand = _useContext.onExpand;
+
+  var columns = store.columns,
+      rowHeight = store.rowHeight,
+      isTimeline = store.isTimeline;
+  var columnsWidth = store.getColumnsWidth;
+  var barList = store.getBarList;
+  var _store$getVisibleRows = store.getVisibleRows,
+      count = _store$getVisibleRows.count,
+      start = _store$getVisibleRows.start;
+  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
+
+  if (barList.length === 0) {
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'center',
+        color: ' rgba(0,0,0,0.65)',
+        marginTop: 30
+      }
+    }, "Nada encontrado.");
+  }
+
+  var parentIdMap = {};
+  var countParent = 0;
+
+  if (isTimeline) {
+    //if isTimeline create a object map with parentId as key and a index as value
+    barList.forEach(function (item) {
+      if (item.record.parentId === null) {
+        if (parentIdMap[item.record.id] === undefined) {
+          parentIdMap[item.record.id] = countParent;
+          countParent++;
+        }
+      }
+    });
+  }
+
+  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
+    // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
+    var parent = bar._parent;
+    var parentItem = parent === null || parent === void 0 ? void 0 : parent._parent;
+    var isLastChild = false;
+    if ((parentItem === null || parentItem === void 0 ? void 0 : parentItem.children) && parentItem.children[parentItem.children.length - 1] === bar._parent) isLastChild = true;
+    var topIndex = isTimeline && !bar.task.parentId ? parentIdMap[bar.record.id] : rowIndex;
+    if (isTimeline && bar.task.parentId) return null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: bar.key,
+      role: 'none',
+      className: "".concat(prefixClsTableBody, "-row"),
+      style: {
+        height: rowHeight,
+        top: (topIndex + start) * rowHeight + TOP_PADDING
+      },
+      onClick: function onClick() {
+        onRow === null || onRow === void 0 ? void 0 : onRow.onClick(bar.record);
+      }
+    }, columns.map(function (column, index) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: column.name,
+        className: "".concat(prefixClsTableBody, "-cell"),
+        style: _objectSpread2({
+          width: columnsWidth[index],
+          minWidth: column.minWidth,
+          maxWidth: column.maxWidth,
+          textAlign: column.align ? column.align : 'left',
+          paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 12
+        }, column.style)
+      }, index === 0 && !isTimeline && // eslint-disable-next-line unicorn/no-new-array
+      new Array(bar._depth).fill(0).map(function (_, i) {
+        var _classNames;
+
+        return /*#__PURE__*/React.createElement("div", {
+          // eslint-disable-next-line react/no-array-index-key
+          key: i,
+          className: classNames("".concat(prefixClsTableBody, "-row-indentation"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-hidden"), isLastChild && i === bar._depth - 2), _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-both"), i === bar._depth - 1), _classNames)),
+          style: {
+            top: -(rowHeight / 2) + 1,
+            left: tableIndent * i + 15,
+            width: tableIndent * 1.5 + 5
+          }
+        });
+      }), index === 0 && !isTimeline && bar._childrenCount > 0 && /*#__PURE__*/React.createElement("div", {
+        style: {
+          position: 'absolute',
+          left: tableIndent * bar._depth + 15,
+          background: 'white',
+          zIndex: 9,
+          transform: 'translateX(-52%)',
+          padding: 1
+        }
+      }, expandIcon ? expandIcon({
+        level: bar._depth,
+        collapsed: bar._collapsed,
+        onClick: function onClick(event) {
+          event.stopPropagation();
+          if (onExpand) onExpand(bar.task.record, !bar._collapsed);
+          store.setRowCollapse(bar.task, !bar._collapsed);
+        }
+      }) : /*#__PURE__*/React.createElement(RowToggler, {
+        prefixCls: prefixCls,
+        level: bar._depth,
+        collapsed: bar._collapsed,
+        onClick: function onClick(event) {
+          event.stopPropagation();
+          if (onExpand) onExpand(bar.task.record, !bar._collapsed);
+          store.setRowCollapse(bar.task, !bar._collapsed);
+        }
+      })), /*#__PURE__*/React.createElement("span", {
+        className: "".concat(prefixClsTableBody, "-ellipsis")
+      }, column.render ? column.render(bar.record) : bar.record[column.name]));
+    }));
+  }));
+};
+
+var ObserverTableRows = observer(TableRows);
+
+var TableBorders = function TableBorders() {
+  var _useContext2 = useContext(context),
+      store = _useContext2.store,
+      prefixCls = _useContext2.prefixCls;
+
+  var columns = store.columns;
+  var columnsWidth = store.getColumnsWidth;
+  var barList = store.getBarList;
+  if (barList.length === 0) return null;
+  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
+  return /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: "".concat(prefixClsTableBody, "-border_row")
+  }, columns.map(function (column, index) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: column.name,
+      className: "".concat(prefixClsTableBody, "-cell"),
+      style: _objectSpread2({
+        width: columnsWidth[index],
+        minWidth: column.minWidth,
+        maxWidth: column.maxWidth,
+        textAlign: column.align ? column.align : 'left'
+      }, column.style)
+    });
+  }));
+};
+
+var ObserverTableBorders = observer(TableBorders);
+
+var TableBody = function TableBody() {
+  var _useContext3 = useContext(context),
+      store = _useContext3.store,
+      prefixCls = _useContext3.prefixCls;
+
+  var handleMouseMove = useCallback(function (event) {
+    event.persist();
+    store.handleMouseMove(event);
+  }, [store]);
+  var handleMouseLeave = useCallback(function () {
+    store.handleMouseLeave();
+  }, [store]);
+  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
+  return /*#__PURE__*/React.createElement("div", {
+    className: prefixClsTableBody,
+    style: {
+      width: store.tableWidth,
+      height: store.bodyScrollHeight
+    },
+    onMouseMove: handleMouseMove,
+    onMouseLeave: handleMouseLeave
+  }, /*#__PURE__*/React.createElement(ObserverTableBorders, null), /*#__PURE__*/React.createElement(ObserverTableRows, null));
+};
+
+var TableBody$1 = observer(TableBody);
+
+var css_248z$4 = ".gantt-table-header {\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.gantt-table-header-head {\n  position: relative;\n}\n.gantt-table-header-row {\n  position: absolute;\n  left: 0;\n  display: flex;\n  transition: height 0.3s;\n  width: 100%;\n}\n.gantt-table-header-cell {\n  position: relative;\n  display: flex;\n  border-right: 1px solid #f0f0f0;\n}\n.gantt-table-header-head-cell {\n  display: flex;\n  flex: 1;\n  align-items: center;\n  overflow: hidden;\n  padding: 0 12px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 14px;\n  color: #2e405e;\n}\n.gantt-table-header-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n";
+styleInject(css_248z$4);
+
+var TableHeader = function TableHeader() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls,
+      renderCustomHeaderFilter = _useContext.renderCustomHeaderFilter;
+
+  var columns = store.columns,
+      tableWidth = store.tableWidth;
+  var width = tableWidth;
+  var columnsWidth = store.getColumnsWidth;
+  var prefixClsTableHeader = "".concat(prefixCls, "-table-header");
+  return /*#__PURE__*/React.createElement("div", {
+    className: prefixClsTableHeader,
+    style: {
+      width: width,
+      height: 56
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTableHeader, "-head"),
+    style: {
+      width: width,
+      height: 56
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTableHeader, "-row"),
+    style: {
+      height: 56
+    }
+  }, columns.map(function (column, index) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: column.name,
+      className: "".concat(prefixClsTableHeader, "-cell"),
+      style: _objectSpread2({
+        width: columnsWidth[index],
+        minWidth: column.minWidth,
+        maxWidth: column.maxWidth,
+        textAlign: column.align ? column.align : 'left'
+      }, column.style)
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "".concat(prefixClsTableHeader, "-head-cell")
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "".concat(prefixClsTableHeader, "-ellipsis")
+    }, column.label)));
+  }), renderCustomHeaderFilter ? renderCustomHeaderFilter() : null)));
+};
+
+var TableHeader$1 = observer(TableHeader);
+
+var css_248z$3 = ".gantt-time-axis {\n  height: 56px;\n  position: absolute;\n  top: 0;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  overflow: hidden;\n  cursor: ew-resize;\n}\n.gantt-time-axis-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 56px;\n  pointer-events: none;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  will-change: transform;\n}\n.gantt-time-axis-today {\n  background-color: #2c7ef8;\n  border-radius: 50%;\n  color: #fff;\n}\n.gantt-time-axis-major {\n  position: absolute;\n  overflow: hidden;\n  box-sizing: content-box;\n  height: 28px;\n  border-right: 1px solid #f0f0f0;\n  font-weight: 400;\n  text-align: left;\n  font-size: 13px;\n  line-height: 28px;\n}\n.gantt-time-axis-major-label {\n  overflow: hidden;\n  padding-left: 8px;\n  white-space: nowrap;\n}\n.gantt-time-axis-minor {\n  position: absolute;\n  top: 27px;\n  box-sizing: content-box;\n  height: 28px;\n  border-top: 1px solid #f0f0f0;\n  border-right: 1px solid #f0f0f0;\n  text-align: center;\n  font-size: 12px;\n  line-height: 28px;\n  color: #202d40;\n}\n.gantt-time-axis-minor.weekends {\n  background-color: hsla(0, 0%, 96.9%, 0.5);\n}\n";
+styleInject(css_248z$3);
+
+var TimeAxis = function TimeAxis() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls;
+
+  var prefixClsTimeAxis = "".concat(prefixCls, "-time-axis");
+  var sightConfig = store.sightConfig,
+      isToday = store.isToday;
+  var majorList = store.getMajorList();
+  var minorList = store.getMinorList();
+  var handleResize = useCallback(function (_ref) {
+    var x = _ref.x;
+    store.handlePanMove(-x);
+  }, [store]);
+  var handleLeftResizeEnd = useCallback(function () {
+    store.handlePanEnd();
+  }, [store]);
+  var getIsToday = useCallback(function (item) {
+    var key = item.key;
+    var type = sightConfig.type;
+    return type === 'day' && isToday(key);
+  }, [sightConfig, isToday]);
+  return /*#__PURE__*/React.createElement(DragResize$1, {
+    onResize: handleResize,
+    onResizeEnd: handleLeftResizeEnd,
+    defaultSize: {
+      x: -store.translateX,
+      width: 0
+    },
+    type: 'move'
+  }, /*#__PURE__*/React.createElement("div", {
+    className: prefixClsTimeAxis,
+    style: {
+      left: store.tableWidth,
+      width: store.viewWidth
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixClsTimeAxis, "-render-chunk"),
+    style: {
+      transform: "translateX(-".concat(store.translateX, "px")
+    }
+  }, majorList.map(function (item) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: item.key,
+      className: "".concat(prefixClsTimeAxis, "-major"),
+      style: {
+        width: item.width,
+        left: item.left
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "".concat(prefixClsTimeAxis, "-major-label")
+    }, item.label));
+  }), minorList.map(function (item) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: item.key,
+      className: classNames("".concat(prefixClsTimeAxis, "-minor")),
+      style: {
+        width: item.width,
+        left: item.left
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)))
+    }, item.label));
+  }))));
+};
+
+var TimeAxis$1 = observer(TimeAxis);
+
+var css_248z$2 = ".gantt-time-axis-scale-select .next-menu {\n  position: relative;\n  min-width: 150px;\n  padding: 4px 0;\n  margin: 0;\n  list-style: none;\n  border-radius: 4px;\n  background: #fff;\n  line-height: 36px;\n  font-size: 14px;\n}\n.gantt-time-axis-scale-select .next-menu,\n.gantt-time-axis-scale-select .next-menu *,\n.gantt-time-axis-scale-select .next-menu :after,\n.gantt-time-axis-scale-select .next-menu :before {\n  box-sizing: border-box;\n}\n.gantt-time-axis-scale-select .next-menu,\n.gantt-time-axis-scale-select .next-select-trigger,\n.gantt-time-axis-scale-select .next-select .next-select-inner {\n  min-width: unset;\n}\n.gantt-time-axis-scale-select .next-menu-item-text {\n  line-height: 36px;\n}\n.time-axis-scale-select__3fTI .next-menu-item-text {\n  line-height: 36px;\n}\n.gantt-shadow {\n  position: absolute;\n  top: 4px;\n  right: 0;\n  width: 90px;\n  height: 48px;\n  z-index: 0;\n  transition: box-shadow 0.5s;\n}\n.gantt-shadow.gantt-scrolling {\n  box-shadow: -3px 0 7px 0 #e5e5e5;\n}\n.gantt-trigger {\n  position: absolute;\n  top: 0;\n  right: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 56px;\n  border-top-right-radius: 4px;\n  background-color: #fff;\n  border-left: 1px solid #f0f0f0;\n  color: #bfbfbf;\n  padding: 0 8px 0 12px;\n  cursor: pointer;\n  width: 90px;\n  z-index: 1;\n  transition: color 0.2s;\n}\n.gantt-trigger:hover {\n  color: #8c8c8c;\n}\n.gantt-trigger:hover .gantt-text {\n  color: #262626;\n}\n.gantt-trigger .gantt-text {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  margin-right: 4px;\n  font-size: 14px;\n  color: #202d40;\n}\n.dropdown-icon {\n  width: 20px;\n  height: 20px;\n  line-height: 20px;\n}\n.dropdown-icon svg {\n  fill: currentColor;\n}\n.next-overlay-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n}\n.next-overlay-wrapper .next-overlay-inner {\n  z-index: 1001;\n  border-radius: 4px;\n  box-shadow: 0 12px 32px 0 rgba(38, 38, 38, 0.16);\n  -webkit-transform: translateZ(0);\n  transform: translateZ(0);\n}\n.next-overlay-wrapper .next-overlay-backdrop {\n  position: fixed;\n  z-index: 1001;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: #000;\n  transition: opacity 0.3s;\n  opacity: 0;\n}\n.next-overlay-wrapper.opened .next-overlay-backdrop {\n  opacity: 0.3;\n}\n.next-menu-item {\n  position: relative;\n  padding: 0 12px 0 40px;\n  transition: background 0.2s ease;\n  color: #262626;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n}\n.next-menu-item .gantt-selected_icon {\n  position: absolute;\n  left: 12px;\n  width: 20px;\n  height: 20px;\n  line-height: 20px;\n}\n.next-menu-item .gantt-selected_icon svg {\n  fill: #1b9aee;\n}\n.next-menu-item:hover {\n  font-weight: 400;\n  background-color: #f7f7f7;\n}\n.next-menu-item.next-selected {\n  color: #262626;\n  background-color: #fff;\n}\n.next-menu-item.next-selected .next-menu-icon-arrow {\n  color: #bfbfbf;\n}\n";
+styleInject(css_248z$2);
+
+var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls;
+
+  var sightConfig = store.sightConfig,
+      scrolling = store.scrolling,
+      viewTypeList = store.viewTypeList;
+
+  var _useState = useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      visible = _useState2[0],
+      setVisible = _useState2[1];
+
+  var ref = useRef(null);
+  useClickAway(function () {
+    setVisible(false);
+  }, ref);
+  var handleClick = useCallback(function () {
+    setVisible(true);
+  }, []);
+  var handleSelect = useCallback(function (item) {
+    store.switchSight(item.type);
+    setVisible(false);
+  }, [store]);
+  var selected = sightConfig.type;
+  var isSelected = useCallback(function (key) {
+    return key === selected;
+  }, [selected]);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixCls, "-time-axis-scale-select"),
+    ref: ref
+  }, /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: "".concat(prefixCls, "-trigger"),
+    onClick: handleClick
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixCls, "-text")
+  }, sightConfig.label), /*#__PURE__*/React.createElement("span", {
+    className: 'dropdown-icon'
+  }, /*#__PURE__*/React.createElement("svg", {
+    id: 'at-triangle-down-s',
+    viewBox: '0 0 1024 1024'
+  }, /*#__PURE__*/React.createElement("path", {
+    d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
+  })))), /*#__PURE__*/React.createElement("div", {
+    className: classNames("".concat(prefixCls, "-shadow"), _defineProperty({}, "".concat(prefixCls, "-scrolling"), scrolling))
+  }), visible && /*#__PURE__*/React.createElement("div", {
+    className: classNames('next-overlay-wrapper', 'opened')
+  }, /*#__PURE__*/React.createElement("div", {
+    className: classNames('next-overlay-inner'),
+    "aria-hidden": 'false',
+    style: {
+      position: 'absolute',
+      right: 15,
+      top: 60
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: 'next-loading-wrap'
+  }, /*#__PURE__*/React.createElement("ul", {
+    role: 'listbox',
+    className: classNames('next-menu'),
+    "aria-multiselectable": 'false'
+  }, viewTypeList.map(function (item) {
+    return /*#__PURE__*/React.createElement("li", {
+      key: item.type,
+      role: 'none',
+      onClick: function onClick() {
+        handleSelect(item);
+      },
+      className: classNames('next-menu-item', {
+        'next-selected': isSelected(item.type)
+      })
+    }, isSelected(item.type) && /*#__PURE__*/React.createElement("i", {
+      className: "".concat(prefixCls, "-selected_icon")
+    }, /*#__PURE__*/React.createElement("svg", {
+      viewBox: '0 0 1024 1024'
+    }, /*#__PURE__*/React.createElement("path", {
+      d: 'M413.7472 768a29.5936 29.5936 0 0 1-21.6576-9.472l-229.5296-241.152a33.3824 33.3824 0 0 1 0-45.5168 29.696 29.696 0 0 1 43.4176 0l207.7696 218.368 404.2752-424.7552a29.5936 29.5936 0 0 1 43.4176 0 33.3824 33.3824 0 0 1 0 45.568l-425.984 447.488A29.5936 29.5936 0 0 1 413.696 768'
+    }))), /*#__PURE__*/React.createElement("span", {
+      className: 'next-menu-item-text',
+      "aria-selected": 'true'
+    }, item.label));
+  }))))));
+};
+
+var TimeAxisScaleSelect$1 = observer(TimeAxisScaleSelect);
+
+var css_248z$1 = ".gantt-time-indicator {\n  position: absolute;\n  top: 0;\n  left: 0;\n  background-color: #096dd9;\n  box-shadow: 0 2px 4px rgba(1, 113, 194, 0.1);\n  transform: translate(12px, 14px);\n  transition: opacity 0.3s;\n  padding: 0 7px;\n  color: #fff;\n  border-radius: 4px;\n  outline: 0;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  box-sizing: border-box;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  vertical-align: middle;\n  cursor: pointer;\n  border: none;\n  font-size: 12px;\n}\n.gantt-time-indicator-scrolling {\n  opacity: 0;\n}\n";
+styleInject(css_248z$1);
+
+var TimeIndicator = function TimeIndicator() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls;
+
+  var scrolling = store.scrolling,
+      translateX = store.translateX,
+      tableWidth = store.tableWidth,
+      viewWidth = store.viewWidth,
+      todayTranslateX = store.todayTranslateX,
+      locale = store.locale;
+  var prefixClsTimeIndicator = "".concat(prefixCls, "-time-indicator");
+  var type = todayTranslateX < translateX ? 'left' : 'right';
+  var left = type === 'left' ? tableWidth : 'unset';
+  var right = type === 'right' ? 111 : 'unset';
+  var display = useMemo(function () {
+    var isOverLeft = todayTranslateX < translateX;
+    var isOverRight = todayTranslateX > translateX + viewWidth;
+    return isOverLeft || isOverRight ? 'block' : 'none';
+  }, [todayTranslateX, translateX, viewWidth]);
+  var handleClick = useCallback(function () {
+    store.scrollToToday();
+  }, [store]);
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: handleClick,
+    className: classNames(prefixClsTimeIndicator, _defineProperty({}, "".concat(prefixClsTimeIndicator, "-scrolling"), scrolling)),
+    type: "button",
+    "data-role": "button",
+    style: {
+      left: left,
+      right: right,
+      display: display
+    }
+  }, /*#__PURE__*/React.createElement("span", null, locale.today));
+};
+
+var TimeIndicator$1 = observer(TimeIndicator);
+
+var css_248z = ".gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: auto;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n}\n";
+styleInject(css_248z);
+
+var enUS = Object.freeze({
+  today: "Today",
+  day: "Day",
+  days: "Days",
+  week: "Week",
+  month: "Month",
+  quarter: "Quarter",
+  halfYear: "Half year",
+  firstHalf: "First half",
+  secondHalf: "Second half",
+  majorFormat: {
+    day: "YYYY, MMMM",
+    week: "YYYY, MMMM",
+    month: "YYYY",
+    quarter: "YYYY",
+    halfYear: "YYYY"
+  },
+  minorFormat: {
+    day: "D",
+    week: "wo [week]",
+    month: "MMMM",
+    quarter: "[Q]Q",
+    halfYear: "YYYY-"
+  }
+});
+
+var zhCN = Object.freeze({
+  today: "今天",
+  day: "日视图",
+  days: "天数",
+  week: "周视图",
+  month: "月视图",
+  quarter: "季视图",
+  halfYear: "年视图",
+  firstHalf: "上半年",
+  secondHalf: "下半年",
+  majorFormat: {
+    day: "YYYY年MM月",
+    week: "YYYY年MM月",
+    month: "YYYY年",
+    quarter: "YYYY年",
+    halfYear: "YYYY年"
+  },
+  minorFormat: {
+    day: "YYYY-MM-D",
+    week: "YYYY-w周",
+    month: "YYYY-MM月",
+    quarter: "YYYY-第Q季",
+    halfYear: "YYYY-"
+  }
+});
+
+var ptBR = Object.freeze({
+  day: "Dia",
+  days: "Dias",
+  week: "Semana",
+  month: "Mês",
+  quarter: "Trimestre",
+  today: "Hoje",
+  dayUnit: " Dias",
+  firstHalf: "Primeiro Semestre",
+  secondHalf: "Segundo Semestre",
+  halfYear: "Semestre",
+  majorFormat: {
+    day: "MM, YYYY",
+    week: "MMM, YYYY",
+    month: "YYYY",
+    quarter: "YYYY",
+    halfYear: "YYYY"
+  },
+  minorFormat: {
+    day: "D",
+    week: "[semana] w",
+    month: "MMMM",
+    quarter: "[T]Q",
+    halfYear: "YYYY-"
+  }
+});
+
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+var advancedFormat = createCommonjsModule(function (module, exports) {
+!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t,r){var n=t.prototype,s=n.format;r.en.ordinal=function(e){var t=["th","st","nd","rd"],r=e%100;return "["+e+(t[(r-20)%10]||t[r]||t[0])+"]"},n.format=function(e){var t=this,r=this.$locale();if(!this.isValid())return s.bind(this)(e);var n=this.$utils(),a=(e||"YYYY-MM-DDTHH:mm:ssZ").replace(/\[([^\]]+)]|Q|wo|ww|w|WW|W|zzz|z|gggg|GGGG|Do|X|x|k{1,2}|S/g,(function(e){switch(e){case"Q":return Math.ceil((t.$M+1)/3);case"Do":return r.ordinal(t.$D);case"gggg":return t.weekYear();case"GGGG":return t.isoWeekYear();case"wo":return r.ordinal(t.week(),"W");case"w":case"ww":return n.s(t.week(),"w"===e?1:2,"0");case"W":case"WW":return n.s(t.isoWeek(),"W"===e?1:2,"0");case"k":case"kk":return n.s(String(0===t.$H?24:t.$H),"k"===e?1:2,"0");case"X":return Math.floor(t.$d.getTime()/1e3);case"x":return t.$d.getTime();case"z":return "["+t.offsetName()+"]";case"zzz":return "["+t.offsetName("long")+"]";default:return e}}));return s.bind(this)(a)};}}));
+});
+
+var isBetween = createCommonjsModule(function (module, exports) {
+!function(e,i){module.exports=i();}(commonjsGlobal,(function(){return function(e,i,t){i.prototype.isBetween=function(e,i,s,f){var n=t(e),o=t(i),r="("===(f=f||"()")[0],u=")"===f[1];return (r?this.isAfter(n,s):!this.isBefore(n,s))&&(u?this.isBefore(o,s):!this.isAfter(o,s))||(r?this.isBefore(n,s):!this.isAfter(n,s))&&(u?this.isAfter(o,s):!this.isBefore(o,s))};}}));
+});
+
+var isLeapYear = createCommonjsModule(function (module, exports) {
+!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t){t.prototype.isLeapYear=function(){return this.$y%4==0&&this.$y%100!=0||this.$y%400==0};}}));
+});
+
+var quarterOfYear = createCommonjsModule(function (module, exports) {
+!function(t,n){module.exports=n();}(commonjsGlobal,(function(){var t="month",n="quarter";return function(e,i){var r=i.prototype;r.quarter=function(t){return this.$utils().u(t)?Math.ceil((this.month()+1)/3):this.month(this.month()%3+3*(t-1))};var s=r.add;r.add=function(e,i){return e=Number(e),this.$utils().p(i)===n?this.add(3*e,t):s.bind(this)(e,i)};var u=r.startOf;r.startOf=function(e,i){var r=this.$utils(),s=!!r.u(i)||i;if(r.p(e)===n){var o=this.quarter()-1;return s?this.month(3*o).startOf(t).startOf("day"):this.month(3*o+2).endOf(t).endOf("day")}return u.bind(this)(e,i)};}}));
+});
+
+var weekday = createCommonjsModule(function (module, exports) {
+!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t){t.prototype.weekday=function(e){var t=this.$locale().weekStart||0,i=this.$W,n=(i<t?i+7:i)-t;return this.$utils().u(e)?n:this.subtract(n,"day").add(e,"day")};}}));
+});
+
+var weekOfYear = createCommonjsModule(function (module, exports) {
+!function(e,t){module.exports=t();}(commonjsGlobal,(function(){var e="week",t="year";return function(i,n,r){var f=n.prototype;f.week=function(i){if(void 0===i&&(i=null),null!==i)return this.add(7*(i-this.week()),"day");var n=this.$locale().yearStart||1;if(11===this.month()&&this.date()>25){var f=r(this).startOf(t).add(1,t).date(n),s=r(this).endOf(e);if(f.isBefore(s))return 1}var a=r(this).startOf(t).date(n).startOf(e).subtract(1,"millisecond"),o=this.diff(a,e,!0);return o<0?r(this).startOf("week").week():Math.ceil(o)},f.weeks=function(e){return void 0===e&&(e=null),this.week(e)};}}));
+});
+
+/**
+ * Gets the timestamp of the number of milliseconds that have elapsed since
+ * the Unix epoch (1 January 1970 00:00:00 UTC).
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Date
+ * @returns {number} Returns the timestamp.
+ * @example
+ *
+ * _.defer(function(stamp) {
+ *   console.log(_.now() - stamp);
+ * }, _.now());
+ * // => Logs the number of milliseconds it took for the deferred invocation.
+ */
+var now = function() {
+  return _root.Date.now();
+};
+
+var now_1 = now;
+
+/** Error message constants. */
+var FUNC_ERROR_TEXT$1 = 'Expected a function';
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked. The debounced function comes with a `cancel` method to cancel
+ * delayed `func` invocations and a `flush` method to immediately invoke them.
+ * Provide `options` to indicate whether `func` should be invoked on the
+ * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+ * with the last arguments provided to the debounced function. Subsequent
+ * calls to the debounced function return the result of the last `func`
+ * invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `_.debounce` and `_.throttle`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0] The number of milliseconds to delay.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', _.debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }));
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+ * var source = new EventSource('/stream');
+ * jQuery(source).on('message', debounced);
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel);
+ */
+function debounce(func, wait, options) {
+  var lastArgs,
+      lastThis,
+      maxWait,
+      result,
+      timerId,
+      lastCallTime,
+      lastInvokeTime = 0,
+      leading = false,
+      maxing = false,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT$1);
+  }
+  wait = toNumber_1(wait) || 0;
+  if (isObject_1(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? nativeMax(toNumber_1(options.maxWait) || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    var args = lastArgs,
+        thisArg = lastThis;
+
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = setTimeout(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime,
+        timeWaiting = wait - timeSinceLastCall;
+
+    return maxing
+      ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+      : timeWaiting;
+  }
+
+  function shouldInvoke(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime;
+
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+  }
+
+  function timerExpired() {
+    var time = now_1();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = setTimeout(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined;
+
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(now_1());
+  }
+
+  function debounced() {
+    var time = now_1(),
+        isInvoking = shouldInvoke(time);
+
+    lastArgs = arguments;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        clearTimeout(timerId);
+        timerId = setTimeout(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = setTimeout(timerExpired, wait);
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  return debounced;
+}
+
+var debounce_1 = debounce;
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -5791,1383 +7170,6 @@ __decorate([action], GanttStore.prototype, "handleInvalidBarDragEnd", null);
 __decorate([action], GanttStore.prototype, "updateBarSize", null);
 
 __decorate([action], GanttStore.prototype, "updateTaskDate", null);
-
-var css_248z$f = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
-styleInject(css_248z$f);
-
-var TaskBar = function TaskBar(_ref) {
-  var _classNames;
-
-  var data = _ref.data;
-
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      getBarColor = _useContext.getBarColor,
-      renderBar = _useContext.renderBar,
-      onBarClick = _useContext.onBarClick,
-      prefixCls = _useContext.prefixCls,
-      barHeight = _useContext.barHeight,
-      alwaysShowTaskBar = _useContext.alwaysShowTaskBar,
-      renderLeftText = _useContext.renderLeftText,
-      renderRightText = _useContext.renderRightText;
-
-  var width = data.width,
-      translateX = data.translateX,
-      translateY = data.translateY,
-      invalidDateRange = data.invalidDateRange,
-      stepGesture = data.stepGesture,
-      dateTextFormat = data.dateTextFormat,
-      record = data.record,
-      loading = data.loading,
-      getDateWidth = data.getDateWidth;
-
-  var _ref2 = record || {},
-      _ref2$disabled = _ref2.disabled,
-      disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
-
-  var prefixClsTaskBar = "".concat(prefixCls, "-task-bar");
-  var selectionIndicatorTop = store.selectionIndicatorTop,
-      showSelectionIndicator = store.showSelectionIndicator,
-      rowHeight = store.rowHeight,
-      locale = store.locale,
-      isTimeline = store.isTimeline;
-  var showDragBar = useMemo(function () {
-    if (!showSelectionIndicator) return false; // 差值
-
-    var baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2;
-    return selectionIndicatorTop === translateY - baseTop;
-  }, [showSelectionIndicator, selectionIndicatorTop, translateY, rowHeight, barHeight]);
-  var themeColor = useMemo(function () {
-    if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE'];
-    return ['#FD998F', '#F96B5D'];
-  }, [store.pxUnitAmp, translateX, width]);
-
-  var handleBeforeResize = function handleBeforeResize(type) {
-    return function () {
-      if (disabled) return;
-      store.handleDragStart(data, type);
-    };
-  };
-
-  var handleResize = useCallback(function (_ref3) {
-    var newWidth = _ref3.width,
-        x = _ref3.x;
-    if (disabled) return;
-    store.updateBarSize(data, {
-      width: newWidth,
-      x: x
-    });
-  }, [data, store, disabled]);
-  var handleLeftResizeEnd = useCallback(function (oldSize) {
-    store.handleDragEnd();
-    store.updateTaskDate(data, oldSize, 'left');
-  }, [data, store]);
-  var handleRightResizeEnd = useCallback(function (oldSize) {
-    store.handleDragEnd();
-    store.updateTaskDate(data, oldSize, 'right');
-  }, [data, store]);
-  var handleMoveEnd = useCallback(function (oldSize) {
-    store.handleDragEnd();
-    store.updateTaskDate(data, oldSize, 'move');
-  }, [data, store]);
-  var handleAutoScroll = useCallback(function (delta) {
-    store.setTranslateX(store.translateX + delta);
-  }, [store]);
-  var allowDrag = showDragBar && !loading;
-  var handleClick = useCallback(function (e) {
-    e.stopPropagation();
-    if (onBarClick) onBarClick(data.record);
-  }, [data.record, onBarClick]);
-  var reachEdge = usePersistFn(function (position) {
-    return position === 'left' && store.translateX <= 0;
-  }); // 根据不同的视图确定拖动时的单位，在任何视图下都以一天为单位
-
-  var grid = useMemo(function () {
-    return ONE_DAY_MS / store.pxUnitAmp;
-  }, [store.pxUnitAmp]);
-  var moveCalc = -(width / store.pxUnitAmp);
-  var days = useMemo(function () {
-    var daysWidth = Number(getDateWidth(translateX + width + moveCalc, translateX));
-    return "".concat(daysWidth, " ").concat(daysWidth > 1 ? locale.days : locale.day);
-  }, [translateX, width, moveCalc, translateX]);
-  return /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    className: classNames(prefixClsTaskBar, (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTaskBar, "-invalid-date-range"), invalidDateRange), _defineProperty(_classNames, "".concat(prefixClsTaskBar, "-overdue"), !invalidDateRange), _classNames)),
-    style: {
-      transform: "translate(".concat(translateX, "px, ").concat(translateY, "px)")
-    },
-    onClick: handleClick
-  }, loading && /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTaskBar, "-loading")
-  }), /*#__PURE__*/React.createElement("div", null, allowDrag && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(DragResize$1, {
-    className: classNames("".concat(prefixClsTaskBar, "-resize-handle"), "".concat(prefixClsTaskBar, "-resize-handle-left"), _defineProperty({}, "".concat(prefixClsTaskBar, "-resize-handle-disabled"), disabled)),
-    style: {
-      left: -14
-    },
-    onResize: handleResize,
-    onResizeEnd: handleLeftResizeEnd,
-    defaultSize: {
-      x: translateX,
-      width: width
-    },
-    minWidth: 30,
-    grid: grid,
-    type: 'left',
-    scroller: store.chartElementRef.current || undefined,
-    onAutoScroll: handleAutoScroll,
-    reachEdge: reachEdge,
-    onBeforeResize: handleBeforeResize('left'),
-    disabled: disabled
-  }), /*#__PURE__*/React.createElement(DragResize$1, {
-    className: classNames("".concat(prefixClsTaskBar, "-resize-handle"), "".concat(prefixClsTaskBar, "-resize-handle-right"), _defineProperty({}, "".concat(prefixClsTaskBar, "-resize-handle-disabled"), disabled)),
-    style: {
-      left: width + 1
-    },
-    onResize: handleResize,
-    onResizeEnd: handleRightResizeEnd,
-    defaultSize: {
-      x: translateX,
-      width: width
-    },
-    minWidth: 30,
-    grid: grid,
-    type: 'right',
-    scroller: store.chartElementRef.current || undefined,
-    onAutoScroll: handleAutoScroll,
-    reachEdge: reachEdge,
-    onBeforeResize: handleBeforeResize('right'),
-    disabled: disabled
-  }), /*#__PURE__*/React.createElement("div", {
-    className: classNames("".concat(prefixClsTaskBar, "-resize-bg"), "".concat(prefixClsTaskBar, "-resize-bg-compact")),
-    style: {
-      width: width + 30,
-      left: -14
-    }
-  })), /*#__PURE__*/React.createElement(DragResize$1, {
-    className: "".concat(prefixClsTaskBar, "-bar"),
-    onResize: handleResize,
-    onResizeEnd: handleMoveEnd,
-    defaultSize: {
-      x: translateX,
-      width: width
-    },
-    minWidth: 30,
-    grid: grid,
-    type: 'move',
-    scroller: store.chartElementRef.current || undefined,
-    onAutoScroll: handleAutoScroll,
-    reachEdge: reachEdge,
-    onBeforeResize: handleBeforeResize('move')
-  }, renderBar ? renderBar(data, {
-    width: width + 1,
-    height: barHeight + 1
-  }) : /*#__PURE__*/React.createElement("svg", {
-    xmlns: 'http://www.w3.org/2000/svg',
-    version: '1.1',
-    width: width + 1,
-    height: barHeight + 1,
-    viewBox: "0 0 ".concat(width + 1, " ").concat(barHeight + 1)
-  }, /*#__PURE__*/React.createElement("path", {
-    fill: record.backgroundColor || getBarColor && getBarColor(record).backgroundColor || themeColor[0],
-    stroke: record.borderColor || getBarColor && getBarColor(record).borderColor || themeColor[1],
-    d: "\n              M".concat(width - 2, ",0.5\n              l-").concat(width - 5, ",0\n              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n              l0,5.3\n\n              c0.03256,0.38255 0.20896,0.724 0.47457,0.97045\n              c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013\n              l4,0\n\n              l").concat(width - 12, ",0\n\n              l4,0\n              c0.41421,0 0.78921,-0.16789 1.06066,-0.43934\n              c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066\n\n              l0,-5.3\n              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n            ")
-  })))), (allowDrag || disabled || alwaysShowTaskBar) && !isTimeline && /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTaskBar, "-label"),
-    style: {
-      left: width / 2 - 10
-    }
-  }, days), (stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTaskBar, "-date-text"),
-    style: {
-      left: width + 16
-    }
-  }, renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)), /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTaskBar, "-date-text"),
-    style: {
-      right: 16
-    }
-  }, renderLeftText ? renderLeftText(data) : dateTextFormat(translateX))));
-};
-
-var TaskBar$1 = observer(TaskBar);
-
-/* eslint-disable no-underscore-dangle */
-
-var BarList = function BarList() {
-  var _useContext = useContext(context),
-      store = _useContext.store;
-
-  var barList = store.getBarList;
-  var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
-    if (bar._group) return /*#__PURE__*/React.createElement(GroupBar$1, {
-      key: bar.key,
-      data: bar
-    });
-    return bar.invalidDateRange ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
-      key: bar.key,
-      data: bar
-    }) : /*#__PURE__*/React.createElement(TaskBar$1, {
-      key: bar.key,
-      data: bar
-    });
-  }));
-};
-
-var BarList$1 = observer(BarList);
-
-var css_248z$e = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@-webkit-keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n";
-styleInject(css_248z$e);
-
-var TaskBarThumb = function TaskBarThumb(_ref) {
-  var _classNames;
-
-  var data = _ref.data;
-
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      renderBarThumb = _useContext.renderBarThumb,
-      prefixCls = _useContext.prefixCls,
-      getBarColor = _useContext.getBarColor;
-
-  var prefixClsTaskBarThumb = "".concat(prefixCls, "-task-bar-thumb");
-  var viewTranslateX = store.translateX,
-      viewWidth = store.viewWidth;
-  var translateX = data.translateX,
-      translateY = data.translateY,
-      label = data.label,
-      record = data.record;
-  var type = useMemo(function () {
-    var rightSide = viewTranslateX + viewWidth;
-    return translateX - rightSide > 0 ? 'right' : 'left';
-  }, [translateX, viewTranslateX, viewWidth]);
-  var left = useMemo(function () {
-    return type === 'right' ? viewTranslateX + viewWidth - 5 : viewTranslateX + 2;
-  }, [type, viewTranslateX, viewWidth]);
-  var handleClick = useCallback(function (e) {
-    e.stopPropagation();
-    store.scrollToBar(data, type);
-  }, [data, store, type]);
-  useMemo(function () {
-    return record.backgroundColor || getBarColor && getBarColor(record).backgroundColor;
-  }, [record]);
-  return /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    className: classNames(prefixClsTaskBarThumb, (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTaskBarThumb, "-left"), type === 'left'), _defineProperty(_classNames, "".concat(prefixClsTaskBarThumb, "-right"), type === 'right'), _classNames)),
-    style: {
-      left: left,
-      top: translateY - 5
-    },
-    onClick: handleClick
-  }, type === 'left' && /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTaskBarThumb, "-circle-left")
-  }), renderBarThumb ? renderBarThumb(data.record, type) : label, type === 'right' && /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTaskBarThumb, "-circle-right")
-  }));
-};
-
-var TaskBarThumb$1 = observer(TaskBarThumb);
-
-/* eslint-disable no-underscore-dangle */
-
-var BarThumbList = function BarThumbList() {
-  var _useContext = useContext(context),
-      store = _useContext.store;
-
-  var barList = store.getBarList;
-  var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
-    if (store.getTaskBarThumbVisible(bar)) return /*#__PURE__*/React.createElement(TaskBarThumb$1, {
-      data: bar,
-      key: bar.key
-    });
-    return null;
-  }));
-};
-
-var BarThumbList$1 = observer(BarThumbList);
-
-var css_248z$d = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
-styleInject(css_248z$d);
-
-var spaceX = 10;
-var spaceY = 10;
-/**
- * 获取关键点
- *
- * @param from
- * @param to
- */
-
-function getPoints(from, to, type) {
-  var fromX = from.x,
-      fromY = from.y;
-  var toX = to.x,
-      toY = to.y;
-  var sameSide = type === 'finish_finish' || type === 'start_start'; // 同向，只需要两个关键点
-
-  if (sameSide) {
-    if (type === 'start_start') {
-      return [{
-        x: Math.min(fromX - spaceX, toX - spaceX),
-        y: fromY
-      }, {
-        x: Math.min(fromX - spaceX, toX - spaceX),
-        y: toY
-      }];
-    }
-
-    return [{
-      x: Math.max(fromX + spaceX, toX + spaceX),
-      y: fromY
-    }, {
-      x: Math.max(fromX + spaceX, toX + spaceX),
-      y: toY
-    }];
-  } // 不同向，需要四个关键点
-
-
-  return [{
-    x: type === 'finish_start' ? fromX + spaceX : fromX - spaceX,
-    y: fromY
-  }, {
-    x: type === 'finish_start' ? fromX + spaceX : fromX - spaceX,
-    y: toY - spaceY
-  }, {
-    x: type === 'finish_start' ? toX - spaceX : toX + spaceX,
-    y: toY - spaceY
-  }, {
-    x: type === 'finish_start' ? toX - spaceX : toX + spaceX,
-    y: toY
-  }];
-}
-
-var Dependence = function Dependence(_ref) {
-  var data = _ref.data;
-
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      barHeight = _useContext.barHeight;
-
-  var from = data.from,
-      to = data.to,
-      type = data.type,
-      _data$color = data.color,
-      color = _data$color === void 0 ? '#f87872' : _data$color;
-  var barList = store.getBarList;
-  var fromBar = find_1(barList, function (bar) {
-    return bar.record.id === from;
-  });
-  var toBar = find_1(barList, function (bar) {
-    return bar.record.id === to;
-  });
-  if (!fromBar || !toBar) return null;
-  var posY = barHeight / 2;
-
-  var _ref2 = function () {
-    return [{
-      x: type === 'finish_finish' || type === 'finish_start' ? fromBar.translateX + fromBar.width : fromBar.translateX,
-      y: fromBar.translateY + posY
-    }, {
-      x: type === 'finish_finish' || type === 'start_finish' ? toBar.translateX + toBar.width : toBar.translateX,
-      y: toBar.translateY + posY
-    }];
-  }(),
-      _ref3 = _slicedToArray(_ref2, 2),
-      start = _ref3[0],
-      end = _ref3[1];
-
-  var points = [].concat(_toConsumableArray(getPoints(start, end, type)), [end]);
-  var endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1;
-  return /*#__PURE__*/React.createElement("g", {
-    stroke: color,
-    className: css_248z$d['task-dependency-line']
-  }, /*#__PURE__*/React.createElement("path", {
-    style: {
-      stroke: color
-    },
-    d: "\n          M".concat(start.x, ",").concat(start.y, "\n          ").concat(points.map(function (point) {
-      return "L".concat(point.x, ",").concat(point.y);
-    }).join('\n'), "\n          L").concat(end.x, ",").concat(end.y, "\n          "),
-    strokeWidth: '1',
-    fill: 'none'
-  }), /*#__PURE__*/React.createElement("path", {
-    name: 'arrow',
-    strokeWidth: '1',
-    fill: color,
-    d: "\n        M".concat(end.x, ",").concat(end.y, " \n        L").concat(end.x - 4 * endPosition, ",").concat(end.y - 3 * endPosition, " \n        L").concat(end.x - 4 * endPosition, ",").concat(end.y + 3 * endPosition, " \n        Z")
-  }));
-};
-
-var Dependence$1 = observer(Dependence);
-
-var Dependencies = function Dependencies() {
-  var _useContext = useContext(context),
-      store = _useContext.store;
-
-  var dependencies = store.dependencies;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, dependencies.map(function (dependence) {
-    return /*#__PURE__*/React.createElement(Dependence$1, {
-      key: JSON.stringify(dependence),
-      data: dependence
-    });
-  }));
-};
-
-var Dependencies$1 = observer(Dependencies);
-
-/**
- * 拖动时的提示条
- */
-
-var DragPresent = function DragPresent() {
-  var _useContext = useContext(context),
-      store = _useContext.store;
-
-  var dragging = store.dragging,
-      draggingType = store.draggingType,
-      bodyScrollHeight = store.bodyScrollHeight;
-
-  if (!dragging) {
-    return null;
-  } // 和当前拖动的块一样长
-
-
-  var width = dragging.width,
-      translateX = dragging.translateX;
-  var left = translateX;
-  var right = translateX + width;
-  var leftLine = draggingType === 'left' || draggingType === 'move';
-  var rightLine = draggingType === 'right' || draggingType === 'move';
-  return /*#__PURE__*/React.createElement("g", {
-    fill: "#DAE0FF",
-    stroke: "#7B90FF"
-  }, leftLine && /*#__PURE__*/React.createElement("path", {
-    d: "M".concat(left, ",0 L").concat(left, ",").concat(bodyScrollHeight)
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: left,
-    y: "0",
-    width: width,
-    height: bodyScrollHeight,
-    strokeWidth: "0"
-  }), rightLine && /*#__PURE__*/React.createElement("path", {
-    d: "M".concat(right, ",0 L").concat(right, ",").concat(bodyScrollHeight)
-  }));
-};
-
-var DragPresent$1 = observer(DragPresent);
-
-var css_248z$c = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
-styleInject(css_248z$c);
-
-var Today = function Today() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
-  return /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixCls, "-today"),
-    style: {
-      transform: "translate(".concat(store.todayTranslateX, "px)")
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixCls, "-today_line"),
-    style: {
-      height: store.bodyScrollHeight
-    }
-  }));
-};
-
-var Today$1 = observer(Today);
-
-var css_248z$b = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
-styleInject(css_248z$b);
-
-var Chart = function Chart() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
-  var tableWidth = store.tableWidth,
-      viewWidth = store.viewWidth,
-      bodyScrollHeight = store.bodyScrollHeight,
-      translateX = store.translateX,
-      chartElementRef = store.chartElementRef;
-  var minorList = store.getMinorList();
-  var handleMouseMove = useCallback(function (event) {
-    event.persist();
-    store.handleMouseMove(event);
-  }, [store]);
-  var handleMouseLeave = useCallback(function () {
-    store.handleMouseLeave();
-  }, [store]);
-  useEffect(function () {
-    var element = chartElementRef.current;
-    if (element) element.addEventListener('wheel', store.handleWheel);
-    return function () {
-      if (element) element.removeEventListener('wheel', store.handleWheel);
-    };
-  }, [chartElementRef, store]);
-  return /*#__PURE__*/React.createElement("div", {
-    ref: chartElementRef,
-    className: "".concat(prefixCls, "-chart"),
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
-    style: {
-      left: tableWidth,
-      width: viewWidth,
-      height: bodyScrollHeight
-    }
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "".concat(prefixCls, "-chart-svg-renderer"),
-    xmlns: 'http://www.w3.org/2000/svg',
-    version: '1.1',
-    width: viewWidth,
-    height: bodyScrollHeight,
-    viewBox: "".concat(translateX, " 0 ").concat(viewWidth, " ").concat(bodyScrollHeight)
-  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("pattern", {
-    id: 'repeat',
-    width: '4.5',
-    height: '10',
-    patternUnits: 'userSpaceOnUse',
-    patternTransform: 'rotate(70 50 50)'
-  }, /*#__PURE__*/React.createElement("line", {
-    stroke: '#c6c6c6',
-    strokeWidth: '1px',
-    y2: '10'
-  }))), minorList.map(function (item) {
-    return item.isWeek ? /*#__PURE__*/React.createElement("g", {
-      key: item.key,
-      stroke: '#f0f0f0'
-    }, /*#__PURE__*/React.createElement("path", {
-      d: "M".concat(item.left, ",0 L").concat(item.left, ",").concat(bodyScrollHeight)
-    }), /*#__PURE__*/React.createElement("rect", {
-      fill: 'url(#repeat)',
-      opacity: '0.5',
-      strokeWidth: '0',
-      x: item.left,
-      y: 0,
-      width: item.width,
-      height: bodyScrollHeight
-    })) : /*#__PURE__*/React.createElement("g", {
-      key: item.key,
-      stroke: '#f0f0f0'
-    }, /*#__PURE__*/React.createElement("path", {
-      d: "M".concat(item.left, ",0 L").concat(item.left, ",").concat(bodyScrollHeight)
-    }));
-  }), /*#__PURE__*/React.createElement(DragPresent$1, null), /*#__PURE__*/React.createElement(Dependencies$1, null)), /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixCls, "-render-chunk"),
-    style: {
-      height: bodyScrollHeight,
-      transform: "translateX(-".concat(translateX, "px")
-    }
-  }, /*#__PURE__*/React.createElement(BarThumbList$1, null), /*#__PURE__*/React.createElement(BarList$1, null), /*#__PURE__*/React.createElement(Today$1, null)));
-};
-
-var Chart$1 = /*#__PURE__*/memo(observer(Chart));
-
-function useDragResize(handleResize, _ref) {
-  var initSize = _ref.initSize,
-      minWidthConfig = _ref.minWidth,
-      maxWidthConfig = _ref.maxWidth;
-
-  var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      resizing = _useState2[0],
-      setResizing = _useState2[1];
-
-  var positionRef = useRef({
-    left: 0
-  });
-  var initSizeRef = useRef(initSize);
-  var handleMouseMove = usePersistFn( /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
-      var distance, width;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              distance = event.clientX - positionRef.current.left;
-              width = initSizeRef.current.width + distance;
-
-              if (minWidthConfig !== undefined) {
-                width = Math.max(width, minWidthConfig);
-              }
-
-              if (maxWidthConfig !== undefined) {
-                width = Math.min(width, maxWidthConfig);
-              }
-
-              handleResize({
-                width: width
-              });
-
-            case 5:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function (_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }());
-  var handleMouseUp = useCallback(function () {
-    window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
-    setResizing(false);
-  }, [handleMouseMove]);
-  var handleMouseDown = useCallback(function (event) {
-    positionRef.current.left = event.clientX;
-    initSizeRef.current = initSize;
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    setResizing(true);
-  }, [handleMouseMove, handleMouseUp, initSize]);
-  return [handleMouseDown, resizing];
-}
-
-var css_248z$a = ".gantt-divider {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  cursor: col-resize;\n}\n.gantt-divider:hover hr {\n  border-color: #3b88f4;\n}\n.gantt-divider:hover hr:before {\n  background: #3b88f4;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper {\n  background-color: #3b88f4;\n  border-color: #3b88f4;\n  border-top: 0;\n  border-bottom: 0;\n  cursor: pointer;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper:after {\n  content: '';\n  right: -3px;\n  position: absolute;\n  width: 2px;\n  height: 30px;\n  background-color: transparent;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:after,\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:before {\n  background-color: #fff;\n}\n.gantt-divider > hr {\n  margin: 0;\n  height: 100%;\n  width: 0;\n  border: none;\n  border-right: 1px solid transparent;\n}\n.gantt-divider > .gantt-divider-icon-wrapper {\n  position: absolute;\n  left: 1px;\n  top: 50%;\n  transform: translateY(-50%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 14px;\n  height: 30px;\n  border-radius: 0 4px 4px 0;\n  border: 1px solid #f0f0f0;\n  border-left: 0;\n  background-color: #fff;\n}\n.gantt-divider-arrow:before {\n  bottom: -1px;\n  transform: rotate(30deg);\n}\n.gantt-divider-arrow:after {\n  top: -1px;\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow:after,\n.gantt-divider-arrow:before {\n  content: '';\n  display: block;\n  position: relative;\n  width: 2px;\n  height: 8px;\n  background-color: #bfbfbf;\n  border-radius: 1px;\n}\n.gantt-divider-arrow.gantt-divider-reverse:before {\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow.gantt-divider-reverse:after {\n  transform: rotate(30deg);\n}\n.gantt-divider_only > hr:before {\n  content: '';\n  position: absolute;\n  border-top: 7px solid white;\n  border-bottom: 7px solid white;\n  background: #a7add0;\n  z-index: 2;\n  height: 26px;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 2px;\n}\n.gantt-divider_only > hr {\n  border-color: #a7add0;\n}\n";
-styleInject(css_248z$a);
-
-var Divider = function Divider() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      tableCollapseAble = _useContext.tableCollapseAble,
-      prefixCls = _useContext.prefixCls;
-
-  var prefixClsDivider = "".concat(prefixCls, "-divider");
-  var tableWidth = store.tableWidth;
-  var handleClick = useCallback(function (event) {
-    event.stopPropagation();
-    store.toggleCollapse();
-  }, [store]);
-  var left = tableWidth;
-  var handleResize = useCallback(function (_ref) {
-    var width = _ref.width;
-    store.handleResizeTableWidth(width);
-  }, [store]);
-
-  var _useDragResize = useDragResize(handleResize, {
-    initSize: {
-      width: tableWidth
-    },
-    minWidth: 200,
-    maxWidth: store.width * 0.6
-  }),
-      _useDragResize2 = _slicedToArray(_useDragResize, 2),
-      handleMouseDown = _useDragResize2[0],
-      resizing = _useDragResize2[1];
-
-  return /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    className: classNames(prefixClsDivider, _defineProperty({}, "".concat(prefixClsDivider, "_only"), !tableCollapseAble)),
-    style: {
-      left: left - 1
-    },
-    onMouseDown: tableWidth === 0 ? undefined : handleMouseDown
-  }, resizing && /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-      zIndex: 9999,
-      cursor: 'col-resize'
-    }
-  }), /*#__PURE__*/React.createElement("hr", null), tableCollapseAble && /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsDivider, "-icon-wrapper"),
-    role: 'none',
-    onMouseDown: function onMouseDown(e) {
-      return e.stopPropagation();
-    },
-    onClick: handleClick
-  }, /*#__PURE__*/React.createElement("i", {
-    className: classNames("".concat(prefixClsDivider, "-arrow"), _defineProperty({}, "".concat(prefixClsDivider, "-reverse"), left <= 0))
-  })));
-};
-
-var Divider$1 = observer(Divider);
-
-var css_248z$9 = ".gantt-scroll_bar {\n  position: absolute;\n  bottom: 0;\n  left: 16px;\n  height: 12px;\n}\n.gantt-scroll_bar-thumb {\n  position: absolute;\n  height: 100%;\n  border-radius: 4px;\n  background-color: #262626;\n  opacity: 0.2;\n  cursor: pointer;\n  will-change: transform;\n}\n";
-styleInject(css_248z$9);
-
-var ScrollBar = function ScrollBar() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
-  var tableWidth = store.tableWidth,
-      viewWidth = store.viewWidth;
-  var width = store.scrollBarWidth;
-  var prefixClsScrollBar = "".concat(prefixCls, "-scroll_bar");
-
-  var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      resizing = _useState2[0],
-      setResizing = _useState2[1];
-
-  var positionRef = useRef({
-    scrollLeft: 0,
-    left: 0,
-    translateX: 0
-  });
-  var handleMouseMove = usePersistFn(function (event) {
-    var distance = event.clientX - positionRef.current.left; // TODO 调整倍率
-
-    store.setTranslateX(distance * (store.viewWidth / store.scrollBarWidth) + positionRef.current.translateX);
-  });
-  var handleMouseUp = useCallback(function () {
-    window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
-    setResizing(false);
-  }, [handleMouseMove]);
-  var handleMouseDown = useCallback(function (event) {
-    positionRef.current.left = event.clientX;
-    positionRef.current.translateX = store.translateX;
-    positionRef.current.scrollLeft = store.scrollLeft;
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    setResizing(true);
-  }, [handleMouseMove, handleMouseUp, store.scrollLeft, store.translateX]);
-  return /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    className: prefixClsScrollBar,
-    style: {
-      left: tableWidth,
-      width: viewWidth
-    },
-    onMouseDown: handleMouseDown
-  }, resizing && /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-      zIndex: 9999,
-      cursor: 'col-resize'
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsScrollBar, "-thumb"),
-    style: {
-      width: width,
-      left: store.scrollLeft
-    }
-  }));
-};
-
-var ScrollBar$1 = /*#__PURE__*/memo(observer(ScrollBar));
-
-var css_248z$8 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('/Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('/Top_hover.svg');\n}\n";
-styleInject(css_248z$8);
-
-var ScrollTop = function ScrollTop() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      scrollTopConfig = _useContext.scrollTop,
-      prefixCls = _useContext.prefixCls;
-
-  var scrollTop = store.scrollTop;
-  var handleClick = useCallback(function () {
-    if (store.mainElementRef.current) {
-      store.mainElementRef.current.scrollTop = 0;
-    }
-  }, [store.mainElementRef]);
-
-  if (scrollTop <= 100 || !store.mainElementRef.current) {
-    return null;
-  }
-
-  var prefixClsScrollTop = "".concat(prefixCls, "-scroll_top");
-  return /*#__PURE__*/React.createElement("div", {
-    className: prefixClsScrollTop,
-    style: scrollTopConfig instanceof Object ? scrollTopConfig : undefined,
-    onClick: handleClick
-  });
-};
-
-var ScrollTop$1 = observer(ScrollTop);
-
-var css_248z$7 = ".gantt-selection-indicator {\n  position: absolute;\n  width: 100%;\n  background: rgba(0, 0, 0, 0.04);\n  pointer-events: none;\n  z-index: 10;\n}\n";
-styleInject(css_248z$7);
-
-/**
- * 鼠标hover效果模拟
- */
-
-var SelectionIndicator = function SelectionIndicator() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
-  var showSelectionIndicator = store.showSelectionIndicator,
-      selectionIndicatorTop = store.selectionIndicatorTop,
-      rowHeight = store.rowHeight;
-  var prefixClsSelectionIndicator = "".concat(prefixCls, "-selection-indicator");
-  return showSelectionIndicator ? /*#__PURE__*/React.createElement("div", {
-    className: prefixClsSelectionIndicator,
-    style: {
-      height: rowHeight,
-      top: selectionIndicatorTop
-    }
-  }) : null;
-};
-
-var SelectionIndicator$1 = observer(SelectionIndicator);
-
-var css_248z$6 = ".gantt-row-toggler {\n  width: 24px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: #d9d9d9;\n  cursor: pointer;\n  position: relative;\n  z-index: 5;\n}\n.gantt-row-toggler:hover {\n  color: #8c8c8c;\n}\n.gantt-row-toggler > i {\n  width: 20px;\n  height: 20px;\n  background: white;\n}\n.gantt-row-toggler > i > svg {\n  transition: transform 218ms;\n  fill: currentColor;\n}\n.gantt-row-toggler-collapsed > i > svg {\n  transform: rotate(-90deg);\n}\n";
-styleInject(css_248z$6);
-
-var RowToggler = function RowToggler(_ref) {
-  var onClick = _ref.onClick,
-      collapsed = _ref.collapsed,
-      level = _ref.level,
-      _ref$prefixCls = _ref.prefixCls,
-      prefixCls = _ref$prefixCls === void 0 ? '' : _ref$prefixCls;
-  var prefixClsRowToggler = "".concat(prefixCls, "-row-toggler");
-  return /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    onClick: onClick,
-    className: prefixClsRowToggler
-  }, /*#__PURE__*/React.createElement("div", {
-    className: classNames(prefixClsRowToggler, _defineProperty({}, "".concat(prefixClsRowToggler, "-collapsed"), collapsed))
-  }, /*#__PURE__*/React.createElement("i", {
-    "data-level": level
-  }, level <= 0 ? /*#__PURE__*/React.createElement("svg", {
-    viewBox: '0 0 1024 1024'
-  }, /*#__PURE__*/React.createElement("path", {
-    d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
-  })) : /*#__PURE__*/React.createElement("svg", {
-    viewBox: '0 0 1024 1024'
-  }, /*#__PURE__*/React.createElement("path", {
-    d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
-  })))));
-};
-
-var css_248z$5 = ".gantt-table-body {\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 0 8px;\n  font-size: 14px;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
-styleInject(css_248z$5);
-
-var TableRows = function TableRows() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      onRow = _useContext.onRow,
-      tableIndent = _useContext.tableIndent,
-      expandIcon = _useContext.expandIcon,
-      prefixCls = _useContext.prefixCls,
-      onExpand = _useContext.onExpand;
-
-  var columns = store.columns,
-      rowHeight = store.rowHeight,
-      isTimeline = store.isTimeline;
-  var columnsWidth = store.getColumnsWidth;
-  var barList = store.getBarList;
-  var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
-  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
-
-  if (barList.length === 0) {
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        textAlign: 'center',
-        color: ' rgba(0,0,0,0.65)',
-        marginTop: 30
-      }
-    }, "Nada encontrado.");
-  }
-
-  var parentIdMap = {};
-  var countParent = 0;
-
-  if (isTimeline) {
-    //if isTimeline create a object map with parentId as key and a index as value
-    barList.forEach(function (item) {
-      if (item.record.parentId === null) {
-        if (parentIdMap[item.record.id] === undefined) {
-          parentIdMap[item.record.id] = countParent;
-          countParent++;
-        }
-      }
-    });
-  }
-
-  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
-    // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
-    var parent = bar._parent;
-    var parentItem = parent === null || parent === void 0 ? void 0 : parent._parent;
-    var isLastChild = false;
-    if ((parentItem === null || parentItem === void 0 ? void 0 : parentItem.children) && parentItem.children[parentItem.children.length - 1] === bar._parent) isLastChild = true;
-    var topIndex = isTimeline && !bar.task.parentId ? parentIdMap[bar.record.id] : rowIndex;
-    if (isTimeline && bar.task.parentId) return null;
-    return /*#__PURE__*/React.createElement("div", {
-      key: bar.key,
-      role: 'none',
-      className: "".concat(prefixClsTableBody, "-row"),
-      style: {
-        height: rowHeight,
-        top: (topIndex + start) * rowHeight + TOP_PADDING
-      },
-      onClick: function onClick() {
-        onRow === null || onRow === void 0 ? void 0 : onRow.onClick(bar.record);
-      }
-    }, columns.map(function (column, index) {
-      return /*#__PURE__*/React.createElement("div", {
-        key: column.name,
-        className: "".concat(prefixClsTableBody, "-cell"),
-        style: _objectSpread2({
-          width: columnsWidth[index],
-          minWidth: column.minWidth,
-          maxWidth: column.maxWidth,
-          textAlign: column.align ? column.align : 'left',
-          paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 12
-        }, column.style)
-      }, index === 0 && !isTimeline && // eslint-disable-next-line unicorn/no-new-array
-      new Array(bar._depth).fill(0).map(function (_, i) {
-        var _classNames;
-
-        return /*#__PURE__*/React.createElement("div", {
-          // eslint-disable-next-line react/no-array-index-key
-          key: i,
-          className: classNames("".concat(prefixClsTableBody, "-row-indentation"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-hidden"), isLastChild && i === bar._depth - 2), _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-both"), i === bar._depth - 1), _classNames)),
-          style: {
-            top: -(rowHeight / 2) + 1,
-            left: tableIndent * i + 15,
-            width: tableIndent * 1.5 + 5
-          }
-        });
-      }), index === 0 && !isTimeline && bar._childrenCount > 0 && /*#__PURE__*/React.createElement("div", {
-        style: {
-          position: 'absolute',
-          left: tableIndent * bar._depth + 15,
-          background: 'white',
-          zIndex: 9,
-          transform: 'translateX(-52%)',
-          padding: 1
-        }
-      }, expandIcon ? expandIcon({
-        level: bar._depth,
-        collapsed: bar._collapsed,
-        onClick: function onClick(event) {
-          event.stopPropagation();
-          if (onExpand) onExpand(bar.task.record, !bar._collapsed);
-          store.setRowCollapse(bar.task, !bar._collapsed);
-        }
-      }) : /*#__PURE__*/React.createElement(RowToggler, {
-        prefixCls: prefixCls,
-        level: bar._depth,
-        collapsed: bar._collapsed,
-        onClick: function onClick(event) {
-          event.stopPropagation();
-          if (onExpand) onExpand(bar.task.record, !bar._collapsed);
-          store.setRowCollapse(bar.task, !bar._collapsed);
-        }
-      })), /*#__PURE__*/React.createElement("span", {
-        className: "".concat(prefixClsTableBody, "-ellipsis")
-      }, column.render ? column.render(bar.record) : bar.record[column.name]));
-    }));
-  }));
-};
-
-var ObserverTableRows = observer(TableRows);
-
-var TableBorders = function TableBorders() {
-  var _useContext2 = useContext(context),
-      store = _useContext2.store,
-      prefixCls = _useContext2.prefixCls;
-
-  var columns = store.columns;
-  var columnsWidth = store.getColumnsWidth;
-  var barList = store.getBarList;
-  if (barList.length === 0) return null;
-  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
-  return /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    className: "".concat(prefixClsTableBody, "-border_row")
-  }, columns.map(function (column, index) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: column.name,
-      className: "".concat(prefixClsTableBody, "-cell"),
-      style: _objectSpread2({
-        width: columnsWidth[index],
-        minWidth: column.minWidth,
-        maxWidth: column.maxWidth,
-        textAlign: column.align ? column.align : 'left'
-      }, column.style)
-    });
-  }));
-};
-
-var ObserverTableBorders = observer(TableBorders);
-
-var TableBody = function TableBody() {
-  var _useContext3 = useContext(context),
-      store = _useContext3.store,
-      prefixCls = _useContext3.prefixCls;
-
-  var handleMouseMove = useCallback(function (event) {
-    event.persist();
-    store.handleMouseMove(event);
-  }, [store]);
-  var handleMouseLeave = useCallback(function () {
-    store.handleMouseLeave();
-  }, [store]);
-  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
-  return /*#__PURE__*/React.createElement("div", {
-    className: prefixClsTableBody,
-    style: {
-      width: store.tableWidth,
-      height: store.bodyScrollHeight
-    },
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave
-  }, /*#__PURE__*/React.createElement(ObserverTableBorders, null), /*#__PURE__*/React.createElement(ObserverTableRows, null));
-};
-
-var TableBody$1 = observer(TableBody);
-
-var css_248z$4 = ".gantt-table-header {\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.gantt-table-header-head {\n  position: relative;\n}\n.gantt-table-header-row {\n  position: absolute;\n  left: 0;\n  display: flex;\n  transition: height 0.3s;\n  width: 100%;\n}\n.gantt-table-header-cell {\n  position: relative;\n  display: flex;\n  border-right: 1px solid #f0f0f0;\n}\n.gantt-table-header-head-cell {\n  display: flex;\n  flex: 1;\n  align-items: center;\n  overflow: hidden;\n  padding: 0 12px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 14px;\n  color: #2e405e;\n}\n.gantt-table-header-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n";
-styleInject(css_248z$4);
-
-var TableHeader = function TableHeader() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls,
-      renderCustomHeaderFilter = _useContext.renderCustomHeaderFilter;
-
-  var columns = store.columns,
-      tableWidth = store.tableWidth;
-  var width = tableWidth;
-  var columnsWidth = store.getColumnsWidth;
-  var prefixClsTableHeader = "".concat(prefixCls, "-table-header");
-  return /*#__PURE__*/React.createElement("div", {
-    className: prefixClsTableHeader,
-    style: {
-      width: width,
-      height: 56
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTableHeader, "-head"),
-    style: {
-      width: width,
-      height: 56
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTableHeader, "-row"),
-    style: {
-      height: 56
-    }
-  }, columns.map(function (column, index) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: column.name,
-      className: "".concat(prefixClsTableHeader, "-cell"),
-      style: _objectSpread2({
-        width: columnsWidth[index],
-        minWidth: column.minWidth,
-        maxWidth: column.maxWidth,
-        textAlign: column.align ? column.align : 'left'
-      }, column.style)
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "".concat(prefixClsTableHeader, "-head-cell")
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "".concat(prefixClsTableHeader, "-ellipsis")
-    }, column.label)));
-  }), renderCustomHeaderFilter ? renderCustomHeaderFilter() : null)));
-};
-
-var TableHeader$1 = observer(TableHeader);
-
-var css_248z$3 = ".gantt-time-axis {\n  height: 56px;\n  position: absolute;\n  top: 0;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  overflow: hidden;\n  cursor: ew-resize;\n}\n.gantt-time-axis-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 56px;\n  pointer-events: none;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  will-change: transform;\n}\n.gantt-time-axis-today {\n  background-color: #2c7ef8;\n  border-radius: 50%;\n  color: #fff;\n}\n.gantt-time-axis-major {\n  position: absolute;\n  overflow: hidden;\n  box-sizing: content-box;\n  height: 28px;\n  border-right: 1px solid #f0f0f0;\n  font-weight: 400;\n  text-align: left;\n  font-size: 13px;\n  line-height: 28px;\n}\n.gantt-time-axis-major-label {\n  overflow: hidden;\n  padding-left: 8px;\n  white-space: nowrap;\n}\n.gantt-time-axis-minor {\n  position: absolute;\n  top: 27px;\n  box-sizing: content-box;\n  height: 28px;\n  border-top: 1px solid #f0f0f0;\n  border-right: 1px solid #f0f0f0;\n  text-align: center;\n  font-size: 12px;\n  line-height: 28px;\n  color: #202d40;\n}\n.gantt-time-axis-minor.weekends {\n  background-color: hsla(0, 0%, 96.9%, 0.5);\n}\n";
-styleInject(css_248z$3);
-
-var TimeAxis = function TimeAxis() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
-  var prefixClsTimeAxis = "".concat(prefixCls, "-time-axis");
-  var sightConfig = store.sightConfig,
-      isToday = store.isToday;
-  var majorList = store.getMajorList();
-  var minorList = store.getMinorList();
-  var handleResize = useCallback(function (_ref) {
-    var x = _ref.x;
-    store.handlePanMove(-x);
-  }, [store]);
-  var handleLeftResizeEnd = useCallback(function () {
-    store.handlePanEnd();
-  }, [store]);
-  var getIsToday = useCallback(function (item) {
-    var key = item.key;
-    var type = sightConfig.type;
-    return type === 'day' && isToday(key);
-  }, [sightConfig, isToday]);
-  return /*#__PURE__*/React.createElement(DragResize$1, {
-    onResize: handleResize,
-    onResizeEnd: handleLeftResizeEnd,
-    defaultSize: {
-      x: -store.translateX,
-      width: 0
-    },
-    type: 'move'
-  }, /*#__PURE__*/React.createElement("div", {
-    className: prefixClsTimeAxis,
-    style: {
-      left: store.tableWidth,
-      width: store.viewWidth
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixClsTimeAxis, "-render-chunk"),
-    style: {
-      transform: "translateX(-".concat(store.translateX, "px")
-    }
-  }, majorList.map(function (item) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: item.key,
-      className: "".concat(prefixClsTimeAxis, "-major"),
-      style: {
-        width: item.width,
-        left: item.left
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "".concat(prefixClsTimeAxis, "-major-label")
-    }, item.label));
-  }), minorList.map(function (item) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: item.key,
-      className: classNames("".concat(prefixClsTimeAxis, "-minor")),
-      style: {
-        width: item.width,
-        left: item.left
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)))
-    }, item.label));
-  }))));
-};
-
-var TimeAxis$1 = observer(TimeAxis);
-
-var css_248z$2 = ".gantt-time-axis-scale-select .next-menu {\n  position: relative;\n  min-width: 150px;\n  padding: 4px 0;\n  margin: 0;\n  list-style: none;\n  border-radius: 4px;\n  background: #fff;\n  line-height: 36px;\n  font-size: 14px;\n}\n.gantt-time-axis-scale-select .next-menu,\n.gantt-time-axis-scale-select .next-menu *,\n.gantt-time-axis-scale-select .next-menu :after,\n.gantt-time-axis-scale-select .next-menu :before {\n  box-sizing: border-box;\n}\n.gantt-time-axis-scale-select .next-menu,\n.gantt-time-axis-scale-select .next-select-trigger,\n.gantt-time-axis-scale-select .next-select .next-select-inner {\n  min-width: unset;\n}\n.gantt-time-axis-scale-select .next-menu-item-text {\n  line-height: 36px;\n}\n.time-axis-scale-select__3fTI .next-menu-item-text {\n  line-height: 36px;\n}\n.gantt-shadow {\n  position: absolute;\n  top: 4px;\n  right: 0;\n  width: 90px;\n  height: 48px;\n  z-index: 0;\n  transition: box-shadow 0.5s;\n}\n.gantt-shadow.gantt-scrolling {\n  box-shadow: -3px 0 7px 0 #e5e5e5;\n}\n.gantt-trigger {\n  position: absolute;\n  top: 0;\n  right: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 56px;\n  border-top-right-radius: 4px;\n  background-color: #fff;\n  border-left: 1px solid #f0f0f0;\n  color: #bfbfbf;\n  padding: 0 8px 0 12px;\n  cursor: pointer;\n  width: 90px;\n  z-index: 1;\n  transition: color 0.2s;\n}\n.gantt-trigger:hover {\n  color: #8c8c8c;\n}\n.gantt-trigger:hover .gantt-text {\n  color: #262626;\n}\n.gantt-trigger .gantt-text {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  margin-right: 4px;\n  font-size: 14px;\n  color: #202d40;\n}\n.dropdown-icon {\n  width: 20px;\n  height: 20px;\n  line-height: 20px;\n}\n.dropdown-icon svg {\n  fill: currentColor;\n}\n.next-overlay-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n}\n.next-overlay-wrapper .next-overlay-inner {\n  z-index: 1001;\n  border-radius: 4px;\n  box-shadow: 0 12px 32px 0 rgba(38, 38, 38, 0.16);\n  -webkit-transform: translateZ(0);\n  transform: translateZ(0);\n}\n.next-overlay-wrapper .next-overlay-backdrop {\n  position: fixed;\n  z-index: 1001;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: #000;\n  transition: opacity 0.3s;\n  opacity: 0;\n}\n.next-overlay-wrapper.opened .next-overlay-backdrop {\n  opacity: 0.3;\n}\n.next-menu-item {\n  position: relative;\n  padding: 0 12px 0 40px;\n  transition: background 0.2s ease;\n  color: #262626;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n}\n.next-menu-item .gantt-selected_icon {\n  position: absolute;\n  left: 12px;\n  width: 20px;\n  height: 20px;\n  line-height: 20px;\n}\n.next-menu-item .gantt-selected_icon svg {\n  fill: #1b9aee;\n}\n.next-menu-item:hover {\n  font-weight: 400;\n  background-color: #f7f7f7;\n}\n.next-menu-item.next-selected {\n  color: #262626;\n  background-color: #fff;\n}\n.next-menu-item.next-selected .next-menu-icon-arrow {\n  color: #bfbfbf;\n}\n";
-styleInject(css_248z$2);
-
-var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
-  var sightConfig = store.sightConfig,
-      scrolling = store.scrolling,
-      viewTypeList = store.viewTypeList;
-
-  var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      visible = _useState2[0],
-      setVisible = _useState2[1];
-
-  var ref = useRef(null);
-  useClickAway(function () {
-    setVisible(false);
-  }, ref);
-  var handleClick = useCallback(function () {
-    setVisible(true);
-  }, []);
-  var handleSelect = useCallback(function (item) {
-    store.switchSight(item.type);
-    setVisible(false);
-  }, [store]);
-  var selected = sightConfig.type;
-  var isSelected = useCallback(function (key) {
-    return key === selected;
-  }, [selected]);
-  return /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixCls, "-time-axis-scale-select"),
-    ref: ref
-  }, /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    className: "".concat(prefixCls, "-trigger"),
-    onClick: handleClick
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixCls, "-text")
-  }, sightConfig.label), /*#__PURE__*/React.createElement("span", {
-    className: 'dropdown-icon'
-  }, /*#__PURE__*/React.createElement("svg", {
-    id: 'at-triangle-down-s',
-    viewBox: '0 0 1024 1024'
-  }, /*#__PURE__*/React.createElement("path", {
-    d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
-  })))), /*#__PURE__*/React.createElement("div", {
-    className: classNames("".concat(prefixCls, "-shadow"), _defineProperty({}, "".concat(prefixCls, "-scrolling"), scrolling))
-  }), visible && /*#__PURE__*/React.createElement("div", {
-    className: classNames('next-overlay-wrapper', 'opened')
-  }, /*#__PURE__*/React.createElement("div", {
-    className: classNames('next-overlay-inner'),
-    "aria-hidden": 'false',
-    style: {
-      position: 'absolute',
-      right: 15,
-      top: 60
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: 'next-loading-wrap'
-  }, /*#__PURE__*/React.createElement("ul", {
-    role: 'listbox',
-    className: classNames('next-menu'),
-    "aria-multiselectable": 'false'
-  }, viewTypeList.map(function (item) {
-    return /*#__PURE__*/React.createElement("li", {
-      key: item.type,
-      role: 'none',
-      onClick: function onClick() {
-        handleSelect(item);
-      },
-      className: classNames('next-menu-item', {
-        'next-selected': isSelected(item.type)
-      })
-    }, isSelected(item.type) && /*#__PURE__*/React.createElement("i", {
-      className: "".concat(prefixCls, "-selected_icon")
-    }, /*#__PURE__*/React.createElement("svg", {
-      viewBox: '0 0 1024 1024'
-    }, /*#__PURE__*/React.createElement("path", {
-      d: 'M413.7472 768a29.5936 29.5936 0 0 1-21.6576-9.472l-229.5296-241.152a33.3824 33.3824 0 0 1 0-45.5168 29.696 29.696 0 0 1 43.4176 0l207.7696 218.368 404.2752-424.7552a29.5936 29.5936 0 0 1 43.4176 0 33.3824 33.3824 0 0 1 0 45.568l-425.984 447.488A29.5936 29.5936 0 0 1 413.696 768'
-    }))), /*#__PURE__*/React.createElement("span", {
-      className: 'next-menu-item-text',
-      "aria-selected": 'true'
-    }, item.label));
-  }))))));
-};
-
-var TimeAxisScaleSelect$1 = observer(TimeAxisScaleSelect);
-
-var css_248z$1 = ".gantt-time-indicator {\n  position: absolute;\n  top: 0;\n  left: 0;\n  background-color: #096dd9;\n  box-shadow: 0 2px 4px rgba(1, 113, 194, 0.1);\n  transform: translate(12px, 14px);\n  transition: opacity 0.3s;\n  padding: 0 7px;\n  color: #fff;\n  border-radius: 4px;\n  outline: 0;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  box-sizing: border-box;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  vertical-align: middle;\n  cursor: pointer;\n  border: none;\n  font-size: 12px;\n}\n.gantt-time-indicator-scrolling {\n  opacity: 0;\n}\n";
-styleInject(css_248z$1);
-
-var TimeIndicator = function TimeIndicator() {
-  var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
-  var scrolling = store.scrolling,
-      translateX = store.translateX,
-      tableWidth = store.tableWidth,
-      viewWidth = store.viewWidth,
-      todayTranslateX = store.todayTranslateX,
-      locale = store.locale;
-  var prefixClsTimeIndicator = "".concat(prefixCls, "-time-indicator");
-  var type = todayTranslateX < translateX ? 'left' : 'right';
-  var left = type === 'left' ? tableWidth : 'unset';
-  var right = type === 'right' ? 111 : 'unset';
-  var display = useMemo(function () {
-    var isOverLeft = todayTranslateX < translateX;
-    var isOverRight = todayTranslateX > translateX + viewWidth;
-    return isOverLeft || isOverRight ? 'block' : 'none';
-  }, [todayTranslateX, translateX, viewWidth]);
-  var handleClick = useCallback(function () {
-    store.scrollToToday();
-  }, [store]);
-  return /*#__PURE__*/React.createElement("button", {
-    onClick: handleClick,
-    className: classNames(prefixClsTimeIndicator, _defineProperty({}, "".concat(prefixClsTimeIndicator, "-scrolling"), scrolling)),
-    type: "button",
-    "data-role": "button",
-    style: {
-      left: left,
-      right: right,
-      display: display
-    }
-  }, /*#__PURE__*/React.createElement("span", null, locale.today));
-};
-
-var TimeIndicator$1 = observer(TimeIndicator);
-
-var css_248z = ".gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: auto;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n}\n";
-styleInject(css_248z);
-
-var enUS = Object.freeze({
-  today: "Today",
-  day: "Day",
-  days: "Days",
-  week: "Week",
-  month: "Month",
-  quarter: "Quarter",
-  halfYear: "Half year",
-  firstHalf: "First half",
-  secondHalf: "Second half",
-  majorFormat: {
-    day: "YYYY, MMMM",
-    week: "YYYY, MMMM",
-    month: "YYYY",
-    quarter: "YYYY",
-    halfYear: "YYYY"
-  },
-  minorFormat: {
-    day: "D",
-    week: "wo [week]",
-    month: "MMMM",
-    quarter: "[Q]Q",
-    halfYear: "YYYY-"
-  }
-});
-
-var zhCN = Object.freeze({
-  today: "今天",
-  day: "日视图",
-  days: "天数",
-  week: "周视图",
-  month: "月视图",
-  quarter: "季视图",
-  halfYear: "年视图",
-  firstHalf: "上半年",
-  secondHalf: "下半年",
-  majorFormat: {
-    day: "YYYY年MM月",
-    week: "YYYY年MM月",
-    month: "YYYY年",
-    quarter: "YYYY年",
-    halfYear: "YYYY年"
-  },
-  minorFormat: {
-    day: "YYYY-MM-D",
-    week: "YYYY-w周",
-    month: "YYYY-MM月",
-    quarter: "YYYY-第Q季",
-    halfYear: "YYYY-"
-  }
-});
-
-var ptBR = Object.freeze({
-  day: "Dia",
-  days: "Dias",
-  week: "Semana",
-  month: "Mês",
-  quarter: "Trimestre",
-  today: "Hoje",
-  dayUnit: " Dias",
-  firstHalf: "Primeiro Semestre",
-  secondHalf: "Segundo Semestre",
-  halfYear: "Semestre",
-  majorFormat: {
-    day: "MM, YYYY",
-    week: "MMM, YYYY",
-    month: "YYYY",
-    quarter: "YYYY",
-    halfYear: "YYYY"
-  },
-  minorFormat: {
-    day: "D",
-    week: "[semana] w",
-    month: "MMMM",
-    quarter: "[T]Q",
-    halfYear: "YYYY-"
-  }
-});
 
 var prefixCls = 'gantt';
 

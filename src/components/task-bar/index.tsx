@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TOP_PADDING } from '../../constants'
 import Context from '../../context'
-import { ONE_DAY_MS } from '../../store'
 import { Gantt } from '../../types'
 import DragResize from '../drag-resize'
 import './index.less'
@@ -13,6 +12,8 @@ import './index.less'
 interface TaskBarProps {
   data: Gantt.Bar
 }
+
+const ONE_DAY_MS = 86400000
 
 const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const {
@@ -266,7 +267,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
           <div className={`${prefixClsTaskBar}-date-text`} style={{ left: width + 16 }}>
             {renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)}
           </div>
-          <div className={`${prefixClsTaskBar}-date-text`} style={{ right: 16 }}>
+          <div className={`${prefixClsTaskBar}-date-text`} style={{ right: width + 16 }}>
             {renderLeftText ? renderLeftText(data) : dateTextFormat(translateX)}
           </div>
         </>
