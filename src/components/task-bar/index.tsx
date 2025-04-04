@@ -112,7 +112,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const moveCalc = -(width / store.pxUnitAmp);
 
   const days = useMemo(() => {
-    const daysWidth = Number(getDateWidth(translateX + width + moveCalc, translateX));
+    const daysWidth = Number(data.record.duration);
 
     return `${daysWidth} ${daysWidth > 1 ? locale.days : locale.day}`
   }, [translateX, width, moveCalc, translateX])

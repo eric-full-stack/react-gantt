@@ -663,13 +663,9 @@ class GanttStore {
 
     const dateTextFormat = (startX: number) => dayjs(startX * pxUnitAmp).format('YYYY-MM-DD')
 
-    const getDateWidth = (start: number, endX: number) => {
-      const startDate = dayjs(start * pxUnitAmp)
-      const endDate = dayjs(endX * pxUnitAmp)
-      // @ts-ignore
-      const diff = this.durationFn ? this.durationFn(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')) : (this.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1)
-
-      return `${diff}`
+    const getDateWidth = () => {
+      
+      return '1';
     }
     
     const flattenData = flattenDeep(data, 0, undefined, this.isTimeline)

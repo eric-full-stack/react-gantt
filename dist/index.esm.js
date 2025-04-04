@@ -853,8 +853,7 @@ var TaskBar = function TaskBar(_ref) {
       stepGesture = data.stepGesture,
       dateTextFormat = data.dateTextFormat,
       record = data.record,
-      loading = data.loading,
-      getDateWidth = data.getDateWidth;
+      loading = data.loading;
 
   var _ref2 = record || {},
       _ref2$disabled = _ref2.disabled,
@@ -922,7 +921,7 @@ var TaskBar = function TaskBar(_ref) {
   }, [store.pxUnitAmp]);
   var moveCalc = -(width / store.pxUnitAmp);
   var days = useMemo(function () {
-    var daysWidth = Number(getDateWidth(translateX + width + moveCalc, translateX));
+    var daysWidth = Number(data.record.duration);
     return "".concat(daysWidth, " ").concat(daysWidth > 1 ? locale.days : locale.day);
   }, [translateX, width, moveCalc, translateX]);
   return /*#__PURE__*/React.createElement("div", {
@@ -6791,12 +6790,8 @@ var GanttStore = /*#__PURE__*/function () {
         return dayjs(startX * pxUnitAmp).format('YYYY-MM-DD');
       };
 
-      var getDateWidth = function getDateWidth(start, endX) {
-        var startDate = dayjs(start * pxUnitAmp);
-        var endDate = dayjs(endX * pxUnitAmp); // @ts-ignore
-
-        var diff = _this4.durationFn ? _this4.durationFn(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')) : _this4.workdays === 'business_days' ? startDate.businessDiff(endDate) : startDate.diff(endDate, 'day') + 1;
-        return "".concat(diff);
+      var getDateWidth = function getDateWidth() {
+        return '1';
       };
 
       var flattenData = flattenDeep(data, 0, undefined, this.isTimeline);
