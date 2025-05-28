@@ -10,6 +10,12 @@ nav:
 
 ## Component
 
+### Custom Events
+
+use to create custom events
+
+<code src="./demo/custom-events.tsx"></code>
+
 ### Basic Component
 
 use `data` `columns` `onUpdate` config, Show a basic Gantt chart

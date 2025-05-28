@@ -1,7 +1,7 @@
 /// <reference types="lodash" />
-import { Dayjs } from 'dayjs';
-import React from 'react';
-import { GanttProps as GanttProperties, GanttLocale } from './Gantt';
+import type { Dayjs } from 'dayjs';
+import type React from 'react';
+import type { GanttLocale, GanttProps as GanttProperties } from './Gantt';
 import { Gantt } from './types';
 export declare const ONE_DAY_MS = 86400000;
 export declare const getViewTypeList: (locale: any) => Gantt.SightConfig[];
@@ -72,6 +72,7 @@ declare class GanttStore {
     autoScrollPos: number;
     clientX: number;
     rowHeight: number;
+    customEvents: Gantt.CustomEvent[];
     onUpdate: GanttProperties['onUpdate'];
     isRestDay: typeof isRestDay;
     getStartDate(): string;
@@ -79,6 +80,7 @@ declare class GanttStore {
     setData(data: Gantt.Record[], startDateKey: string, endDateKey: string): void;
     toggleCollapse(): void;
     setRowCollapse(item: Gantt.Item, collapsed: boolean): void;
+    setCustomEvents(customEvents: Gantt.CustomEvent[]): void;
     setOnUpdate(onUpdate: GanttProperties['onUpdate']): void;
     setColumns(columns: Gantt.Column[]): void;
     setDependencies(dependencies: Gantt.Dependence[]): void;

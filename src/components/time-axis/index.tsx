@@ -9,7 +9,7 @@ import './index.less'
 const TimeAxis: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
   const prefixClsTimeAxis = `${prefixCls}-time-axis`
-  const { sightConfig, isToday } = store
+  const { sightConfig, isToday, customEvents } = store
   const majorList = store.getMajorList()
   const minorList = store.getMinorList()
   const handleResize = useCallback(
@@ -29,6 +29,16 @@ const TimeAxis: React.FC = () => {
       return type === 'day' && isToday(key)
     },
     [sightConfig, isToday]
+  )
+
+  const getIsCustomEvent = useCallback(
+    item => {
+      const { key } = item
+      const date = key.split(' ')[0]
+      const { type } = sightConfig
+      return type === 'day' && customEvents.some(event => event.date === date)
+    },
+    [sightConfig, customEvents]
   )
 
   return (
@@ -68,6 +78,7 @@ const TimeAxis: React.FC = () => {
               <div
                 className={classNames(`${prefixClsTimeAxis}-minor-label`, {
                   [`${prefixClsTimeAxis}-today`]: getIsToday(item),
+                  [`${prefixClsTimeAxis}-custom-event`]: getIsCustomEvent(item),
                 })}
               >
                 {item.label}

@@ -40,6 +40,8 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   renderRightText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
   renderCustomHeaderFilter?: () => React.ReactNode
   onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void
+  onCustomEventClick?: (event: Gantt.CustomEvent) => void
+  customEvents?: Gantt.CustomEvent[]
 
   hideTable?: boolean
 }

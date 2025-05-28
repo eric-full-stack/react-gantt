@@ -1,5 +1,5 @@
 import { useSize } from 'ahooks'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import React, { useContext, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import Chart from './components/chart'
 import Divider from './components/divider'
@@ -12,11 +12,12 @@ import TimeAxis from './components/time-axis'
 import TimeAxisScaleSelect from './components/time-axis-scale-select'
 import TimeIndicator from './components/time-indicator'
 import { BAR_HEIGHT, ROW_HEIGHT, TABLE_INDENT } from './constants'
-import Context, { GanttContext } from './context'
+import type { GanttContext } from './context'
+import Context from './context'
 import './Gantt.less'
 import { ptBR } from './locales'
 import GanttStore from './store'
-import { DefaultRecordType, Gantt } from './types'
+import type { DefaultRecordType, Gantt } from './types'
 
 const prefixCls = 'gantt'
 
@@ -45,6 +46,8 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   startDateKey?: string
   endDateKey?: string
   isRestDay?: (date: string) => boolean
+  customEvents?: Gantt.CustomEvent[]
+  onCustomEventClick?: (event: Gantt.CustomEvent) => void
   unit?: Gantt.Sight
   rowHeight?: number
   innerRef?: React.MutableRefObject<GanttRef>
@@ -70,7 +73,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
    * 自定义日期筛选维度
    */
   customSights?: Gantt.SightConfig[]
-  locale?: GanttLocale;
+  locale?: GanttLocale
 
   /**
    * 隐藏左侧表格
@@ -83,32 +86,32 @@ export interface GanttRef {
 }
 
 export interface GanttLocale {
-  today: string;
-  day: string;
-  days: string;
-  week: string;
-  month: string;
-  quarter: string;
-  halfYear: string;
-  firstHalf: string;
-  secondHalf: string,
+  today: string
+  day: string
+  days: string
+  week: string
+  month: string
+  quarter: string
+  halfYear: string
+  firstHalf: string
+  secondHalf: string
   majorFormat: {
-    day: string;
-    week: string;
-    month: string;
-    quarter: string;
-    halfYear: string;
-  },
+    day: string
+    week: string
+    month: string
+    quarter: string
+    halfYear: string
+  }
   minorFormat: {
-    day: string;
-    week: string;
-    month: string;
-    quarter: string;
-    halfYear: string;
+    day: string
+    week: string
+    month: string
+    quarter: string
+    halfYear: string
   }
 }
 
-export const defaultLocale: GanttLocale = {...ptBR};
+export const defaultLocale: GanttLocale = { ...ptBR }
 
 const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<RecordType>) => {
   const {
@@ -143,10 +146,12 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     renderCustomHeaderFilter,
     onExpand,
     customSights = [],
-    locale = {...defaultLocale},
+    locale = { ...defaultLocale },
     hideTable = false,
     workdays = 'all_days',
     durationFn,
+    customEvents = [],
+    onCustomEventClick,
   } = props
 
   const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale }), [rowHeight])
@@ -157,6 +162,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   useEffect(() => {
     store.setColumns(columns)
   }, [columns, store])
+
+  useEffect(() => {
+    store.setCustomEvents(customEvents)
+  }, [customEvents, store])
 
   useEffect(() => {
     store.setOnUpdate(onUpdate)
@@ -204,6 +213,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       showUnitSwitch,
       onRow,
       tableIndent,
+      customEvents,
       expandIcon,
       renderBar,
       renderInvalidBar,
@@ -219,6 +229,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       renderCustomHeaderFilter,
       onExpand,
       hideTable,
+      onCustomEventClick,
     }),
     [
       store,
@@ -227,6 +238,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       showUnitSwitch,
       onRow,
       tableIndent,
+      customEvents,
       expandIcon,
       renderBar,
       renderInvalidBar,
@@ -241,6 +253,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       renderCustomHeaderFilter,
       onExpand,
       hideTable,
+      onCustomEventClick,
     ]
   )
 

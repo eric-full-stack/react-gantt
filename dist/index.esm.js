@@ -276,8 +276,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z$h = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-group-bar .gantt-bar {\n  position: relative;\n  top: -3px;\n}\n";
-styleInject(css_248z$h);
+var css_248z$i = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-group-bar .gantt-bar {\n  position: relative;\n  top: -3px;\n}\n";
+styleInject(css_248z$i);
 
 var height = 8;
 
@@ -683,8 +683,8 @@ var DragResize = function DragResize(_ref) {
 
 var DragResize$1 = observer(DragResize);
 
-var css_248z$g = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
-styleInject(css_248z$g);
+var css_248z$h = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
+styleInject(css_248z$h);
 
 var barH = 8;
 var startX = 0;
@@ -825,8 +825,8 @@ var BAR_HEIGHT = 8;
 var TOP_PADDING = 0;
 var TABLE_INDENT = 30; // 图表最小比例
 
-var css_248z$f = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
-styleInject(css_248z$f);
+var css_248z$g = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
+styleInject(css_248z$g);
 
 var ONE_DAY_MS$1 = 86400000;
 
@@ -1052,8 +1052,8 @@ var BarList = function BarList() {
 
 var BarList$1 = observer(BarList);
 
-var css_248z$e = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@-webkit-keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n";
-styleInject(css_248z$e);
+var css_248z$f = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@-webkit-keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n";
+styleInject(css_248z$f);
 
 var TaskBarThumb = function TaskBarThumb(_ref) {
   var _classNames;
@@ -4307,8 +4307,8 @@ var find = _createFind(findIndex_1);
 
 var find_1 = find;
 
-var css_248z$d = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
-styleInject(css_248z$d);
+var css_248z$e = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
+styleInject(css_248z$e);
 
 var spaceX = 10;
 var spaceY = 10;
@@ -4401,7 +4401,7 @@ var Dependence = function Dependence(_ref) {
   var endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1;
   return /*#__PURE__*/React.createElement("g", {
     stroke: color,
-    className: css_248z$d['task-dependency-line']
+    className: css_248z$e['task-dependency-line']
   }, /*#__PURE__*/React.createElement("path", {
     style: {
       stroke: color
@@ -4477,8 +4477,8 @@ var DragPresent = function DragPresent() {
 
 var DragPresent$1 = observer(DragPresent);
 
-var css_248z$c = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
-styleInject(css_248z$c);
+var css_248z$d = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
+styleInject(css_248z$d);
 
 var Today = function Today() {
   var _useContext = useContext(context),
@@ -4499,6 +4499,89 @@ var Today = function Today() {
 };
 
 var Today$1 = observer(Today);
+
+var css_248z$c = ".gantt-custom-events {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-custom-event {\n  position: absolute;\n  top: 0;\n  background: transparent;\n  text-align: center;\n  pointer-events: auto;\n  cursor: pointer;\n  z-index: 10;\n}\n.gantt-custom-event:hover .gantt-custom-event_line {\n  background: #d14900;\n  width: 2px;\n  margin-left: 14px;\n}\n.gantt-custom-event_line {\n  width: 1px;\n  background: #a83000;\n  margin-left: 15px;\n  height: 100%;\n  transition: all 0.2s ease;\n}\n.gantt-custom-event_flag {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  background: #a83000;\n  color: white;\n  padding: 6px 10px;\n  border-radius: 6px;\n  font-size: 12px;\n  font-weight: 500;\n  white-space: nowrap;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\n  z-index: 15;\n  -webkit-animation: fadeInFlag 0.2s ease-out;\n          animation: fadeInFlag 0.2s ease-out;\n  pointer-events: none;\n}\n.gantt-custom-event_flag::after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 0;\n  height: 0;\n  border-left: 6px solid transparent;\n  border-right: 6px solid transparent;\n  border-top: 6px solid #a83000;\n}\n@-webkit-keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n@keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n.gantt-custom-event_title {\n  display: block;\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n";
+styleInject(css_248z$c);
+
+var CustomEvents = function CustomEvents() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls,
+      onCustomEventClick = _useContext.onCustomEventClick;
+
+  var customEvents = store.customEvents,
+      sightConfig = store.sightConfig,
+      getTranslateXByDate = store.getTranslateXByDate;
+  var minorList = store.getMinorList();
+
+  var _useState = useState(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      hoveredEvent = _useState2[0],
+      setHoveredEvent = _useState2[1];
+
+  var _useState3 = useState(0),
+      _useState4 = _slicedToArray(_useState3, 2),
+      mouseY = _useState4[0],
+      setMouseY = _useState4[1];
+
+  var handleEventClick = function handleEventClick(event) {
+    if (onCustomEventClick) onCustomEventClick(event);
+  };
+
+  var handleMouseEnter = function handleMouseEnter(eventKey) {
+    setHoveredEvent(eventKey);
+  };
+
+  var handleMouseLeave = function handleMouseLeave() {
+    setHoveredEvent(null);
+  };
+
+  var handleMouseMove = function handleMouseMove(e) {
+    var rect = e.currentTarget.getBoundingClientRect();
+    setMouseY(e.clientY - rect.top - 25);
+  }; // Só renderiza eventos se estivermos na visualização de dias
+
+
+  if (sightConfig.type !== 'day') return null;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixCls, "-custom-events")
+  }, minorList.map(function (item) {
+    // Verifica se existe um evento customizado para este dia
+    var customEvent = customEvents.find(function (event) {
+      return event.key === item.key.split(' ')[0];
+    });
+    if (!customEvent) return null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: item.key,
+      className: "".concat(prefixCls, "-custom-event"),
+      style: {
+        transform: "translate(".concat(getTranslateXByDate(customEvent.date), "px)")
+      },
+      onClick: function onClick() {
+        return handleEventClick(customEvent);
+      },
+      onMouseEnter: function onMouseEnter() {
+        return handleMouseEnter(customEvent.key);
+      },
+      onMouseLeave: handleMouseLeave,
+      onMouseMove: handleMouseMove
+    }, hoveredEvent === customEvent.key && /*#__PURE__*/React.createElement("div", {
+      className: "".concat(prefixCls, "-custom-event_flag"),
+      style: {
+        top: Math.max(0, mouseY - 15)
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "".concat(prefixCls, "-custom-event_title")
+    }, customEvent.content || 'Evento')), /*#__PURE__*/React.createElement("div", {
+      className: "".concat(prefixCls, "-custom-event_line"),
+      style: {
+        height: store.bodyScrollHeight
+      }
+    }));
+  }));
+};
+
+var CustomEvents$1 = observer(CustomEvents);
 
 var css_248z$b = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
 styleInject(css_248z$b);
@@ -4581,7 +4664,7 @@ var Chart = function Chart() {
       height: bodyScrollHeight,
       transform: "translateX(-".concat(translateX, "px")
     }
-  }, /*#__PURE__*/React.createElement(BarThumbList$1, null), /*#__PURE__*/React.createElement(BarList$1, null), /*#__PURE__*/React.createElement(Today$1, null)));
+  }, /*#__PURE__*/React.createElement(BarThumbList$1, null), /*#__PURE__*/React.createElement(BarList$1, null), /*#__PURE__*/React.createElement(Today$1, null), /*#__PURE__*/React.createElement(CustomEvents$1, null)));
 };
 
 var Chart$1 = /*#__PURE__*/memo(observer(Chart));
@@ -5497,7 +5580,7 @@ var TableHeader = function TableHeader() {
 
 var TableHeader$1 = observer(TableHeader);
 
-var css_248z$3 = ".gantt-time-axis {\n  height: 56px;\n  position: absolute;\n  top: 0;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  overflow: hidden;\n  cursor: ew-resize;\n}\n.gantt-time-axis-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 56px;\n  pointer-events: none;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  will-change: transform;\n}\n.gantt-time-axis-today {\n  background-color: #2c7ef8;\n  border-radius: 50%;\n  color: #fff;\n}\n.gantt-time-axis-major {\n  position: absolute;\n  overflow: hidden;\n  box-sizing: content-box;\n  height: 28px;\n  border-right: 1px solid #f0f0f0;\n  font-weight: 400;\n  text-align: left;\n  font-size: 13px;\n  line-height: 28px;\n}\n.gantt-time-axis-major-label {\n  overflow: hidden;\n  padding-left: 8px;\n  white-space: nowrap;\n}\n.gantt-time-axis-minor {\n  position: absolute;\n  top: 27px;\n  box-sizing: content-box;\n  height: 28px;\n  border-top: 1px solid #f0f0f0;\n  border-right: 1px solid #f0f0f0;\n  text-align: center;\n  font-size: 12px;\n  line-height: 28px;\n  color: #202d40;\n}\n.gantt-time-axis-minor.weekends {\n  background-color: hsla(0, 0%, 96.9%, 0.5);\n}\n";
+var css_248z$3 = ".gantt-time-axis {\n  height: 56px;\n  position: absolute;\n  top: 0;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  overflow: hidden;\n  cursor: ew-resize;\n}\n.gantt-time-axis-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 56px;\n  pointer-events: none;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  will-change: transform;\n}\n.gantt-time-axis-today {\n  background-color: #2c7ef8;\n  border-radius: 50%;\n  color: #fff;\n}\n.gantt-time-axis-custom-event {\n  background-color: #a83000;\n  border-radius: 50%;\n  color: #fff;\n}\n.gantt-time-axis-major {\n  position: absolute;\n  overflow: hidden;\n  box-sizing: content-box;\n  height: 28px;\n  border-right: 1px solid #f0f0f0;\n  font-weight: 400;\n  text-align: left;\n  font-size: 13px;\n  line-height: 28px;\n}\n.gantt-time-axis-major-label {\n  overflow: hidden;\n  padding-left: 8px;\n  white-space: nowrap;\n}\n.gantt-time-axis-minor {\n  position: absolute;\n  top: 27px;\n  box-sizing: content-box;\n  height: 28px;\n  border-top: 1px solid #f0f0f0;\n  border-right: 1px solid #f0f0f0;\n  text-align: center;\n  font-size: 12px;\n  line-height: 28px;\n  color: #202d40;\n}\n.gantt-time-axis-minor.weekends {\n  background-color: hsla(0, 0%, 96.9%, 0.5);\n}\n";
 styleInject(css_248z$3);
 
 var TimeAxis = function TimeAxis() {
@@ -5507,7 +5590,8 @@ var TimeAxis = function TimeAxis() {
 
   var prefixClsTimeAxis = "".concat(prefixCls, "-time-axis");
   var sightConfig = store.sightConfig,
-      isToday = store.isToday;
+      isToday = store.isToday,
+      customEvents = store.customEvents;
   var majorList = store.getMajorList();
   var minorList = store.getMinorList();
   var handleResize = useCallback(function (_ref) {
@@ -5522,6 +5606,14 @@ var TimeAxis = function TimeAxis() {
     var type = sightConfig.type;
     return type === 'day' && isToday(key);
   }, [sightConfig, isToday]);
+  var getIsCustomEvent = useCallback(function (item) {
+    var key = item.key;
+    var date = key.split(' ')[0];
+    var type = sightConfig.type;
+    return type === 'day' && customEvents.some(function (event) {
+      return event.date === date;
+    });
+  }, [sightConfig, customEvents]);
   return /*#__PURE__*/React.createElement(DragResize$1, {
     onResize: handleResize,
     onResizeEnd: handleLeftResizeEnd,
@@ -5553,6 +5645,8 @@ var TimeAxis = function TimeAxis() {
       className: "".concat(prefixClsTimeAxis, "-major-label")
     }, item.label));
   }), minorList.map(function (item) {
+    var _classNames;
+
     return /*#__PURE__*/React.createElement("div", {
       key: item.key,
       className: classNames("".concat(prefixClsTimeAxis, "-minor")),
@@ -5561,7 +5655,7 @@ var TimeAxis = function TimeAxis() {
         left: item.left
       }
     }, /*#__PURE__*/React.createElement("div", {
-      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)))
+      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), _defineProperty(_classNames, "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), _classNames))
     }, item.label));
   }))));
 };
@@ -6105,6 +6199,10 @@ function throttle(func, wait, options) {
 
 var throttle_1 = throttle;
 
+var ptBr = createCommonjsModule(function (module, exports) {
+!function(e,o){module.exports=o(dayjs);}(commonjsGlobal,(function(e){function o(e){return e&&"object"==typeof e&&"default"in e?e:{default:e}}var a=o(e),s={name:"pt-br",weekdays:"domingo_segunda-feira_terça-feira_quarta-feira_quinta-feira_sexta-feira_sábado".split("_"),weekdaysShort:"dom_seg_ter_qua_qui_sex_sáb".split("_"),weekdaysMin:"Do_2ª_3ª_4ª_5ª_6ª_Sá".split("_"),months:"janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split("_"),monthsShort:"jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),ordinal:function(e){return e+"º"},formats:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY [às] HH:mm",LLLL:"dddd, D [de] MMMM [de] YYYY [às] HH:mm"},relativeTime:{future:"em %s",past:"há %s",s:"poucos segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um mês",MM:"%d meses",y:"um ano",yy:"%d anos"}};return a.default.locale(s,null,!0),s}));
+});
+
 var Gantt;
 
 (function (Gantt) {
@@ -6117,10 +6215,6 @@ var Gantt;
     ESightValues[ESightValues["halfYear"] = 115200] = "halfYear";
   })(Gantt.ESightValues || (Gantt.ESightValues = {}));
 })(Gantt || (Gantt = {}));
-
-var ptBr = createCommonjsModule(function (module, exports) {
-!function(e,o){module.exports=o(dayjs);}(commonjsGlobal,(function(e){function o(e){return e&&"object"==typeof e&&"default"in e?e:{default:e}}var a=o(e),s={name:"pt-br",weekdays:"domingo_segunda-feira_terça-feira_quarta-feira_quinta-feira_sexta-feira_sábado".split("_"),weekdaysShort:"dom_seg_ter_qua_qui_sex_sáb".split("_"),weekdaysMin:"Do_2ª_3ª_4ª_5ª_6ª_Sá".split("_"),months:"janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split("_"),monthsShort:"jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),ordinal:function(e){return e+"º"},formats:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY [às] HH:mm",LLLL:"dddd, D [de] MMMM [de] YYYY [às] HH:mm"},relativeTime:{future:"em %s",past:"há %s",s:"poucos segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um mês",MM:"%d meses",y:"um ano",yy:"%d anos"}};return a.default.locale(s,null,!0),s}));
-});
 
 dayjs.locale(ptBr);
 dayjs.extend(weekday);
@@ -6197,6 +6291,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.endDateKey = 'endDate';
     this.autoScrollPos = 0;
     this.clientX = 0;
+    this.customEvents = [];
 
     this.onUpdate = function () {
       return Promise.resolve(true);
@@ -6213,9 +6308,9 @@ var GanttStore = /*#__PURE__*/function () {
 
       var dayRect = function dayRect() {
         var stAmp = date.startOf('day');
-        var endAmp = date.endOf('day'); // @ts-ignore
+        var endAmp = date.endOf('day'); // @ts-expect-error
 
-        var left = stAmp / _this.pxUnitAmp; // @ts-ignore
+        var left = stAmp / _this.pxUnitAmp; // @ts-expect-error
 
         var width = (endAmp - stAmp) / _this.pxUnitAmp;
         return {
@@ -6346,6 +6441,11 @@ var GanttStore = /*#__PURE__*/function () {
       item.collapsed = collapsed; // this.barList = this.getBarList();
     }
   }, {
+    key: "setCustomEvents",
+    value: function setCustomEvents(customEvents) {
+      this.customEvents = customEvents;
+    }
+  }, {
     key: "setOnUpdate",
     value: function setOnUpdate(onUpdate) {
       this.onUpdate = onUpdate;
@@ -6458,7 +6558,7 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "getTranslateXByDate",
     value: function getTranslateXByDate(date) {
-      return dayjs(date).startOf('day').valueOf() / this.pxUnitAmp;
+      return dayjs(date).startOf('day').valueOf() / 2880000;
     }
   }, {
     key: "todayTranslateX",
@@ -6705,7 +6805,10 @@ var GanttStore = /*#__PURE__*/function () {
       };
 
       var getMinorKey = function getMinorKey(date) {
-        if (_this2.sightConfig.type === 'halfYear') return date.format(format) + (fstHalfYear.has(date.month()) ? _this2.locale.firstHalf : _this2.locale.secondHalf);
+        if (_this2.sightConfig.type === 'halfYear') {
+          return date.format(format) + (fstHalfYear.has(date.month()) ? _this2.locale.firstHalf : _this2.locale.secondHalf);
+        }
+
         return date.format(format);
       }; // 初始化当前时间
 
@@ -6798,7 +6901,7 @@ var GanttStore = /*#__PURE__*/function () {
       var parentIdMap = {};
 
       if (this.isTimeline) {
-        //if isTimeline create a object map with parentId as key and a index as value
+        // if isTimeline create a object map with parentId as key and a index as value
         data.forEach(function (item, index) {
           if (!item.record.parentId) {
             if (parentIdMap[item.record.id] === undefined) parentIdMap[item.record.id] = index;
@@ -6874,7 +6977,9 @@ var GanttStore = /*#__PURE__*/function () {
     value: function showSelectionBar(event) {
       var _a, _b;
 
-      if (this.isTimeline) this.showSelectionIndicator = false;else {
+      if (this.isTimeline) {
+        this.showSelectionIndicator = false;
+      } else {
         var scrollTop = ((_a = this.mainElementRef.current) === null || _a === void 0 ? void 0 : _a.scrollTop) || 0;
 
         var _ref2 = ((_b = this.mainElementRef.current) === null || _b === void 0 ? void 0 : _b.getBoundingClientRect()) || {
@@ -7092,6 +7197,8 @@ __decorate([action], GanttStore.prototype, "toggleCollapse", null);
 
 __decorate([action], GanttStore.prototype, "setRowCollapse", null);
 
+__decorate([action], GanttStore.prototype, "setCustomEvents", null);
+
 __decorate([action], GanttStore.prototype, "setOnUpdate", null);
 
 __decorate([action], GanttStore.prototype, "setColumns", null);
@@ -7237,7 +7344,10 @@ var GanttComponent = function GanttComponent(props) {
       hideTable = _props$hideTable === void 0 ? false : _props$hideTable,
       _props$workdays = props.workdays,
       workdays = _props$workdays === void 0 ? 'all_days' : _props$workdays,
-      durationFn = props.durationFn;
+      durationFn = props.durationFn,
+      _props$customEvents = props.customEvents,
+      customEvents = _props$customEvents === void 0 ? [] : _props$customEvents,
+      onCustomEventClick = props.onCustomEventClick;
   var store = useMemo(function () {
     return new GanttStore({
       rowHeight: rowHeight,
@@ -7252,6 +7362,9 @@ var GanttComponent = function GanttComponent(props) {
   useEffect(function () {
     store.setColumns(columns);
   }, [columns, store]);
+  useEffect(function () {
+    store.setCustomEvents(customEvents);
+  }, [customEvents, store]);
   useEffect(function () {
     store.setOnUpdate(onUpdate);
   }, [onUpdate, store]);
@@ -7293,6 +7406,7 @@ var GanttComponent = function GanttComponent(props) {
       showUnitSwitch: showUnitSwitch,
       onRow: onRow,
       tableIndent: tableIndent,
+      customEvents: customEvents,
       expandIcon: expandIcon,
       renderBar: renderBar,
       renderInvalidBar: renderInvalidBar,
@@ -7307,9 +7421,10 @@ var GanttComponent = function GanttComponent(props) {
       renderRightText: renderRightText,
       renderCustomHeaderFilter: renderCustomHeaderFilter,
       onExpand: onExpand,
-      hideTable: hideTable
+      hideTable: hideTable,
+      onCustomEventClick: onCustomEventClick
     };
-  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderCustomHeaderFilter, onExpand, hideTable]);
+  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, customEvents, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderCustomHeaderFilter, onExpand, hideTable, onCustomEventClick]);
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {

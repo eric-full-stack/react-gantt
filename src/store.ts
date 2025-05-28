@@ -1,4 +1,5 @@
-import dayjs, { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import isBetween from 'dayjs/plugin/isBetween'
 import isLeapYear from 'dayjs/plugin/isLeapYear'
@@ -9,13 +10,15 @@ import debounce from 'lodash/debounce'
 import find from 'lodash/find'
 import throttle from 'lodash/throttle'
 import { action, computed, observable, runInAction, toJS } from 'mobx'
-import React, { createRef } from 'react'
+import type React from 'react'
+import { createRef } from 'react'
+import ptBR from 'dayjs/locale/pt-br'
+import dayjsBusinessDays from 'dayjs-business-days'
 import { HEADER_HEIGHT, TOP_PADDING } from './constants'
-import { GanttProps as GanttProperties, GanttLocale, defaultLocale } from './Gantt'
+import type { GanttLocale, GanttProps as GanttProperties } from './Gantt'
+import { defaultLocale } from './Gantt'
 import { Gantt } from './types'
 import { flattenDeep, transverseData } from './utils'
-import ptBR from "dayjs/locale/pt-br"
-import dayjsBusinessDays from 'dayjs-business-days';
 
 dayjs.locale(ptBR)
 dayjs.extend(weekday)
@@ -91,7 +94,7 @@ class GanttStore {
     this.locale = locale
   }
 
-  locale = {...defaultLocale}
+  locale = { ...defaultLocale }
 
   _wheelTimer: number | undefined
 
@@ -161,6 +164,8 @@ class GanttStore {
 
   rowHeight: number
 
+  customEvents: Gantt.CustomEvent[] = []
+
   onUpdate: GanttProperties['onUpdate'] = () => Promise.resolve(true)
 
   isRestDay = isRestDay
@@ -195,6 +200,11 @@ class GanttStore {
   setRowCollapse(item: Gantt.Item, collapsed: boolean) {
     item.collapsed = collapsed
     // this.barList = this.getBarList();
+  }
+
+  @action
+  setCustomEvents(customEvents: Gantt.CustomEvent[]) {
+    this.customEvents = customEvents
   }
 
   @action
@@ -242,10 +252,12 @@ class GanttStore {
     this.scrolling = true
     this.setTranslateX(translateX)
   }
+
   @action
   handlePanEnd() {
     this.scrolling = false
   }
+
   @action syncSize(size: { width?: number; height?: number }) {
     if (!size.height || !size.width) return
 
@@ -274,10 +286,12 @@ class GanttStore {
       this.tableWidth = this.width - this.viewWidth
     }
   }
+  
   @action
   setTranslateX(translateX: number) {
     this.translateX = Math.max(translateX, 0)
   }
+
   @action switchSight(type: Gantt.Sight) {
     const target = find(this.viewTypeList, { type })
     if (target) {
@@ -292,7 +306,7 @@ class GanttStore {
   }
 
   getTranslateXByDate(date: string) {
-    return dayjs(date).startOf('day').valueOf() / this.pxUnitAmp
+    return dayjs(date).startOf('day').valueOf() / 2880000
   }
 
   @computed get todayTranslateX() {
@@ -531,12 +545,12 @@ class GanttStore {
     }
     const getMinorKey = (date: Dayjs) => {
       if (this.sightConfig.type === 'halfYear')
-        return (
-          date.format(format) +
+      { return (
+        date.format(format) +
           (fstHalfYear.has(date.month())
             ? this.locale.firstHalf
             : this.locale.secondHalf)
-        )
+      ) }
 
       return date.format(format)
     }
@@ -564,9 +578,9 @@ class GanttStore {
     const dayRect = () => {
       const stAmp = date.startOf('day')
       const endAmp = date.endOf('day')
-      // @ts-ignore
+      // @ts-expect-error
       const left = stAmp / this.pxUnitAmp
-      // @ts-ignore
+      // @ts-expect-error
       const width = (endAmp - stAmp) / this.pxUnitAmp
 
       return {
@@ -665,14 +679,14 @@ class GanttStore {
 
     const getDateWidth = () => {
       
-      return '1';
+      return '1'
     }
     
     const flattenData = flattenDeep(data, 0, undefined, this.isTimeline)
     
-    const parentIdMap: { [key: string]: number } = {}
+    const parentIdMap: Record<string, number> = {}
     if(this.isTimeline) {
-      //if isTimeline create a object map with parentId as key and a index as value
+      // if isTimeline create a object map with parentId as key and a index as value
       data.forEach((item, index) => {
         if (!item.record.parentId) {
           if(parentIdMap[item.record.id] === undefined) 
@@ -736,21 +750,21 @@ class GanttStore {
   }
 
   @action
-  handleWheel = (event: WheelEvent) => {
-    if (event.deltaX !== 0) {
-      event.preventDefault()
-      event.stopPropagation()
+    handleWheel = (event: WheelEvent) => {
+      if (event.deltaX !== 0) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      if (this._wheelTimer) clearTimeout(this._wheelTimer)
+      // 水平滚动
+      if (Math.abs(event.deltaX) > 0) {
+        this.scrolling = true
+        this.setTranslateX(this.translateX + event.deltaX)
+      }
+      this._wheelTimer = window.setTimeout(() => {
+        this.scrolling = false
+      }, 100)
     }
-    if (this._wheelTimer) clearTimeout(this._wheelTimer)
-    // 水平滚动
-    if (Math.abs(event.deltaX) > 0) {
-      this.scrolling = true
-      this.setTranslateX(this.translateX + event.deltaX)
-    }
-    this._wheelTimer = window.setTimeout(() => {
-      this.scrolling = false
-    }, 100)
-  }
 
   handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const { scrollTop } = event.currentTarget
@@ -784,7 +798,7 @@ class GanttStore {
 
   @action
   showSelectionBar(event: MouseEvent) {
-    if(this.isTimeline) this.showSelectionIndicator = false;
+    if(this.isTimeline) { this.showSelectionIndicator = false }
     else {
       const scrollTop = this.mainElementRef.current?.scrollTop || 0
       const { top } = this.mainElementRef.current?.getBoundingClientRect() || {
@@ -856,9 +870,11 @@ class GanttStore {
     barInfo.translateX = Math.max(x, 0)
     barInfo.stepGesture = 'moving'
   }
+
   getMovedDay(ms: number): number {
     return Math.round(ms / ONE_DAY_MS)
   }
+
   /** 更新时间 */
   @action
   async updateTaskDate(

@@ -3,6 +3,11 @@ import React from 'react'
 
 export type DefaultRecordType = Record<string, any>
 export namespace Gantt {
+  export interface CustomEvent {
+    key: string
+    date: string
+    content: string
+  }
   export interface Major {
     width: number
     left: number

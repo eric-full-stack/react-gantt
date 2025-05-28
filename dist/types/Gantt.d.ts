@@ -1,8 +1,8 @@
-import { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import React from 'react';
-import { GanttContext } from './context';
+import type { GanttContext } from './context';
 import './Gantt.less';
-import { DefaultRecordType, Gantt } from './types';
+import type { DefaultRecordType, Gantt } from './types';
 export interface GanttProps<RecordType = DefaultRecordType> {
     data: Gantt.Record<RecordType>[];
     columns: Gantt.Column[];
@@ -15,6 +15,8 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     startDateKey?: string;
     endDateKey?: string;
     isRestDay?: (date: string) => boolean;
+    customEvents?: Gantt.CustomEvent[];
+    onCustomEventClick?: (event: Gantt.CustomEvent) => void;
     unit?: Gantt.Sight;
     rowHeight?: number;
     innerRef?: React.MutableRefObject<GanttRef>;

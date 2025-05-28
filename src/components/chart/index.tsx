@@ -6,6 +6,7 @@ import BarThumbList from '../bar-thumb-list'
 import Dependencies from '../dependencies'
 import DragPresent from '../drag-present'
 import Today from '../today'
+import CustomEvents from '../custom-events'
 import './index.less'
 
 const Chart: React.FC = () => {
@@ -95,6 +96,7 @@ const Chart: React.FC = () => {
         <BarThumbList />
         <BarList />
         <Today />
+        <CustomEvents />
       </div>
     </div>
   )

@@ -2,6 +2,11 @@ import { Dayjs } from 'dayjs';
 import React from 'react';
 export declare type DefaultRecordType = Record<string, any>;
 export declare namespace Gantt {
+    interface CustomEvent {
+        key: string;
+        date: string;
+        content: string;
+    }
     interface Major {
         width: number;
         left: number;
