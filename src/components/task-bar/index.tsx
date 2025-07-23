@@ -163,6 +163,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
               defaultSize={{
                 x: translateX,
                 width,
+                y: 0,
+                height: 0,
               }}
               minWidth={30}
               grid={grid}
@@ -183,6 +185,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
               defaultSize={{
                 x: translateX,
                 width,
+                y: 0,
+                height: 0,
               }}
               minWidth={30}
               grid={grid}
@@ -206,6 +210,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
           defaultSize={{
             x: translateX,
             width,
+            y: 0,
+            height: 0,
           }}
           minWidth={30}
           grid={grid}

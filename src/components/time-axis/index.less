@@ -22,12 +22,16 @@
     background-color: #2c7ef8;
     border-radius: 50%;
     color: #fff;
+    width: 35px;
+    margin: 0 auto;
   }
   
   &-custom-event {
     background-color: #a83000;
     border-radius: 50%;
     color: #fff;
+    width: 35px;
+    margin: 0 auto;
   }
 
   &-major {
@@ -61,6 +65,42 @@
     color: #202d40;
     &.weekends {
       background-color: hsla(0, 0%, 96.9%, 0.5);
+    }
+    
+    &-label {
+      &.day-view {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 0 4px;
+        height: 28px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 14px;
+        
+        br {
+          display: block;
+          margin: 0;
+          content: "";
+        }
+        
+        // Day of week style
+        &::before {
+          content: attr(data-day-of-week);
+          display: block;
+          font-size: 10px;
+          font-weight: normal;
+        }
+        
+        // Day number style
+        &::after {
+          content: attr(data-day-number);
+          display: block;
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
     }
   }
 }

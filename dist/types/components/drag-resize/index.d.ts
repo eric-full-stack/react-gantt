@@ -1,12 +1,16 @@
 import React, { HTMLProps } from 'react';
 interface DragResizeProps extends Omit<HTMLProps<HTMLDivElement>, 'onResize'> {
-    onResize: ({ width, x }: {
+    onResize: ({ width, x, y, height }: {
         width: number;
         x: number;
+        y: number;
+        height: number;
     }) => void;
-    onResizeEnd?: ({ width, x }: {
+    onResizeEnd?: ({ width, x, y, height }: {
         width: number;
         x: number;
+        y: number;
+        height: number;
     }) => void;
     onBeforeResize?: () => void;
     minWidth?: number;
@@ -16,6 +20,8 @@ interface DragResizeProps extends Omit<HTMLProps<HTMLDivElement>, 'onResize'> {
     defaultSize: {
         width: number;
         x: number;
+        y: number;
+        height: number;
     };
     autoScroll?: boolean;
     onAutoScroll?: (delta: number) => void;

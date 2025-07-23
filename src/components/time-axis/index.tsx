@@ -14,7 +14,7 @@ const TimeAxis: React.FC = () => {
   const minorList = store.getMinorList()
   const handleResize = useCallback(
     ({ x }) => {
-      store.handlePanMove(-x)
+      store.handlePanMove(-x, -store.translateY)
     },
     [store]
   )
@@ -41,13 +41,50 @@ const TimeAxis: React.FC = () => {
     [sightConfig, customEvents]
   )
 
+  const isDayView = sightConfig.type === 'day'
+
+  const renderLabel = (item) => {
+    if (isDayView) {
+      // For day view with <br/> in label, extract day of week and day number
+      const parts = item.label.split('<br/>')
+      const dayOfWeek = parts[0]
+      const dayNumber = parts[1]
+
+      return (
+        <div 
+          className={classNames(`${prefixClsTimeAxis}-minor-label`, {
+            [`${prefixClsTimeAxis}-today`]: getIsToday(item),
+            [`${prefixClsTimeAxis}-custom-event`]: getIsCustomEvent(item),
+            'day-view': isDayView,
+          })}
+          data-day-of-week={dayOfWeek}
+          data-day-number={dayNumber}
+        />
+      )
+    } 
+    
+    return (
+      <div
+        className={classNames(`${prefixClsTimeAxis}-minor-label`, {
+          [`${prefixClsTimeAxis}-today`]: getIsToday(item),
+          [`${prefixClsTimeAxis}-custom-event`]: getIsCustomEvent(item),
+          'day-view': isDayView,
+        })}
+      >
+        {item.label}
+      </div>
+    )
+  }
+
   return (
     <DragResize
       onResize={handleResize}
       onResizeEnd={handleLeftResizeEnd}
       defaultSize={{
         x: -store.translateX,
+        y: -store.translateY,
         width: 0,
+        height: 0,
       }}
       type='move'
     >
@@ -75,14 +112,7 @@ const TimeAxis: React.FC = () => {
               className={classNames(`${prefixClsTimeAxis}-minor`)}
               style={{ width: item.width, left: item.left }}
             >
-              <div
-                className={classNames(`${prefixClsTimeAxis}-minor-label`, {
-                  [`${prefixClsTimeAxis}-today`]: getIsToday(item),
-                  [`${prefixClsTimeAxis}-custom-event`]: getIsCustomEvent(item),
-                })}
-              >
-                {item.label}
-              </div>
+              {renderLabel(item)}
             </div>
           ))}
         </div>

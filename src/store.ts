@@ -87,6 +87,7 @@ class GanttStore {
     this.viewWidth = viewWidth
     this.tableWidth = tableWidth
     this.translateX = translateX
+    this.translateY = 0
     this.sightConfig = sightConfig
     this.bodyWidth = bodyWidth
     this.rowHeight = rowHeight
@@ -131,6 +132,8 @@ class GanttStore {
   @observable bodyWidth: number
 
   @observable translateX: number
+  
+  @observable translateY: number
 
   @observable sightConfig: Gantt.SightConfig
 
@@ -248,9 +251,10 @@ class GanttStore {
   }
 
   @action
-  handlePanMove(translateX: number) {
+  handlePanMove(translateX: number, translateY: number) {
     this.scrolling = true
     this.setTranslateX(translateX)
+    this.setTranslateY(translateY)
   }
 
   @action
@@ -290,6 +294,11 @@ class GanttStore {
   @action
   setTranslateX(translateX: number) {
     this.translateX = Math.max(translateX, 0)
+  }
+
+  @action
+  setTranslateY(translateY: number) {
+    this.translateY = Math.max(translateY, 0)
   }
 
   @action switchSight(type: Gantt.Sight) {
@@ -362,14 +371,17 @@ class GanttStore {
   // 内容区滚动区域域高度
   @computed get bodyScrollHeight() {
     const barListLength = this.isTimeline ? this.getBarList.filter(bar => bar.record.parentId === null).length : this.getBarList.length
-    let height = barListLength * this.rowHeight + TOP_PADDING
-    if (height < this.bodyClientHeight) height = this.bodyClientHeight
-
+    const height = barListLength * this.rowHeight + TOP_PADDING
     return height
   }
 
   // 1px对应的毫秒数
   @computed get pxUnitAmp() {
+    // For day view, reduce the value to make columns wider
+    if (this.sightConfig.type === 'day') {
+      // Return a smaller value to make columns wider (one third of the original value)
+      return (this.sightConfig.value * 1000) / 3
+    }
     return this.sightConfig.value * 1000
   }
 
@@ -635,8 +647,16 @@ class GanttStore {
       let isWeek = false
       if (this.sightConfig.type === 'day') isWeek = this.isRestDay(startDate.toString())
 
+      let finalLabel = label
+      // For day view, show day of week and day number
+      if (this.sightConfig.type === 'day') {
+        const dayOfWeek = startDate.format('ddd') // Short day name (Mon, Tue, etc)
+        const dayNumber = startDate.format('D')   // Day number (1, 2, etc)
+        finalLabel = `${dayOfWeek}<br/>${dayNumber}`
+      }
+
       return {
-        label,
+        label: finalLabel,
         left,
         width,
         isWeek,
@@ -761,27 +781,22 @@ class GanttStore {
         this.scrolling = true
         this.setTranslateX(this.translateX + event.deltaX)
       }
+      if (Math.abs(event.deltaY) > 0) {
+        this.scrolling = true
+        this.setTranslateY(this.translateY + event.deltaY)
+      }
       this._wheelTimer = window.setTimeout(() => {
         this.scrolling = false
       }, 100)
     }
 
-  handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    const { scrollTop } = event.currentTarget
-    this.scrollY(scrollTop)
-  }
-
-  scrollY = throttle((scrollTop: number) => {
-    this.scrollTop = scrollTop
-  }, 100)
-
   // 虚拟滚动
   @computed get getVisibleRows() {
     const visibleHeight = this.bodyClientHeight
-    
+
     const visibleRowCount = Math.ceil(visibleHeight / this.rowHeight) + 10
 
-    const start = Math.max(Math.ceil(this.scrollTop / this.rowHeight) - 5, 0)
+    const start = Math.max(Math.ceil(this.translateY / this.rowHeight) - 5, 0)
     return {
       start: this.isTimeline ? 0 : start,
       count: this.isTimeline ? this.getBarList.length : visibleRowCount,
@@ -800,13 +815,12 @@ class GanttStore {
   showSelectionBar(event: MouseEvent) {
     if(this.isTimeline) { this.showSelectionIndicator = false }
     else {
-      const scrollTop = this.mainElementRef.current?.scrollTop || 0
       const { top } = this.mainElementRef.current?.getBoundingClientRect() || {
         top: 0,
       }
       // 内容区高度
       const contentHeight = this.getBarList.length * this.rowHeight
-      const offsetY = event.clientY - top + scrollTop
+      const offsetY = event.clientY - top + this.translateY
       if (offsetY - contentHeight > TOP_PADDING) {
         this.showSelectionIndicator = false
       } else {

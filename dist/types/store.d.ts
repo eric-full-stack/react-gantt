@@ -56,6 +56,7 @@ declare class GanttStore {
     height: number;
     bodyWidth: number;
     translateX: number;
+    translateY: number;
     sightConfig: Gantt.SightConfig;
     showSelectionIndicator: boolean;
     selectionIndicatorTop: number;
@@ -88,7 +89,7 @@ declare class GanttStore {
     setWorkdays(workdays: 'business_days' | 'all_days'): void;
     setDurationFn(durationFn: (startDate: string, endDate: string) => number): void;
     setHideTable(isHidden?: boolean): void;
-    handlePanMove(translateX: number): void;
+    handlePanMove(translateX: number, translateY: number): void;
     handlePanEnd(): void;
     syncSize(size: {
         width?: number;
@@ -97,6 +98,7 @@ declare class GanttStore {
     handleResizeTableWidth(width: number): void;
     initWidth(): void;
     setTranslateX(translateX: number): void;
+    setTranslateY(translateY: number): void;
     switchSight(type: Gantt.Sight): void;
     scrollToToday(): void;
     getTranslateXByDate(date: string): number;
@@ -130,8 +132,6 @@ declare class GanttStore {
     scrollToBar(barInfo: Gantt.Bar, type: 'left' | 'right'): void;
     get getBarList(): Gantt.Bar[];
     handleWheel: (event: WheelEvent) => void;
-    handleScroll: (event: React.UIEvent<HTMLDivElement, UIEvent>) => void;
-    scrollY: import("lodash").DebouncedFunc<(scrollTop: number) => void>;
     get getVisibleRows(): {
         start: number;
         count: number;

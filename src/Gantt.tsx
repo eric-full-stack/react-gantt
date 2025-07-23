@@ -264,7 +264,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
           {!hideTable && <TableHeader />}
           <TimeAxis />
         </header>
-        <main ref={store.mainElementRef} onScroll={store.handleScroll}>
+        <main ref={store.mainElementRef}>
           <SelectionIndicator />
           {!hideTable && <TableBody />}
           <Chart />

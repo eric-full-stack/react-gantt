@@ -512,6 +512,8 @@ var DragResize = function DragResize(_ref) {
       _ref$defaultSize = _ref.defaultSize,
       defaultX = _ref$defaultSize.x,
       defaultWidth = _ref$defaultSize.width,
+      defaultY = _ref$defaultSize.y,
+      defaultHeight = _ref$defaultSize.height,
       scroller = _ref.scroller,
       _ref$autoScroll = _ref.autoScroll,
       enableAutoScroll = _ref$autoScroll === void 0 ? true : _ref$autoScroll,
@@ -546,15 +548,20 @@ var DragResize = function DragResize(_ref) {
   }, [handleAutoScroll, scroller, reachEdge]);
   var positionRef = useRef({
     clientX: 0,
+    clientY: 0,
     width: defaultWidth,
-    x: defaultX
+    height: defaultHeight,
+    x: defaultX,
+    y: defaultY
   });
   var moveRef = useRef({
-    clientX: 0
+    clientX: 0,
+    clientY: 0
   });
   var updateSize = usePersistFn(function () {
     if (disabled) return;
     var distance = moveRef.current.clientX - positionRef.current.clientX + autoScroll.autoScrollPos;
+    var distanceY = moveRef.current.clientY - positionRef.current.clientY + autoScroll.autoScrollPos;
 
     switch (type) {
       case 'left':
@@ -573,7 +580,9 @@ var DragResize = function DragResize(_ref) {
           var x = positionRef.current.x - pos;
           onResize({
             width: width,
-            x: x
+            x: x,
+            y: positionRef.current.y,
+            height: positionRef.current.height
           });
           break;
         }
@@ -594,14 +603,18 @@ var DragResize = function DragResize(_ref) {
           var _x = positionRef.current.x;
           onResize({
             width: _width,
-            x: _x
+            x: _x,
+            y: positionRef.current.y,
+            height: positionRef.current.height
           });
           break;
         }
 
       case 'move':
         {
-          var _width2 = positionRef.current.width;
+          var _positionRef$current = positionRef.current,
+              _width2 = _positionRef$current.width,
+              height = _positionRef$current.height;
           var rightDistance = distance;
 
           if (grid) {
@@ -610,9 +623,12 @@ var DragResize = function DragResize(_ref) {
 
           var _x2 = positionRef.current.x + rightDistance;
 
+          var y = positionRef.current.y + distanceY;
           onResize({
             width: _width2,
-            x: _x2
+            x: _x2,
+            y: y,
+            height: height
           });
           break;
         }
@@ -630,6 +646,7 @@ var DragResize = function DragResize(_ref) {
     }
 
     moveRef.current.clientX = event.clientX;
+    moveRef.current.clientY = event.clientY;
     updateSize();
   });
   var handleMouseUp = usePersistFn(function () {
@@ -642,7 +659,9 @@ var DragResize = function DragResize(_ref) {
       setResizing(false);
       onResizeEnd && onResizeEnd({
         x: positionRef.current.x,
-        width: positionRef.current.width
+        width: positionRef.current.width,
+        y: positionRef.current.y,
+        height: positionRef.current.height
       });
     }
   });
@@ -660,8 +679,11 @@ var DragResize = function DragResize(_ref) {
     }
 
     positionRef.current.clientX = event.clientX;
+    positionRef.current.clientY = event.clientY;
     positionRef.current.x = defaultX;
+    positionRef.current.y = defaultY;
     positionRef.current.width = defaultWidth;
+    positionRef.current.height = defaultHeight;
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
   });
@@ -775,7 +797,9 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
     onResizeEnd: handleLeftResizeEnd,
     defaultSize: {
       x: translateX,
-      width: width
+      width: width,
+      y: 0,
+      height: 0
     },
     minWidth: 30,
     grid: 30,
@@ -942,7 +966,9 @@ var TaskBar = function TaskBar(_ref) {
     onResizeEnd: handleLeftResizeEnd,
     defaultSize: {
       x: translateX,
-      width: width
+      width: width,
+      y: 0,
+      height: 0
     },
     minWidth: 30,
     grid: grid,
@@ -961,7 +987,9 @@ var TaskBar = function TaskBar(_ref) {
     onResizeEnd: handleRightResizeEnd,
     defaultSize: {
       x: translateX,
-      width: width
+      width: width,
+      y: 0,
+      height: 0
     },
     minWidth: 30,
     grid: grid,
@@ -983,7 +1011,9 @@ var TaskBar = function TaskBar(_ref) {
     onResizeEnd: handleMoveEnd,
     defaultSize: {
       x: translateX,
-      width: width
+      width: width,
+      y: 0,
+      height: 0
     },
     minWidth: 30,
     grid: grid,
@@ -3487,7 +3517,7 @@ function isKey(value, object) {
 var _isKey = isKey;
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$2 = 'Expected a function';
+var FUNC_ERROR_TEXT$1 = 'Expected a function';
 
 /**
  * Creates a function that memoizes the result of `func`. If `resolver` is
@@ -3535,7 +3565,7 @@ var FUNC_ERROR_TEXT$2 = 'Expected a function';
  */
 function memoize(func, resolver) {
   if (typeof func != 'function' || (resolver != null && typeof resolver != 'function')) {
-    throw new TypeError(FUNC_ERROR_TEXT$2);
+    throw new TypeError(FUNC_ERROR_TEXT$1);
   }
   var memoized = function() {
     var args = arguments,
@@ -4595,7 +4625,16 @@ var Chart = function Chart() {
       viewWidth = store.viewWidth,
       bodyScrollHeight = store.bodyScrollHeight,
       translateX = store.translateX,
+      translateY = store.translateY,
       chartElementRef = store.chartElementRef;
+  var handleResize = useCallback(function (_ref) {
+    var x = _ref.x,
+        y = _ref.y;
+    store.handlePanMove(-x, -y);
+  }, [store]);
+  var handleResizeEnd = useCallback(function () {
+    store.handlePanEnd();
+  }, [store]);
   var minorList = store.getMinorList();
   var handleMouseMove = useCallback(function (event) {
     event.persist();
@@ -4611,7 +4650,17 @@ var Chart = function Chart() {
       if (element) element.removeEventListener('wheel', store.handleWheel);
     };
   }, [chartElementRef, store]);
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement(DragResize$1, {
+    onResize: handleResize,
+    onResizeEnd: handleResizeEnd,
+    defaultSize: {
+      x: -store.translateX,
+      y: -store.translateY,
+      width: 0,
+      height: 0
+    },
+    type: 'move'
+  }, /*#__PURE__*/React.createElement("div", {
     ref: chartElementRef,
     className: "".concat(prefixCls, "-chart"),
     onMouseMove: handleMouseMove,
@@ -4625,9 +4674,11 @@ var Chart = function Chart() {
     className: "".concat(prefixCls, "-chart-svg-renderer"),
     xmlns: 'http://www.w3.org/2000/svg',
     version: '1.1',
-    width: viewWidth,
+    width: store.width,
     height: bodyScrollHeight,
-    viewBox: "".concat(translateX, " 0 ").concat(viewWidth, " ").concat(bodyScrollHeight)
+    style: {
+      transform: "translateX(-".concat(translateX, "px)")
+    }
   }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("pattern", {
     id: 'repeat',
     width: '4.5',
@@ -4662,9 +4713,9 @@ var Chart = function Chart() {
     className: "".concat(prefixCls, "-render-chunk"),
     style: {
       height: bodyScrollHeight,
-      transform: "translateX(-".concat(translateX, "px")
+      transform: "translate(-".concat(translateX, "px, -").concat(translateY, "px)")
     }
-  }, /*#__PURE__*/React.createElement(BarThumbList$1, null), /*#__PURE__*/React.createElement(BarList$1, null), /*#__PURE__*/React.createElement(Today$1, null), /*#__PURE__*/React.createElement(CustomEvents$1, null)));
+  }, /*#__PURE__*/React.createElement(BarThumbList$1, null), /*#__PURE__*/React.createElement(BarList$1, null), /*#__PURE__*/React.createElement(Today$1, null), /*#__PURE__*/React.createElement(CustomEvents$1, null))));
 };
 
 var Chart$1 = /*#__PURE__*/memo(observer(Chart));
@@ -5204,59 +5255,30 @@ var ScrollBar = function ScrollBar() {
       viewWidth = store.viewWidth;
   var width = store.scrollBarWidth;
   var prefixClsScrollBar = "".concat(prefixCls, "-scroll_bar");
-
-  var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      resizing = _useState2[0],
-      setResizing = _useState2[1];
-
-  var positionRef = useRef({
-    scrollLeft: 0,
-    left: 0,
-    translateX: 0
-  });
-  var handleMouseMove = usePersistFn(function (event) {
-    var distance = event.clientX - positionRef.current.left; // TODO 调整倍率
-
-    store.setTranslateX(distance * (store.viewWidth / store.scrollBarWidth) + positionRef.current.translateX);
-  });
-  var handleMouseUp = useCallback(function () {
-    window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
-    setResizing(false);
-  }, [handleMouseMove]);
-  var handleMouseDown = useCallback(function (event) {
-    positionRef.current.left = event.clientX;
-    positionRef.current.translateX = store.translateX;
-    positionRef.current.scrollLeft = store.scrollLeft;
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    setResizing(true);
-  }, [handleMouseMove, handleMouseUp, store.scrollLeft, store.translateX]);
+  var handleResize = useCallback(function (_ref) {
+    var x = _ref.x;
+    store.setTranslateX(x * (store.scrollWidth / store.viewWidth));
+  }, [store]);
   return /*#__PURE__*/React.createElement("div", {
     role: 'none',
     className: prefixClsScrollBar,
     style: {
       left: tableWidth,
       width: viewWidth
-    },
-    onMouseDown: handleMouseDown
-  }, resizing && /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-      zIndex: 9999,
-      cursor: 'col-resize'
     }
-  }), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(DragResize$1, {
     className: "".concat(prefixClsScrollBar, "-thumb"),
-    style: {
+    onResize: handleResize,
+    defaultSize: {
+      x: 0,
       width: width,
-      left: store.scrollLeft
-    }
+      y: 0,
+      height: 0
+    },
+    style: {
+      transform: "translateX(".concat(store.scrollLeft, "px)")
+    },
+    type: 'move'
   }));
 };
 
@@ -5474,40 +5496,12 @@ var TableRows = function TableRows() {
 
 var ObserverTableRows = observer(TableRows);
 
-var TableBorders = function TableBorders() {
+var TableBody = function TableBody() {
   var _useContext2 = useContext(context),
       store = _useContext2.store,
       prefixCls = _useContext2.prefixCls;
 
-  var columns = store.columns;
-  var columnsWidth = store.getColumnsWidth;
-  var barList = store.getBarList;
-  if (barList.length === 0) return null;
-  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
-  return /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    className: "".concat(prefixClsTableBody, "-border_row")
-  }, columns.map(function (column, index) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: column.name,
-      className: "".concat(prefixClsTableBody, "-cell"),
-      style: _objectSpread2({
-        width: columnsWidth[index],
-        minWidth: column.minWidth,
-        maxWidth: column.maxWidth,
-        textAlign: column.align ? column.align : 'left'
-      }, column.style)
-    });
-  }));
-};
-
-var ObserverTableBorders = observer(TableBorders);
-
-var TableBody = function TableBody() {
-  var _useContext3 = useContext(context),
-      store = _useContext3.store,
-      prefixCls = _useContext3.prefixCls;
-
+  var translateY = store.translateY;
   var handleMouseMove = useCallback(function (event) {
     event.persist();
     store.handleMouseMove(event);
@@ -5520,11 +5514,12 @@ var TableBody = function TableBody() {
     className: prefixClsTableBody,
     style: {
       width: store.tableWidth,
-      height: store.bodyScrollHeight
+      height: store.bodyScrollHeight,
+      transform: "translateY(-".concat(translateY, "px)")
     },
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave
-  }, /*#__PURE__*/React.createElement(ObserverTableBorders, null), /*#__PURE__*/React.createElement(ObserverTableRows, null));
+  }, /*#__PURE__*/React.createElement(ObserverTableRows, null));
 };
 
 var TableBody$1 = observer(TableBody);
@@ -5580,7 +5575,7 @@ var TableHeader = function TableHeader() {
 
 var TableHeader$1 = observer(TableHeader);
 
-var css_248z$3 = ".gantt-time-axis {\n  height: 56px;\n  position: absolute;\n  top: 0;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  overflow: hidden;\n  cursor: ew-resize;\n}\n.gantt-time-axis-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 56px;\n  pointer-events: none;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  will-change: transform;\n}\n.gantt-time-axis-today {\n  background-color: #2c7ef8;\n  border-radius: 50%;\n  color: #fff;\n}\n.gantt-time-axis-custom-event {\n  background-color: #a83000;\n  border-radius: 50%;\n  color: #fff;\n}\n.gantt-time-axis-major {\n  position: absolute;\n  overflow: hidden;\n  box-sizing: content-box;\n  height: 28px;\n  border-right: 1px solid #f0f0f0;\n  font-weight: 400;\n  text-align: left;\n  font-size: 13px;\n  line-height: 28px;\n}\n.gantt-time-axis-major-label {\n  overflow: hidden;\n  padding-left: 8px;\n  white-space: nowrap;\n}\n.gantt-time-axis-minor {\n  position: absolute;\n  top: 27px;\n  box-sizing: content-box;\n  height: 28px;\n  border-top: 1px solid #f0f0f0;\n  border-right: 1px solid #f0f0f0;\n  text-align: center;\n  font-size: 12px;\n  line-height: 28px;\n  color: #202d40;\n}\n.gantt-time-axis-minor.weekends {\n  background-color: hsla(0, 0%, 96.9%, 0.5);\n}\n";
+var css_248z$3 = ".gantt-time-axis {\n  height: 56px;\n  position: absolute;\n  top: 0;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  overflow: hidden;\n  cursor: ew-resize;\n}\n.gantt-time-axis-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 56px;\n  pointer-events: none;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  will-change: transform;\n}\n.gantt-time-axis-today {\n  background-color: #2c7ef8;\n  border-radius: 50%;\n  color: #fff;\n  width: 35px;\n  margin: 0 auto;\n}\n.gantt-time-axis-custom-event {\n  background-color: #a83000;\n  border-radius: 50%;\n  color: #fff;\n  width: 35px;\n  margin: 0 auto;\n}\n.gantt-time-axis-major {\n  position: absolute;\n  overflow: hidden;\n  box-sizing: content-box;\n  height: 28px;\n  border-right: 1px solid #f0f0f0;\n  font-weight: 400;\n  text-align: left;\n  font-size: 13px;\n  line-height: 28px;\n}\n.gantt-time-axis-major-label {\n  overflow: hidden;\n  padding-left: 8px;\n  white-space: nowrap;\n}\n.gantt-time-axis-minor {\n  position: absolute;\n  top: 27px;\n  box-sizing: content-box;\n  height: 28px;\n  border-top: 1px solid #f0f0f0;\n  border-right: 1px solid #f0f0f0;\n  text-align: center;\n  font-size: 12px;\n  line-height: 28px;\n  color: #202d40;\n}\n.gantt-time-axis-minor.weekends {\n  background-color: hsla(0, 0%, 96.9%, 0.5);\n}\n.gantt-time-axis-minor-label.day-view {\n  font-size: 12px;\n  font-weight: 600;\n  padding: 0 4px;\n  height: 28px;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  line-height: 14px;\n}\n.gantt-time-axis-minor-label.day-view br {\n  display: block;\n  margin: 0;\n  content: \"\";\n}\n.gantt-time-axis-minor-label.day-view::before {\n  content: attr(data-day-of-week);\n  display: block;\n  font-size: 10px;\n  font-weight: normal;\n}\n.gantt-time-axis-minor-label.day-view::after {\n  content: attr(data-day-number);\n  display: block;\n  font-size: 14px;\n  font-weight: bold;\n}\n";
 styleInject(css_248z$3);
 
 var TimeAxis = function TimeAxis() {
@@ -5596,7 +5591,7 @@ var TimeAxis = function TimeAxis() {
   var minorList = store.getMinorList();
   var handleResize = useCallback(function (_ref) {
     var x = _ref.x;
-    store.handlePanMove(-x);
+    store.handlePanMove(-x, -store.translateY);
   }, [store]);
   var handleLeftResizeEnd = useCallback(function () {
     store.handlePanEnd();
@@ -5614,12 +5609,38 @@ var TimeAxis = function TimeAxis() {
       return event.date === date;
     });
   }, [sightConfig, customEvents]);
+  var isDayView = sightConfig.type === 'day';
+
+  var renderLabel = function renderLabel(item) {
+    var _classNames2;
+
+    if (isDayView) {
+      var _classNames;
+
+      // For day view with <br/> in label, extract day of week and day number
+      var parts = item.label.split('<br/>');
+      var dayOfWeek = parts[0];
+      var dayNumber = parts[1];
+      return /*#__PURE__*/React.createElement("div", {
+        className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), _defineProperty(_classNames, "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), _defineProperty(_classNames, 'day-view', isDayView), _classNames)),
+        "data-day-of-week": dayOfWeek,
+        "data-day-number": dayNumber
+      });
+    }
+
+    return /*#__PURE__*/React.createElement("div", {
+      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), (_classNames2 = {}, _defineProperty(_classNames2, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), _defineProperty(_classNames2, "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), _defineProperty(_classNames2, 'day-view', isDayView), _classNames2))
+    }, item.label);
+  };
+
   return /*#__PURE__*/React.createElement(DragResize$1, {
     onResize: handleResize,
     onResizeEnd: handleLeftResizeEnd,
     defaultSize: {
       x: -store.translateX,
-      width: 0
+      y: -store.translateY,
+      width: 0,
+      height: 0
     },
     type: 'move'
   }, /*#__PURE__*/React.createElement("div", {
@@ -5645,8 +5666,6 @@ var TimeAxis = function TimeAxis() {
       className: "".concat(prefixClsTimeAxis, "-major-label")
     }, item.label));
   }), minorList.map(function (item) {
-    var _classNames;
-
     return /*#__PURE__*/React.createElement("div", {
       key: item.key,
       className: classNames("".concat(prefixClsTimeAxis, "-minor")),
@@ -5654,9 +5673,7 @@ var TimeAxis = function TimeAxis() {
         width: item.width,
         left: item.left
       }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), _defineProperty(_classNames, "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), _classNames))
-    }, item.label));
+    }, renderLabel(item));
   }))));
 };
 
@@ -5945,7 +5962,7 @@ var now = function() {
 var now_1 = now;
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$1 = 'Expected a function';
+var FUNC_ERROR_TEXT = 'Expected a function';
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max,
@@ -6018,7 +6035,7 @@ function debounce(func, wait, options) {
       trailing = true;
 
   if (typeof func != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT$1);
+    throw new TypeError(FUNC_ERROR_TEXT);
   }
   wait = toNumber_1(wait) || 0;
   if (isObject_1(options)) {
@@ -6131,73 +6148,6 @@ function debounce(func, wait, options) {
 }
 
 var debounce_1 = debounce;
-
-/** Error message constants. */
-var FUNC_ERROR_TEXT = 'Expected a function';
-
-/**
- * Creates a throttled function that only invokes `func` at most once per
- * every `wait` milliseconds. The throttled function comes with a `cancel`
- * method to cancel delayed `func` invocations and a `flush` method to
- * immediately invoke them. Provide `options` to indicate whether `func`
- * should be invoked on the leading and/or trailing edge of the `wait`
- * timeout. The `func` is invoked with the last arguments provided to the
- * throttled function. Subsequent calls to the throttled function return the
- * result of the last `func` invocation.
- *
- * **Note:** If `leading` and `trailing` options are `true`, `func` is
- * invoked on the trailing edge of the timeout only if the throttled function
- * is invoked more than once during the `wait` timeout.
- *
- * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
- * until to the next tick, similar to `setTimeout` with a timeout of `0`.
- *
- * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
- * for details over the differences between `_.throttle` and `_.debounce`.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Function
- * @param {Function} func The function to throttle.
- * @param {number} [wait=0] The number of milliseconds to throttle invocations to.
- * @param {Object} [options={}] The options object.
- * @param {boolean} [options.leading=true]
- *  Specify invoking on the leading edge of the timeout.
- * @param {boolean} [options.trailing=true]
- *  Specify invoking on the trailing edge of the timeout.
- * @returns {Function} Returns the new throttled function.
- * @example
- *
- * // Avoid excessively updating the position while scrolling.
- * jQuery(window).on('scroll', _.throttle(updatePosition, 100));
- *
- * // Invoke `renewToken` when the click event is fired, but not more than once every 5 minutes.
- * var throttled = _.throttle(renewToken, 300000, { 'trailing': false });
- * jQuery(element).on('click', throttled);
- *
- * // Cancel the trailing throttled invocation.
- * jQuery(window).on('popstate', throttled.cancel);
- */
-function throttle(func, wait, options) {
-  var leading = true,
-      trailing = true;
-
-  if (typeof func != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  if (isObject_1(options)) {
-    leading = 'leading' in options ? !!options.leading : leading;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
-  }
-  return debounce_1(func, wait, {
-    'leading': leading,
-    'maxWait': wait,
-    'trailing': trailing
-  });
-}
-
-var throttle_1 = throttle;
 
 var ptBr = createCommonjsModule(function (module, exports) {
 !function(e,o){module.exports=o(dayjs);}(commonjsGlobal,(function(e){function o(e){return e&&"object"==typeof e&&"default"in e?e:{default:e}}var a=o(e),s={name:"pt-br",weekdays:"domingo_segunda-feira_terça-feira_quarta-feira_quinta-feira_sexta-feira_sábado".split("_"),weekdaysShort:"dom_seg_ter_qua_qui_sex_sáb".split("_"),weekdaysMin:"Do_2ª_3ª_4ª_5ª_6ª_Sá".split("_"),months:"janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split("_"),monthsShort:"jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),ordinal:function(e){return e+"º"},formats:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY [às] HH:mm",LLLL:"dddd, D [de] MMMM [de] YYYY [às] HH:mm"},relativeTime:{future:"em %s",past:"há %s",s:"poucos segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um mês",MM:"%d meses",y:"um ano",yy:"%d anos"}};return a.default.locale(s,null,!0),s}));
@@ -6366,20 +6316,17 @@ var GanttStore = /*#__PURE__*/function () {
         _this.setTranslateX(_this.translateX + event.deltaX);
       }
 
+      if (Math.abs(event.deltaY) > 0) {
+        _this.scrolling = true;
+
+        _this.setTranslateY(_this.translateY + event.deltaY);
+      }
+
       _this._wheelTimer = window.setTimeout(function () {
         _this.scrolling = false;
       }, 100);
     };
 
-    this.handleScroll = function (event) {
-      var scrollTop = event.currentTarget.scrollTop;
-
-      _this.scrollY(scrollTop);
-    };
-
-    this.scrollY = throttle_1(function (scrollTop) {
-      _this.scrollTop = scrollTop;
-    }, 100);
     this.handleMouseMove = debounce_1(function (event) {
       if (!_this.isPointerPress) _this.showSelectionBar(event);
     }, 5);
@@ -6400,6 +6347,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.viewWidth = viewWidth;
     this.tableWidth = tableWidth;
     this.translateX = translateX;
+    this.translateY = 0;
     this.sightConfig = sightConfig;
     this.bodyWidth = bodyWidth;
     this.rowHeight = rowHeight;
@@ -6489,9 +6437,10 @@ var GanttStore = /*#__PURE__*/function () {
     }
   }, {
     key: "handlePanMove",
-    value: function handlePanMove(translateX) {
+    value: function handlePanMove(translateX, translateY) {
       this.scrolling = true;
       this.setTranslateX(translateX);
+      this.setTranslateY(translateY);
     }
   }, {
     key: "handlePanEnd",
@@ -6536,6 +6485,11 @@ var GanttStore = /*#__PURE__*/function () {
     key: "setTranslateX",
     value: function setTranslateX(translateX) {
       this.translateX = Math.max(translateX, 0);
+    }
+  }, {
+    key: "setTranslateY",
+    value: function setTranslateY(translateY) {
+      this.translateY = Math.max(translateY, 0);
     }
   }, {
     key: "switchSight",
@@ -6630,13 +6584,18 @@ var GanttStore = /*#__PURE__*/function () {
         return bar.record.parentId === null;
       }).length : this.getBarList.length;
       var height = barListLength * this.rowHeight + TOP_PADDING;
-      if (height < this.bodyClientHeight) height = this.bodyClientHeight;
       return height;
     } // 1px对应的毫秒数
 
   }, {
     key: "pxUnitAmp",
     get: function get() {
+      // For day view, reduce the value to make columns wider
+      if (this.sightConfig.type === 'day') {
+        // Return a smaller value to make columns wider (one third of the original value)
+        return this.sightConfig.value * 1000 / 3;
+      }
+
       return this.sightConfig.value * 1000;
     }
     /** 当前开始时间毫秒数 */
@@ -6844,8 +6803,18 @@ var GanttStore = /*#__PURE__*/function () {
         var width = (endDate.valueOf() - startDate.valueOf()) / pxUnitAmp;
         var isWeek = false;
         if (_this3.sightConfig.type === 'day') isWeek = _this3.isRestDay(startDate.toString());
+        var finalLabel = label; // For day view, show day of week and day number
+
+        if (_this3.sightConfig.type === 'day') {
+          var dayOfWeek = startDate.format('ddd'); // Short day name (Mon, Tue, etc)
+
+          var dayNumber = startDate.format('D'); // Day number (1, 2, etc)
+
+          finalLabel = "".concat(dayOfWeek, "<br/>").concat(dayNumber);
+        }
+
         return {
-          label: label,
+          label: finalLabel,
           left: left,
           width: width,
           isWeek: isWeek,
@@ -6961,7 +6930,7 @@ var GanttStore = /*#__PURE__*/function () {
     get: function get() {
       var visibleHeight = this.bodyClientHeight;
       var visibleRowCount = Math.ceil(visibleHeight / this.rowHeight) + 10;
-      var start = Math.max(Math.ceil(this.scrollTop / this.rowHeight) - 5, 0);
+      var start = Math.max(Math.ceil(this.translateY / this.rowHeight) - 5, 0);
       return {
         start: this.isTimeline ? 0 : start,
         count: this.isTimeline ? this.getBarList.length : visibleRowCount
@@ -6975,21 +6944,19 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "showSelectionBar",
     value: function showSelectionBar(event) {
-      var _a, _b;
+      var _a;
 
       if (this.isTimeline) {
         this.showSelectionIndicator = false;
       } else {
-        var scrollTop = ((_a = this.mainElementRef.current) === null || _a === void 0 ? void 0 : _a.scrollTop) || 0;
-
-        var _ref2 = ((_b = this.mainElementRef.current) === null || _b === void 0 ? void 0 : _b.getBoundingClientRect()) || {
+        var _ref2 = ((_a = this.mainElementRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect()) || {
           top: 0
         },
             top = _ref2.top; // 内容区高度
 
 
         var contentHeight = this.getBarList.length * this.rowHeight;
-        var offsetY = event.clientY - top + scrollTop;
+        var offsetY = event.clientY - top + this.translateY;
 
         if (offsetY - contentHeight > TOP_PADDING) {
           this.showSelectionIndicator = false;
@@ -7179,6 +7146,8 @@ __decorate([observable], GanttStore.prototype, "bodyWidth", void 0);
 
 __decorate([observable], GanttStore.prototype, "translateX", void 0);
 
+__decorate([observable], GanttStore.prototype, "translateY", void 0);
+
 __decorate([observable], GanttStore.prototype, "sightConfig", void 0);
 
 __decorate([observable], GanttStore.prototype, "showSelectionIndicator", void 0);
@@ -7224,6 +7193,8 @@ __decorate([action], GanttStore.prototype, "handleResizeTableWidth", null);
 __decorate([action], GanttStore.prototype, "initWidth", null);
 
 __decorate([action], GanttStore.prototype, "setTranslateX", null);
+
+__decorate([action], GanttStore.prototype, "setTranslateY", null);
 
 __decorate([action], GanttStore.prototype, "switchSight", null);
 
@@ -7428,8 +7399,7 @@ var GanttComponent = function GanttComponent(props) {
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {
-    ref: store.mainElementRef,
-    onScroll: store.handleScroll
+    ref: store.mainElementRef
   }, /*#__PURE__*/React.createElement(SelectionIndicator$1, null), !hideTable && /*#__PURE__*/React.createElement(TableBody$1, null), /*#__PURE__*/React.createElement(Chart$1, null)), !hideTable && /*#__PURE__*/React.createElement(Divider$1, null), showBackToday && /*#__PURE__*/React.createElement(TimeIndicator$1, null), showUnitSwitch && /*#__PURE__*/React.createElement(TimeAxisScaleSelect$1, null), /*#__PURE__*/React.createElement(ScrollBar$1, null), scrollTop && /*#__PURE__*/React.createElement(ScrollTop$1, null)));
 };
 

@@ -147,36 +147,10 @@ const TableRows = () => {
   )
 }
 const ObserverTableRows = observer(TableRows)
-const TableBorders = () => {
-  const { store, prefixCls } = useContext(Context)
-  const { columns } = store
-  const columnsWidth = store.getColumnsWidth
-  const barList = store.getBarList
-  if (barList.length === 0) return null
-
-  const prefixClsTableBody = `${prefixCls}-table-body`
-  return (
-    <div role='none' className={`${prefixClsTableBody}-border_row`}>
-      {columns.map((column, index) => (
-        <div
-          key={column.name}
-          className={`${prefixClsTableBody}-cell`}
-          style={{
-            width: columnsWidth[index],
-            minWidth: column.minWidth,
-            maxWidth: column.maxWidth,
-            textAlign: column.align ? column.align : 'left',
-            ...column.style,
-          }}
-        />
-      ))}
-    </div>
-  )
-}
-const ObserverTableBorders = observer(TableBorders)
 
 const TableBody: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
+  const { translateY } = store
   const handleMouseMove = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.persist()
@@ -194,11 +168,11 @@ const TableBody: React.FC = () => {
       style={{
         width: store.tableWidth,
         height: store.bodyScrollHeight,
+        transform: `translateY(-${translateY}px)`,
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <ObserverTableBorders />
       <ObserverTableRows />
     </div>
   )
