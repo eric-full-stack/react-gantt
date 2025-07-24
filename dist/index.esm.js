@@ -6546,7 +6546,7 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "getTranslateXByDate",
     value: function getTranslateXByDate(date) {
-      return dayjs(date).startOf('day').valueOf() / 2880000;
+      return dayjs(date).startOf('day').valueOf() / 1440000 + 15;
     }
   }, {
     key: "todayTranslateX",

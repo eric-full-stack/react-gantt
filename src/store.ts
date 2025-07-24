@@ -322,7 +322,7 @@ class GanttStore {
   }
 
   getTranslateXByDate(date: string) {
-    return dayjs(date).startOf('day').valueOf() / 2880000
+    return dayjs(date).startOf('day').valueOf() / 1440000 + 15
   }
 
   @computed get todayTranslateX() {
