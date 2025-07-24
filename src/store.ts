@@ -80,7 +80,7 @@ class GanttStore {
     this.height = 418
     this.viewTypeList = customSights.length ? customSights : getViewTypeList(locale)
     const sightConfig = customSights.length ? customSights[0] : getViewTypeList(locale)[0]
-    const translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.value * 1000)
+    const translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.type === 'day' ? (sightConfig.value * 1000) / 2 : sightConfig.value * 1000)
     const bodyWidth = this.width
     const viewWidth = 704
     const tableWidth = 500
@@ -380,7 +380,7 @@ class GanttStore {
     // For day view, reduce the value to make columns wider
     if (this.sightConfig.type === 'day') {
       // Return a smaller value to make columns wider (one third of the original value)
-      return (this.sightConfig.value * 1000) / 3
+      return (this.sightConfig.value * 1000) / 2
     }
     return this.sightConfig.value * 1000
   }

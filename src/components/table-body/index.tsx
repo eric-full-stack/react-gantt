@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import classNames from 'classnames'
 import Context from '../../context'
@@ -31,7 +31,7 @@ const TableRows = () => {
   const parentIdMap = {}
   let countParent = 0
   if(isTimeline) {
-    //if isTimeline create a object map with parentId as key and a index as value
+    // if isTimeline create a object map with parentId as key and a index as value
     barList.forEach((item, ) => {
       if (item.record.parentId === null) {
         if(parentIdMap[item.record.id] === undefined) {
@@ -54,7 +54,7 @@ const TableRows = () => {
 
         const topIndex = isTimeline && !bar.task.parentId ? parentIdMap[bar.record.id] : rowIndex
 
-        if(isTimeline && bar.task.parentId) return null;
+        if(isTimeline && bar.task.parentId) return null
         
 
         return (
@@ -148,6 +148,34 @@ const TableRows = () => {
 }
 const ObserverTableRows = observer(TableRows)
 
+const TableBorders = () => {
+  const { store, prefixCls } = useContext(Context)
+  const { columns } = store
+  const columnsWidth = store.getColumnsWidth
+  const barList = store.getBarList
+  if (barList.length === 0) return null
+
+  const prefixClsTableBody = `${prefixCls}-table-body`
+  return (
+    <div role='none' className={`${prefixClsTableBody}-border_row`}>
+      {columns.map((column, index) => (
+        <div
+          key={column.name}
+          className={`${prefixClsTableBody}-cell`}
+          style={{
+            width: columnsWidth[index],
+            minWidth: column.minWidth,
+            maxWidth: column.maxWidth,
+            textAlign: column.align ? column.align : 'left',
+            ...column.style,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+const ObserverTableBorders = observer(TableBorders)
+
 const TableBody: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
   const { translateY } = store
@@ -174,6 +202,7 @@ const TableBody: React.FC = () => {
       onMouseLeave={handleMouseLeave}
     >
       <ObserverTableRows />
+      <ObserverTableBorders />
     </div>
   )
 }

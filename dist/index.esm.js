@@ -5406,7 +5406,7 @@ var TableRows = function TableRows() {
   var countParent = 0;
 
   if (isTimeline) {
-    //if isTimeline create a object map with parentId as key and a index as value
+    // if isTimeline create a object map with parentId as key and a index as value
     barList.forEach(function (item) {
       if (item.record.parentId === null) {
         if (parentIdMap[item.record.id] === undefined) {
@@ -5496,10 +5496,39 @@ var TableRows = function TableRows() {
 
 var ObserverTableRows = observer(TableRows);
 
-var TableBody = function TableBody() {
+var TableBorders = function TableBorders() {
   var _useContext2 = useContext(context),
       store = _useContext2.store,
       prefixCls = _useContext2.prefixCls;
+
+  var columns = store.columns;
+  var columnsWidth = store.getColumnsWidth;
+  var barList = store.getBarList;
+  if (barList.length === 0) return null;
+  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
+  return /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: "".concat(prefixClsTableBody, "-border_row")
+  }, columns.map(function (column, index) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: column.name,
+      className: "".concat(prefixClsTableBody, "-cell"),
+      style: _objectSpread2({
+        width: columnsWidth[index],
+        minWidth: column.minWidth,
+        maxWidth: column.maxWidth,
+        textAlign: column.align ? column.align : 'left'
+      }, column.style)
+    });
+  }));
+};
+
+var ObserverTableBorders = observer(TableBorders);
+
+var TableBody = function TableBody() {
+  var _useContext3 = useContext(context),
+      store = _useContext3.store,
+      prefixCls = _useContext3.prefixCls;
 
   var translateY = store.translateY;
   var handleMouseMove = useCallback(function (event) {
@@ -5519,7 +5548,7 @@ var TableBody = function TableBody() {
     },
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave
-  }, /*#__PURE__*/React.createElement(ObserverTableRows, null));
+  }, /*#__PURE__*/React.createElement(ObserverTableRows, null), /*#__PURE__*/React.createElement(ObserverTableBorders, null));
 };
 
 var TableBody$1 = observer(TableBody);
@@ -6340,7 +6369,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.height = 418;
     this.viewTypeList = customSights.length ? customSights : getViewTypeList(locale);
     var sightConfig = customSights.length ? customSights[0] : getViewTypeList(locale)[0];
-    var translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.value * 1000);
+    var translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.type === 'day' ? sightConfig.value * 1000 / 2 : sightConfig.value * 1000);
     var bodyWidth = this.width;
     var viewWidth = 704;
     var tableWidth = 500;
@@ -6593,7 +6622,7 @@ var GanttStore = /*#__PURE__*/function () {
       // For day view, reduce the value to make columns wider
       if (this.sightConfig.type === 'day') {
         // Return a smaller value to make columns wider (one third of the original value)
-        return this.sightConfig.value * 1000 / 3;
+        return this.sightConfig.value * 1000 / 2;
       }
 
       return this.sightConfig.value * 1000;
