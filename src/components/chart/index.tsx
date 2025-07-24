@@ -70,11 +70,9 @@ const Chart: React.FC = () => {
           className={`${prefixCls}-chart-svg-renderer`}
           xmlns='http://www.w3.org/2000/svg'
           version='1.1'
-          width={store.width}
+          width={viewWidth}
           height={bodyScrollHeight}
-          style={{
-            transform: `translateX(-${translateX}px)`,
-          }}
+          viewBox={`${translateX} ${translateY} ${viewWidth} ${bodyScrollHeight}`}
         >
           <defs>
             <pattern

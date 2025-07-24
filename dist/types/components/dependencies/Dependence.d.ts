@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gantt } from '../../types';
+import type { Gantt } from '../../types';
 interface DependenceProps {
     data: Gantt.Dependence;
 }

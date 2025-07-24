@@ -2,7 +2,7 @@ import find from 'lodash/find'
 import { observer } from 'mobx-react-lite'
 import React, { useContext } from 'react'
 import Context from '../../context'
-import { Gantt } from '../../types'
+import type { Gantt } from '../../types'
 import styles from './Dependence.less'
 
 const spaceX = 10

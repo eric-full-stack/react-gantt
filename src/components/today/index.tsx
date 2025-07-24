@@ -9,7 +9,7 @@ const Today: React.FC = () => {
     <div
       className={`${prefixCls}-today`}
       style={{
-        transform: `translate(${store.todayTranslateX}px)`,
+        transform: `translate(${store.todayTranslateX + 15}px)`,
       }}
     >
       <div

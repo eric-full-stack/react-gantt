@@ -4518,7 +4518,7 @@ var Today = function Today() {
   return /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixCls, "-today"),
     style: {
-      transform: "translate(".concat(store.todayTranslateX, "px)")
+      transform: "translate(".concat(store.todayTranslateX + 15, "px)")
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixCls, "-today_line"),
@@ -4674,11 +4674,9 @@ var Chart = function Chart() {
     className: "".concat(prefixCls, "-chart-svg-renderer"),
     xmlns: 'http://www.w3.org/2000/svg',
     version: '1.1',
-    width: store.width,
+    width: viewWidth,
     height: bodyScrollHeight,
-    style: {
-      transform: "translateX(-".concat(translateX, "px)")
-    }
+    viewBox: "".concat(translateX, " ").concat(translateY, " ").concat(viewWidth, " ").concat(bodyScrollHeight)
   }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("pattern", {
     id: 'repeat',
     width: '4.5',
@@ -5328,13 +5326,14 @@ var SelectionIndicator = function SelectionIndicator() {
 
   var showSelectionIndicator = store.showSelectionIndicator,
       selectionIndicatorTop = store.selectionIndicatorTop,
-      rowHeight = store.rowHeight;
+      rowHeight = store.rowHeight,
+      translateY = store.translateY;
   var prefixClsSelectionIndicator = "".concat(prefixCls, "-selection-indicator");
   return showSelectionIndicator ? /*#__PURE__*/React.createElement("div", {
     className: prefixClsSelectionIndicator,
     style: {
       height: rowHeight,
-      top: selectionIndicatorTop
+      top: selectionIndicatorTop - translateY
     }
   }) : null;
 };
@@ -5840,7 +5839,7 @@ var TimeIndicator = function TimeIndicator() {
 
 var TimeIndicator$1 = observer(TimeIndicator);
 
-var css_248z = ".gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: auto;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n}\n";
+var css_248z = ".gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: hidden;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n}\n";
 styleInject(css_248z);
 
 var enUS = Object.freeze({
@@ -6518,7 +6517,13 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "setTranslateY",
     value: function setTranslateY(translateY) {
-      this.translateY = Math.max(translateY, 0);
+      // Calculate the maximum allowed translateY value
+      // This is the total content height minus the visible area height
+      // If this value is negative, it means the content is shorter than the visible area,
+      // so we should not allow any vertical scrolling
+      var maxTranslateY = Math.max(0, this.bodyScrollHeight - this.bodyClientHeight); // Limit translateY between 0 and maxTranslateY
+
+      this.translateY = Math.max(0, Math.min(translateY, maxTranslateY));
     }
   }, {
     key: "switchSight",
@@ -6613,6 +6618,7 @@ var GanttStore = /*#__PURE__*/function () {
         return bar.record.parentId === null;
       }).length : this.getBarList.length;
       var height = barListLength * this.rowHeight + TOP_PADDING;
+      if (height < this.bodyClientHeight) height = this.bodyClientHeight;
       return height;
     } // 1px对应的毫秒数
 

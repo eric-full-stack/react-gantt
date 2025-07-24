@@ -298,7 +298,14 @@ class GanttStore {
 
   @action
   setTranslateY(translateY: number) {
-    this.translateY = Math.max(translateY, 0)
+    // Calculate the maximum allowed translateY value
+    // This is the total content height minus the visible area height
+    // If this value is negative, it means the content is shorter than the visible area,
+    // so we should not allow any vertical scrolling
+    const maxTranslateY = Math.max(0, this.bodyScrollHeight - this.bodyClientHeight)
+    
+    // Limit translateY between 0 and maxTranslateY
+    this.translateY = Math.max(0, Math.min(translateY, maxTranslateY))
   }
 
   @action switchSight(type: Gantt.Sight) {
@@ -371,7 +378,9 @@ class GanttStore {
   // 内容区滚动区域域高度
   @computed get bodyScrollHeight() {
     const barListLength = this.isTimeline ? this.getBarList.filter(bar => bar.record.parentId === null).length : this.getBarList.length
-    const height = barListLength * this.rowHeight + TOP_PADDING
+    let height = barListLength * this.rowHeight + TOP_PADDING
+    if (height < this.bodyClientHeight) height = this.bodyClientHeight
+
     return height
   }
 
