@@ -107,6 +107,10 @@ class GanttStore {
 
   @observable columns: Gantt.Column[] = []
 
+  @observable columnConfig: Gantt.ColumnConfig | undefined
+
+  @observable customFields: Gantt.CustomField[] = []
+
   @observable dependencies: Gantt.Dependence[] = []
 
   @observable scrolling = false
@@ -218,6 +222,16 @@ class GanttStore {
   @action
   setColumns(columns: Gantt.Column[]) {
     this.columns = columns
+  }
+
+  @action
+  setColumnConfig(columnConfig?: Gantt.ColumnConfig) {
+    this.columnConfig = columnConfig
+  }
+
+  @action
+  setCustomFields(customFields: Gantt.CustomField[]) {
+    this.customFields = customFields
   }
 
   @action
@@ -357,16 +371,48 @@ class GanttStore {
     return this.height - HEADER_HEIGHT - 1
   }
 
+  @computed get getVisibleColumns(): Gantt.Column[] {
+    if (!this.columnConfig) return this.columns
+
+    const { visibleColumns, columnOrder } = this.columnConfig
+
+    let filtered = this.columns
+    if (visibleColumns && visibleColumns.length > 0) {
+      filtered = this.columns.filter(col => visibleColumns.includes(col.name))
+    }
+
+    if (columnOrder && columnOrder.length > 0) {
+      filtered = filtered.sort((a, b) => {
+        const aIndex = columnOrder.indexOf(a.name)
+        const bIndex = columnOrder.indexOf(b.name)
+        if (aIndex === -1 && bIndex === -1) return 0
+        if (aIndex === -1) return 1
+        if (bIndex === -1) return -1
+        return aIndex - bIndex
+      })
+    }
+
+    return filtered
+  }
+
   @computed get getColumnsWidth(): number[] {
-    if (this.columns.length === 1 && this.columns[0]?.width < 200) return [200]
-    const totalColumnWidth = this.columns.reduce((width, item) => width + (item.width || 0), 0)
-    const totalFlex = this.columns.reduce((total, item) => total + (item.width ? 0 : item.flex || 1), 0)
+    const cols = this.getVisibleColumns
+    if (cols.length === 1 && cols[0]?.width < 200) return [200]
+
+    const columnWidths = this.columnConfig?.columnWidths
+
+    const columnsWithCustomWidths = cols.map(col => ({
+      ...col,
+      width: columnWidths?.[col.name] !== undefined ? columnWidths[col.name] : col.width,
+    }))
+
+    const totalColumnWidth = columnsWithCustomWidths.reduce((width, item) => width + (item.width || 0), 0)
+    const totalFlex = columnsWithCustomWidths.reduce((total, item) => total + (item.width ? 0 : item.flex || 1), 0)
     const restWidth = this.tableWidth - totalColumnWidth
-    return this.columns.map(column => {
+
+    return columnsWithCustomWidths.map(column => {
       if (column.width) return column.width
-
       if (column.flex) return restWidth * (column.flex / totalFlex)
-
       return restWidth * (1 / totalFlex)
     })
   }

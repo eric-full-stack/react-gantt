@@ -79,6 +79,16 @@ export interface GanttProps<RecordType = DefaultRecordType> {
    * 隐藏左侧表格
    */
   hideTable?: boolean
+
+  /**
+   * Configuração de colunas (visibilidade, ordem, larguras)
+   */
+  columnConfig?: Gantt.ColumnConfig
+
+  /**
+   * Lista de campos customizados disponíveis
+   */
+  customFields?: Gantt.CustomField[]
 }
 export interface GanttRef {
   backToday: () => void
@@ -152,6 +162,8 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     durationFn,
     customEvents = [],
     onCustomEventClick,
+    columnConfig,
+    customFields = [],
   } = props
 
   const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale }), [rowHeight])
@@ -162,6 +174,14 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   useEffect(() => {
     store.setColumns(columns)
   }, [columns, store])
+
+  useEffect(() => {
+    store.setColumnConfig(columnConfig)
+  }, [columnConfig, store])
+
+  useEffect(() => {
+    store.setCustomFields(customFields)
+  }, [customFields, store])
 
   useEffect(() => {
     store.setCustomEvents(customEvents)

@@ -95,6 +95,19 @@ export namespace Gantt {
   }
 
   export type ColumnAlign = 'center' | 'right' | 'left'
+
+  export type ColumnType =
+    | 'text'
+    | 'date'
+    | 'number'
+    | 'progress'
+    | 'status'
+    | 'priority'
+    | 'user'
+    | 'tags'
+    | 'currency'
+    | 'custom'
+
   export interface Column<RecordType = DefaultRecordType> {
     width?: number
     minWidth?: number
@@ -105,6 +118,42 @@ export namespace Gantt {
     style?: Object
     render?: (item: Record<RecordType>) => React.ReactNode
     align?: ColumnAlign
+    type?: ColumnType
+    key?: string
+    formatter?: (value: any, record?: Record<RecordType>) => string
+    cellRenderer?: (value: any, record: Record<RecordType>) => React.ReactNode
+    icon?: React.ReactNode
+    sortable?: boolean
+    customFieldId?: string
+  }
+
+  export interface ColumnConfig {
+    visibleColumns?: string[]
+    columnOrder?: string[]
+    columnWidths?: Record<string, number>
+  }
+
+  export type CustomFieldType =
+    | 'text'
+    | 'number'
+    | 'date'
+    | 'select'
+    | 'multiselect'
+    | 'currency'
+    | 'checkbox'
+    | 'url'
+    | 'email'
+    | 'phone'
+
+  export interface CustomField {
+    id: string
+    label: string
+    type: CustomFieldType
+    icon?: string
+    options?: string[]
+    required?: boolean
+    description?: string
+    order?: number
   }
   export type DependenceType = 'start_finish' | 'finish_start' | 'start_start' | 'finish_finish'
   export interface Dependence {

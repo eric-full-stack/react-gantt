@@ -5,7 +5,8 @@ import './index.less';
 
 const TableHeader: React.FC = () => {
   const { store, prefixCls, renderCustomHeaderFilter } = useContext(Context);
-  const { columns, tableWidth } = store;
+  const { tableWidth } = store;
+  const columns = store.getVisibleColumns;
   const width = tableWidth;
   const columnsWidth = store.getColumnsWidth;
   const prefixClsTableHeader = `${prefixCls}-table-header`;
@@ -30,6 +31,11 @@ const TableHeader: React.FC = () => {
             >
               <div className={`${prefixClsTableHeader}-head-cell`}>
                 <span className={`${prefixClsTableHeader}-ellipsis`}>
+                  {column.icon && (
+                    <span style={{ marginRight: 4, display: 'inline-flex', alignItems: 'center' }}>
+                      {column.icon}
+                    </span>
+                  )}
                   {column.label}
                 </span>
               </div>

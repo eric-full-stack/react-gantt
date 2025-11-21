@@ -4,11 +4,13 @@ import classNames from 'classnames'
 import Context from '../../context'
 import { TOP_PADDING } from '../../constants'
 import RowToggler from './RowToggler'
+import { renderCell } from './cell-renderers'
 import './index.less'
 
 const TableRows = () => {
   const { store, onRow, tableIndent, expandIcon, prefixCls, onExpand } = useContext(Context)
-  const { columns, rowHeight, isTimeline } = store
+  const { rowHeight, isTimeline } = store
+  const columns = store.getVisibleColumns
   const columnsWidth = store.getColumnsWidth
   const barList = store.getBarList
 
@@ -136,7 +138,11 @@ const TableRows = () => {
                   </div>
                 )}
                 <span className={`${prefixClsTableBody}-ellipsis`}>
-                  {column.render ? column.render(bar.record) : bar.record[column.name]}
+                  {renderCell(
+                    column.key ? bar.record[column.key] : bar.record[column.name],
+                    bar.record,
+                    column
+                  )}
                 </span>
               </div>
             ))}
@@ -150,7 +156,7 @@ const ObserverTableRows = observer(TableRows)
 
 const TableBorders = () => {
   const { store, prefixCls } = useContext(Context)
-  const { columns } = store
+  const columns = store.getVisibleColumns
   const columnsWidth = store.getColumnsWidth
   const barList = store.getBarList
   if (barList.length === 0) return null
