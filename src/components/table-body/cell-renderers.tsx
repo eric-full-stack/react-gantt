@@ -40,15 +40,14 @@ export const NumberCell = <RecordType extends DefaultRecordType>({
   const formatted = column.formatter
     ? column.formatter(value)
     : typeof value === 'number'
-    ? value.toLocaleString('pt-BR')
-    : value
+      ? value.toLocaleString('pt-BR')
+      : value
 
   return <span>{formatted}</span>
 }
 
 export const ProgressCell = <RecordType extends DefaultRecordType>({
   value,
-  record,
 }: CellRendererProps<RecordType>) => {
   const progress = typeof value === 'number' ? value : 0
   const percentage = Math.min(Math.max(progress, 0), 100)
@@ -68,7 +67,6 @@ export const ProgressCell = <RecordType extends DefaultRecordType>({
 
 export const StatusCell = <RecordType extends DefaultRecordType>({
   value,
-  record,
 }: CellRendererProps<RecordType>) => {
   if (!value) return <span>-</span>
 
@@ -115,7 +113,6 @@ export const PriorityCell = <RecordType extends DefaultRecordType>({
 
 export const UserCell = <RecordType extends DefaultRecordType>({
   value,
-  record,
 }: CellRendererProps<RecordType>) => {
   if (!value) return <span>-</span>
 
@@ -182,9 +179,9 @@ export const CurrencyCell = <RecordType extends DefaultRecordType>({
   const formatted = column.formatter
     ? column.formatter(value)
     : new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-      }).format(numValue)
+      style: 'currency',
+      currency: 'BRL',
+    }).format(numValue)
 
   return <span>{formatted}</span>
 }

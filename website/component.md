@@ -30,6 +30,12 @@ nav:
 
 <code src="./demo/child.tsx"></code>
 
+### 多级结构完整示例
+
+展示完整的3层级结构（项目→阶段→任务），包含所有列类型和自定义字段
+
+<code src="./demo/multi-level.tsx"></code>
+
 ### 自定义表格列
 
 `columns` 类型定义见类型定义
@@ -37,6 +43,12 @@ nav:
 其中，如果每列都配置 `width` 属性。组件内部会计算总宽度。默认初始化表格宽度为总宽度
 
 <code src="./demo/column.tsx"></code>
+
+### 高级表格列（所有类型）
+
+展示所有可用的列类型，包括标准类型（text, date, number, progress）、特殊类型（status, priority, user, tags, currency）和自定义字段（select, checkbox, url, email）
+
+<code src="./demo/custom-columns.tsx"></code>
 
 ### 依赖结构
 

@@ -2,38 +2,36 @@
 @table-header-prefix-cls: ~'@{gantt-prefix}-table-header';
 
 .@{table-header-prefix-cls} {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: hidden;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+  height: 56px;
 
   &-head {
     position: relative;
   }
 
   &-row {
-    position: absolute;
-    left: 0;
     display: flex;
-    transition: height 0.3s;
     width: 100%;
   }
 
   &-cell {
     position: relative;
     display: flex;
-    border-right: 1px solid #f0f0f0;
-  }
-
-  &-head-cell {
-    display: flex;
-    flex: 1;
     align-items: center;
-    overflow: hidden;
-    padding: 0 12px;
+    border-right: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 500;
+    background: #fafafa;
+    padding: 0;
+    box-sizing: border-box;
     user-select: none;
     font-size: 14px;
     color: #2e405e;
+    flex-shrink: 0;
+    overflow: visible;
   }
 
   &-ellipsis {
@@ -41,5 +39,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-width: 0;
+    padding-right: 10px;
   }
 }

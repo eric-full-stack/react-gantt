@@ -1,4 +1,4 @@
-import { GanttLocale } from "../Gantt";
+import type { GanttLocale } from "../types";
 
 export const enUS: GanttLocale = Object.freeze({
     today: "Today",

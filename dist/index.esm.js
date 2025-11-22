@@ -276,8 +276,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z$i = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-group-bar .gantt-bar {\n  position: relative;\n  top: -3px;\n}\n";
-styleInject(css_248z$i);
+var css_248z$j = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-group-bar .gantt-bar {\n  position: relative;\n  top: -3px;\n}\n";
+styleInject(css_248z$j);
 
 var height = 8;
 
@@ -705,8 +705,8 @@ var DragResize = function DragResize(_ref) {
 
 var DragResize$1 = observer(DragResize);
 
-var css_248z$h = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
-styleInject(css_248z$h);
+var css_248z$i = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
+styleInject(css_248z$i);
 
 var barH = 8;
 var startX = 0;
@@ -849,8 +849,8 @@ var BAR_HEIGHT = 8;
 var TOP_PADDING = 0;
 var TABLE_INDENT = 30; // 图表最小比例
 
-var css_248z$g = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
-styleInject(css_248z$g);
+var css_248z$h = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
+styleInject(css_248z$h);
 
 var ONE_DAY_MS$1 = 86400000;
 
@@ -1082,8 +1082,8 @@ var BarList = function BarList() {
 
 var BarList$1 = observer(BarList);
 
-var css_248z$f = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@-webkit-keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n";
-styleInject(css_248z$f);
+var css_248z$g = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@-webkit-keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n";
+styleInject(css_248z$g);
 
 var TaskBarThumb = function TaskBarThumb(_ref) {
   var _classNames;
@@ -4337,8 +4337,8 @@ var find = _createFind(findIndex_1);
 
 var find_1 = find;
 
-var css_248z$e = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
-styleInject(css_248z$e);
+var css_248z$f = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
+styleInject(css_248z$f);
 
 var spaceX = 10;
 var spaceY = 10;
@@ -4431,7 +4431,7 @@ var Dependence = function Dependence(_ref) {
   var endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1;
   return /*#__PURE__*/React.createElement("g", {
     stroke: color,
-    className: css_248z$e['task-dependency-line']
+    className: css_248z$f['task-dependency-line']
   }, /*#__PURE__*/React.createElement("path", {
     style: {
       stroke: color
@@ -4507,8 +4507,8 @@ var DragPresent = function DragPresent() {
 
 var DragPresent$1 = observer(DragPresent);
 
-var css_248z$d = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
-styleInject(css_248z$d);
+var css_248z$e = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
+styleInject(css_248z$e);
 
 var Today = function Today() {
   var _useContext = useContext(context),
@@ -4530,8 +4530,8 @@ var Today = function Today() {
 
 var Today$1 = observer(Today);
 
-var css_248z$c = ".gantt-custom-events {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-custom-event {\n  position: absolute;\n  top: 0;\n  background: transparent;\n  text-align: center;\n  pointer-events: auto;\n  cursor: pointer;\n  z-index: 10;\n}\n.gantt-custom-event:hover .gantt-custom-event_line {\n  background: #d14900;\n  width: 2px;\n  margin-left: 14px;\n}\n.gantt-custom-event_line {\n  width: 1px;\n  background: #a83000;\n  margin-left: 15px;\n  height: 100%;\n  transition: all 0.2s ease;\n}\n.gantt-custom-event_flag {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  background: #a83000;\n  color: white;\n  padding: 6px 10px;\n  border-radius: 6px;\n  font-size: 12px;\n  font-weight: 500;\n  white-space: nowrap;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\n  z-index: 15;\n  -webkit-animation: fadeInFlag 0.2s ease-out;\n          animation: fadeInFlag 0.2s ease-out;\n  pointer-events: none;\n}\n.gantt-custom-event_flag::after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 0;\n  height: 0;\n  border-left: 6px solid transparent;\n  border-right: 6px solid transparent;\n  border-top: 6px solid #a83000;\n}\n@-webkit-keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n@keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n.gantt-custom-event_title {\n  display: block;\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n";
-styleInject(css_248z$c);
+var css_248z$d = ".gantt-custom-events {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-custom-event {\n  position: absolute;\n  top: 0;\n  background: transparent;\n  text-align: center;\n  pointer-events: auto;\n  cursor: pointer;\n  z-index: 10;\n}\n.gantt-custom-event:hover .gantt-custom-event_line {\n  background: #d14900;\n  width: 2px;\n  margin-left: 14px;\n}\n.gantt-custom-event_line {\n  width: 1px;\n  background: #a83000;\n  margin-left: 15px;\n  height: 100%;\n  transition: all 0.2s ease;\n}\n.gantt-custom-event_flag {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  background: #a83000;\n  color: white;\n  padding: 6px 10px;\n  border-radius: 6px;\n  font-size: 12px;\n  font-weight: 500;\n  white-space: nowrap;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\n  z-index: 15;\n  -webkit-animation: fadeInFlag 0.2s ease-out;\n          animation: fadeInFlag 0.2s ease-out;\n  pointer-events: none;\n}\n.gantt-custom-event_flag::after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 0;\n  height: 0;\n  border-left: 6px solid transparent;\n  border-right: 6px solid transparent;\n  border-top: 6px solid #a83000;\n}\n@-webkit-keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n@keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n.gantt-custom-event_title {\n  display: block;\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n";
+styleInject(css_248z$d);
 
 var CustomEvents = function CustomEvents() {
   var _useContext = useContext(context),
@@ -4613,8 +4613,8 @@ var CustomEvents = function CustomEvents() {
 
 var CustomEvents$1 = observer(CustomEvents);
 
-var css_248z$b = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
-styleInject(css_248z$b);
+var css_248z$c = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
+styleInject(css_248z$c);
 
 var Chart = function Chart() {
   var _useContext = useContext(context),
@@ -5178,8 +5178,8 @@ function useDragResize(handleResize, _ref) {
   return [handleMouseDown, resizing];
 }
 
-var css_248z$a = ".gantt-divider {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  cursor: col-resize;\n}\n.gantt-divider:hover hr {\n  border-color: #3b88f4;\n}\n.gantt-divider:hover hr:before {\n  background: #3b88f4;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper {\n  background-color: #3b88f4;\n  border-color: #3b88f4;\n  border-top: 0;\n  border-bottom: 0;\n  cursor: pointer;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper:after {\n  content: '';\n  right: -3px;\n  position: absolute;\n  width: 2px;\n  height: 30px;\n  background-color: transparent;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:after,\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:before {\n  background-color: #fff;\n}\n.gantt-divider > hr {\n  margin: 0;\n  height: 100%;\n  width: 0;\n  border: none;\n  border-right: 1px solid transparent;\n}\n.gantt-divider > .gantt-divider-icon-wrapper {\n  position: absolute;\n  left: 1px;\n  top: 50%;\n  transform: translateY(-50%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 14px;\n  height: 30px;\n  border-radius: 0 4px 4px 0;\n  border: 1px solid #f0f0f0;\n  border-left: 0;\n  background-color: #fff;\n}\n.gantt-divider-arrow:before {\n  bottom: -1px;\n  transform: rotate(30deg);\n}\n.gantt-divider-arrow:after {\n  top: -1px;\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow:after,\n.gantt-divider-arrow:before {\n  content: '';\n  display: block;\n  position: relative;\n  width: 2px;\n  height: 8px;\n  background-color: #bfbfbf;\n  border-radius: 1px;\n}\n.gantt-divider-arrow.gantt-divider-reverse:before {\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow.gantt-divider-reverse:after {\n  transform: rotate(30deg);\n}\n.gantt-divider_only > hr:before {\n  content: '';\n  position: absolute;\n  border-top: 7px solid white;\n  border-bottom: 7px solid white;\n  background: #a7add0;\n  z-index: 2;\n  height: 26px;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 2px;\n}\n.gantt-divider_only > hr {\n  border-color: #a7add0;\n}\n";
-styleInject(css_248z$a);
+var css_248z$b = ".gantt-divider {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  cursor: col-resize;\n}\n.gantt-divider:hover hr {\n  border-color: #3b88f4;\n}\n.gantt-divider:hover hr:before {\n  background: #3b88f4;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper {\n  background-color: #3b88f4;\n  border-color: #3b88f4;\n  border-top: 0;\n  border-bottom: 0;\n  cursor: pointer;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper:after {\n  content: '';\n  right: -3px;\n  position: absolute;\n  width: 2px;\n  height: 30px;\n  background-color: transparent;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:after,\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:before {\n  background-color: #fff;\n}\n.gantt-divider > hr {\n  margin: 0;\n  height: 100%;\n  width: 0;\n  border: none;\n  border-right: 1px solid transparent;\n}\n.gantt-divider > .gantt-divider-icon-wrapper {\n  position: absolute;\n  left: 1px;\n  top: 50%;\n  transform: translateY(-50%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 14px;\n  height: 30px;\n  border-radius: 0 4px 4px 0;\n  border: 1px solid #f0f0f0;\n  border-left: 0;\n  background-color: #fff;\n}\n.gantt-divider-arrow:before {\n  bottom: -1px;\n  transform: rotate(30deg);\n}\n.gantt-divider-arrow:after {\n  top: -1px;\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow:after,\n.gantt-divider-arrow:before {\n  content: '';\n  display: block;\n  position: relative;\n  width: 2px;\n  height: 8px;\n  background-color: #bfbfbf;\n  border-radius: 1px;\n}\n.gantt-divider-arrow.gantt-divider-reverse:before {\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow.gantt-divider-reverse:after {\n  transform: rotate(30deg);\n}\n.gantt-divider_only > hr:before {\n  content: '';\n  position: absolute;\n  border-top: 7px solid white;\n  border-bottom: 7px solid white;\n  background: #a7add0;\n  z-index: 2;\n  height: 26px;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 2px;\n}\n.gantt-divider_only > hr {\n  border-color: #a7add0;\n}\n";
+styleInject(css_248z$b);
 
 var Divider = function Divider() {
   var _useContext = useContext(context),
@@ -5241,8 +5241,8 @@ var Divider = function Divider() {
 
 var Divider$1 = observer(Divider);
 
-var css_248z$9 = ".gantt-scroll_bar {\n  position: absolute;\n  bottom: 0;\n  left: 16px;\n  height: 12px;\n}\n.gantt-scroll_bar-thumb {\n  position: absolute;\n  height: 100%;\n  border-radius: 4px;\n  background-color: #262626;\n  opacity: 0.2;\n  cursor: pointer;\n  will-change: transform;\n}\n";
-styleInject(css_248z$9);
+var css_248z$a = ".gantt-scroll_bar {\n  position: absolute;\n  bottom: 0;\n  left: 16px;\n  height: 12px;\n}\n.gantt-scroll_bar-thumb {\n  position: absolute;\n  height: 100%;\n  border-radius: 4px;\n  background-color: #262626;\n  opacity: 0.2;\n  cursor: pointer;\n  will-change: transform;\n}\n";
+styleInject(css_248z$a);
 
 var ScrollBar = function ScrollBar() {
   var _useContext = useContext(context),
@@ -5282,8 +5282,8 @@ var ScrollBar = function ScrollBar() {
 
 var ScrollBar$1 = /*#__PURE__*/memo(observer(ScrollBar));
 
-var css_248z$8 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('/Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('/Top_hover.svg');\n}\n";
-styleInject(css_248z$8);
+var css_248z$9 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('/Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('/Top_hover.svg');\n}\n";
+styleInject(css_248z$9);
 
 var ScrollTop = function ScrollTop() {
   var _useContext = useContext(context),
@@ -5312,8 +5312,8 @@ var ScrollTop = function ScrollTop() {
 
 var ScrollTop$1 = observer(ScrollTop);
 
-var css_248z$7 = ".gantt-selection-indicator {\n  position: absolute;\n  width: 100%;\n  background: rgba(0, 0, 0, 0.04);\n  pointer-events: none;\n  z-index: 10;\n}\n";
-styleInject(css_248z$7);
+var css_248z$8 = ".gantt-selection-indicator {\n  position: absolute;\n  width: 100%;\n  background: rgba(0, 0, 0, 0.04);\n  pointer-events: none;\n  z-index: 10;\n}\n";
+styleInject(css_248z$8);
 
 /**
  * 鼠标hover效果模拟
@@ -5340,8 +5340,8 @@ var SelectionIndicator = function SelectionIndicator() {
 
 var SelectionIndicator$1 = observer(SelectionIndicator);
 
-var css_248z$6 = ".gantt-row-toggler {\n  width: 24px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: #d9d9d9;\n  cursor: pointer;\n  position: relative;\n  z-index: 5;\n}\n.gantt-row-toggler:hover {\n  color: #8c8c8c;\n}\n.gantt-row-toggler > i {\n  width: 20px;\n  height: 20px;\n  background: white;\n}\n.gantt-row-toggler > i > svg {\n  transition: transform 218ms;\n  fill: currentColor;\n}\n.gantt-row-toggler-collapsed > i > svg {\n  transform: rotate(-90deg);\n}\n";
-styleInject(css_248z$6);
+var css_248z$7 = ".gantt-row-toggler {\n  width: 24px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: #d9d9d9;\n  cursor: pointer;\n  position: relative;\n  z-index: 5;\n}\n.gantt-row-toggler:hover {\n  color: #8c8c8c;\n}\n.gantt-row-toggler > i {\n  width: 20px;\n  height: 20px;\n  background: white;\n}\n.gantt-row-toggler > i > svg {\n  transition: transform 218ms;\n  fill: currentColor;\n}\n.gantt-row-toggler-collapsed > i > svg {\n  transform: rotate(-90deg);\n}\n";
+styleInject(css_248z$7);
 
 var RowToggler = function RowToggler(_ref) {
   var onClick = _ref.onClick,
@@ -5369,8 +5369,294 @@ var RowToggler = function RowToggler(_ref) {
   })))));
 };
 
-var css_248z$5 = ".gantt-table-body {\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 0 8px;\n  font-size: 14px;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
-styleInject(css_248z$5);
+var TextCell = function TextCell(_ref) {
+  var value = _ref.value;
+  if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
+  return /*#__PURE__*/React.createElement("span", null, String(value));
+};
+var DateCell = function DateCell(_ref2) {
+  var value = _ref2.value,
+      column = _ref2.column;
+  if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
+
+  try {
+    var formatted = column.formatter ? column.formatter(value) : dayjs(value).format('DD/MM/YYYY');
+    return /*#__PURE__*/React.createElement("span", null, formatted);
+  } catch (_unused) {
+    return /*#__PURE__*/React.createElement("span", null, "-");
+  }
+};
+var NumberCell = function NumberCell(_ref3) {
+  var value = _ref3.value,
+      column = _ref3.column;
+  if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
+  var formatted = column.formatter ? column.formatter(value) : typeof value === 'number' ? value.toLocaleString('pt-BR') : value;
+  return /*#__PURE__*/React.createElement("span", null, formatted);
+};
+var ProgressCell = function ProgressCell(_ref4) {
+  var value = _ref4.value;
+  var progress = typeof value === 'number' ? value : 0;
+  var percentage = Math.min(Math.max(progress, 0), 100);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2 w-full"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 h-2 bg-gray-200 rounded-full overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "h-full bg-blue-500 transition-all",
+    style: {
+      width: "".concat(percentage, "%")
+    }
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-gray-600 min-w-[3ch]"
+  }, percentage, "%"));
+};
+var StatusCell = function StatusCell(_ref5) {
+  var value = _ref5.value;
+  if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
+  var statusObj = _typeof(value) === 'object' ? value : {
+    title: String(value)
+  };
+  var title = statusObj.title,
+      color = statusObj.color,
+      textColor = statusObj.textColor;
+  return /*#__PURE__*/React.createElement("span", {
+    className: "inline-flex items-center px-2 py-1 rounded text-xs font-medium",
+    style: {
+      backgroundColor: color || '#e5e7eb',
+      color: textColor || '#374151'
+    }
+  }, title || value);
+};
+var PriorityCell = function PriorityCell(_ref6) {
+  var value = _ref6.value;
+  if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
+  var priorityMap = {
+    1: {
+      label: 'Muito Baixa',
+      color: '#10b981'
+    },
+    2: {
+      label: 'Baixa',
+      color: '#84cc16'
+    },
+    3: {
+      label: 'Média',
+      color: '#f59e0b'
+    },
+    4: {
+      label: 'Alta',
+      color: '#f97316'
+    },
+    5: {
+      label: 'Muito Alta',
+      color: '#ef4444'
+    }
+  };
+  var priority = priorityMap[value] || {
+    label: String(value),
+    color: '#6b7280'
+  };
+  return /*#__PURE__*/React.createElement("span", {
+    className: "inline-flex items-center px-2 py-1 rounded text-xs font-medium text-white",
+    style: {
+      backgroundColor: priority.color
+    }
+  }, priority.label);
+};
+var UserCell = function UserCell(_ref7) {
+  var value = _ref7.value;
+  if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
+  var userObj = _typeof(value) === 'object' ? value : {
+    name: String(value)
+  };
+  var name = userObj.name,
+      avatar = userObj.avatar,
+      picture = userObj.picture;
+  var userAvatar = avatar || picture;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2"
+  }, userAvatar && /*#__PURE__*/React.createElement("img", {
+    src: userAvatar,
+    alt: name || 'User',
+    className: "w-6 h-6 rounded-full object-cover"
+  }), !userAvatar && /*#__PURE__*/React.createElement("div", {
+    className: "w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600"
+  }, (name || 'U').charAt(0).toUpperCase()), /*#__PURE__*/React.createElement("span", {
+    className: "text-sm truncate"
+  }, name || value));
+};
+var TagsCell = function TagsCell(_ref8) {
+  var value = _ref8.value;
+  if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
+  var tags = [];
+
+  if (typeof value === 'string') {
+    tags = value.split(',').map(function (t) {
+      return t.trim();
+    }).filter(Boolean);
+  } else if (Array.isArray(value)) {
+    tags = value;
+  }
+
+  if (tags.length === 0) return /*#__PURE__*/React.createElement("span", null, "-");
+  return /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-wrap gap-1"
+  }, tags.map(function (tag, index) {
+    return /*#__PURE__*/React.createElement("span", {
+      key: index,
+      className: "inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700"
+    }, tag);
+  }));
+};
+var CurrencyCell = function CurrencyCell(_ref9) {
+  var value = _ref9.value,
+      column = _ref9.column;
+  if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
+  var numValue = typeof value === 'number' ? value : parseFloat(value);
+  if (isNaN(numValue)) return /*#__PURE__*/React.createElement("span", null, "-");
+  var formatted = column.formatter ? column.formatter(value) : new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(numValue);
+  return /*#__PURE__*/React.createElement("span", null, formatted);
+};
+var CustomFieldCell = function CustomFieldCell(_ref10) {
+  var value = _ref10.value,
+      record = _ref10.record,
+      column = _ref10.column;
+  if (!column.customFieldId) return /*#__PURE__*/React.createElement(TextCell, {
+    value: value,
+    record: record,
+    column: column
+  });
+  var customFieldValues = record.customFieldValues;
+  if (!customFieldValues) return /*#__PURE__*/React.createElement("span", null, "-");
+  var fieldValue = customFieldValues.find(function (fv) {
+    return fv.fieldId === column.customFieldId;
+  });
+  if (!fieldValue) return /*#__PURE__*/React.createElement("span", null, "-");
+  var field = fieldValue.field,
+      fieldVal = fieldValue.value;
+  if (!field || !fieldVal) return /*#__PURE__*/React.createElement("span", null, "-");
+
+  switch (field.type) {
+    case 'text':
+    case 'email':
+    case 'phone':
+      return /*#__PURE__*/React.createElement(TextCell, {
+        value: fieldVal,
+        record: record,
+        column: column
+      });
+
+    case 'number':
+      return /*#__PURE__*/React.createElement(NumberCell, {
+        value: fieldVal,
+        record: record,
+        column: column
+      });
+
+    case 'date':
+      return /*#__PURE__*/React.createElement(DateCell, {
+        value: fieldVal,
+        record: record,
+        column: column
+      });
+
+    case 'currency':
+      return /*#__PURE__*/React.createElement(CurrencyCell, {
+        value: fieldVal,
+        record: record,
+        column: column
+      });
+
+    case 'select':
+      return /*#__PURE__*/React.createElement("span", {
+        className: "inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700"
+      }, fieldVal);
+
+    case 'multiselect':
+      {
+        var values = Array.isArray(fieldVal) ? fieldVal : [fieldVal];
+        return /*#__PURE__*/React.createElement(TagsCell, {
+          value: values,
+          record: record,
+          column: column
+        });
+      }
+
+    case 'checkbox':
+      return /*#__PURE__*/React.createElement("span", {
+        className: "inline-flex items-center"
+      }, fieldVal === 'true' || fieldVal === true ? '✓' : '✗');
+
+    case 'url':
+      return /*#__PURE__*/React.createElement("a", {
+        href: fieldVal,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        className: "text-blue-600 hover:underline"
+      }, fieldVal);
+
+    default:
+      return /*#__PURE__*/React.createElement(TextCell, {
+        value: fieldVal,
+        record: record,
+        column: column
+      });
+  }
+};
+var renderCell = function renderCell(value, record, column) {
+  if (column.cellRenderer) {
+    return column.cellRenderer(value, record);
+  }
+
+  if (column.render) {
+    return column.render(record);
+  }
+
+  var props = {
+    value: value,
+    record: record,
+    column: column
+  };
+
+  switch (column.type) {
+    case 'date':
+      return /*#__PURE__*/React.createElement(DateCell, _objectSpread2({}, props));
+
+    case 'number':
+      return /*#__PURE__*/React.createElement(NumberCell, _objectSpread2({}, props));
+
+    case 'progress':
+      return /*#__PURE__*/React.createElement(ProgressCell, _objectSpread2({}, props));
+
+    case 'status':
+      return /*#__PURE__*/React.createElement(StatusCell, _objectSpread2({}, props));
+
+    case 'priority':
+      return /*#__PURE__*/React.createElement(PriorityCell, _objectSpread2({}, props));
+
+    case 'user':
+      return /*#__PURE__*/React.createElement(UserCell, _objectSpread2({}, props));
+
+    case 'tags':
+      return /*#__PURE__*/React.createElement(TagsCell, _objectSpread2({}, props));
+
+    case 'currency':
+      return /*#__PURE__*/React.createElement(CurrencyCell, _objectSpread2({}, props));
+
+    case 'custom':
+      return /*#__PURE__*/React.createElement(CustomFieldCell, _objectSpread2({}, props));
+
+    case 'text':
+    default:
+      return /*#__PURE__*/React.createElement(TextCell, _objectSpread2({}, props));
+  }
+};
+
+var css_248z$6 = ".gantt-table-body {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  border-bottom: 1px solid #f0f0f0;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 0;\n  font-size: 14px;\n  box-sizing: border-box;\n  flex-shrink: 0;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
+styleInject(css_248z$6);
 
 var TableRows = function TableRows() {
   var _useContext = useContext(context),
@@ -5381,9 +5667,9 @@ var TableRows = function TableRows() {
       prefixCls = _useContext.prefixCls,
       onExpand = _useContext.onExpand;
 
-  var columns = store.columns,
-      rowHeight = store.rowHeight,
+  var rowHeight = store.rowHeight,
       isTimeline = store.isTimeline;
+  var columns = store.getVisibleColumns;
   var columnsWidth = store.getColumnsWidth;
   var barList = store.getBarList;
   var _store$getVisibleRows = store.getVisibleRows,
@@ -5444,7 +5730,8 @@ var TableRows = function TableRows() {
           minWidth: column.minWidth,
           maxWidth: column.maxWidth,
           textAlign: column.align ? column.align : 'left',
-          paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 12
+          paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 12,
+          paddingRight: 12
         }, column.style)
       }, index === 0 && !isTimeline && // eslint-disable-next-line unicorn/no-new-array
       new Array(bar._depth).fill(0).map(function (_, i) {
@@ -5488,7 +5775,7 @@ var TableRows = function TableRows() {
         }
       })), /*#__PURE__*/React.createElement("span", {
         className: "".concat(prefixClsTableBody, "-ellipsis")
-      }, column.render ? column.render(bar.record) : bar.record[column.name]));
+      }, renderCell(column.key ? bar.record[column.key] : bar.record[column.name], bar.record, column)));
     }));
   }));
 };
@@ -5500,7 +5787,7 @@ var TableBorders = function TableBorders() {
       store = _useContext2.store,
       prefixCls = _useContext2.prefixCls;
 
-  var columns = store.columns;
+  var columns = store.getVisibleColumns;
   var columnsWidth = store.getColumnsWidth;
   var barList = store.getBarList;
   if (barList.length === 0) return null;
@@ -5537,8 +5824,13 @@ var TableBody = function TableBody() {
   var handleMouseLeave = useCallback(function () {
     store.handleMouseLeave();
   }, [store]);
+  var handleScroll = useCallback(function (e) {
+    var tableHeader = store.tableHeaderRef.current;
+    if (tableHeader && tableHeader.scrollLeft !== e.currentTarget.scrollLeft) tableHeader.scrollLeft = e.currentTarget.scrollLeft;
+  }, [store]);
   var prefixClsTableBody = "".concat(prefixCls, "-table-body");
   return /*#__PURE__*/React.createElement("div", {
+    ref: store.tableBodyRef,
     className: prefixClsTableBody,
     style: {
       width: store.tableWidth,
@@ -5546,13 +5838,52 @@ var TableBody = function TableBody() {
       transform: "translateY(-".concat(translateY, "px)")
     },
     onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave
+    onMouseLeave: handleMouseLeave,
+    onScroll: handleScroll
   }, /*#__PURE__*/React.createElement(ObserverTableRows, null), /*#__PURE__*/React.createElement(ObserverTableBorders, null));
 };
 
 var TableBody$1 = observer(TableBody);
 
-var css_248z$4 = ".gantt-table-header {\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.gantt-table-header-head {\n  position: relative;\n}\n.gantt-table-header-row {\n  position: absolute;\n  left: 0;\n  display: flex;\n  transition: height 0.3s;\n  width: 100%;\n}\n.gantt-table-header-cell {\n  position: relative;\n  display: flex;\n  border-right: 1px solid #f0f0f0;\n}\n.gantt-table-header-head-cell {\n  display: flex;\n  flex: 1;\n  align-items: center;\n  overflow: hidden;\n  padding: 0 12px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 14px;\n  color: #2e405e;\n}\n.gantt-table-header-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n";
+var css_248z$5 = ".gantt-table-header-resize-handle {\n  position: absolute;\n  top: 0;\n  right: -6px;\n  width: 10px;\n  height: 100%;\n  cursor: col-resize;\n  z-index: 999;\n}\n.gantt-table-header-resize-handle:hover::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 3px;\n  height: 100%;\n  background-color: #1890ff;\n}\n.gantt-table-header-resize-handle-active::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 3px;\n  height: 100%;\n  background-color: #1890ff;\n}\n";
+styleInject(css_248z$5);
+
+var ResizeHandle = function ResizeHandle(_ref) {
+  var onResize = _ref.onResize,
+      prefixCls = _ref.prefixCls;
+
+  var _useState = useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isDragging = _useState2[0],
+      setIsDragging = _useState2[1];
+
+  var handleMouseDown = useCallback(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+    var startX = e.clientX;
+
+    var handleMouseMove = function handleMouseMove(moveEvent) {
+      var deltaX = moveEvent.clientX - startX;
+      onResize(deltaX);
+    };
+
+    var handleMouseUp = function handleMouseUp() {
+      setIsDragging(false);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }, [onResize]);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "".concat(prefixCls, "-resize-handle ").concat(isDragging ? "".concat(prefixCls, "-resize-handle-active") : ''),
+    onMouseDown: handleMouseDown
+  });
+};
+
+var css_248z$4 = ".gantt-table-header {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n  height: 56px;\n}\n.gantt-table-header-head {\n  position: relative;\n}\n.gantt-table-header-row {\n  display: flex;\n  width: 100%;\n}\n.gantt-table-header-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  border-bottom: 1px solid #f0f0f0;\n  font-weight: 500;\n  background: #fafafa;\n  padding: 0;\n  box-sizing: border-box;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 14px;\n  color: #2e405e;\n  flex-shrink: 0;\n  overflow: visible;\n}\n.gantt-table-header-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n  padding-right: 10px;\n}\n";
 styleInject(css_248z$4);
 
 var TableHeader = function TableHeader() {
@@ -5561,21 +5892,31 @@ var TableHeader = function TableHeader() {
       prefixCls = _useContext.prefixCls,
       renderCustomHeaderFilter = _useContext.renderCustomHeaderFilter;
 
-  var columns = store.columns,
-      tableWidth = store.tableWidth;
-  var width = tableWidth;
+  var columns = store.getVisibleColumns;
   var columnsWidth = store.getColumnsWidth;
+  var totalWidth = store.totalColumnWidth;
   var prefixClsTableHeader = "".concat(prefixCls, "-table-header");
+  var handleResize = useCallback(function (columnName, initialWidth) {
+    return function (deltaX) {
+      var newWidth = Math.max(initialWidth + deltaX, 50);
+      store.setColumnWidth(columnName, newWidth);
+    };
+  }, [store]);
+  var handleScroll = useCallback(function (e) {
+    var tableBody = store.tableBodyRef.current;
+    if (tableBody && tableBody.scrollLeft !== e.currentTarget.scrollLeft) tableBody.scrollLeft = e.currentTarget.scrollLeft;
+  }, [store]);
   return /*#__PURE__*/React.createElement("div", {
+    ref: store.tableHeaderRef,
     className: prefixClsTableHeader,
     style: {
-      width: width,
-      height: 56
-    }
+      width: store.tableWidth
+    },
+    onScroll: handleScroll
   }, /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTableHeader, "-head"),
     style: {
-      width: width,
+      width: totalWidth,
       height: 56
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -5591,13 +5932,23 @@ var TableHeader = function TableHeader() {
         width: columnsWidth[index],
         minWidth: column.minWidth,
         maxWidth: column.maxWidth,
-        textAlign: column.align ? column.align : 'left'
+        textAlign: column.align ? column.align : 'left',
+        paddingLeft: index === 0 ? 10 : 12,
+        paddingRight: 12,
+        height: 56
       }, column.style)
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "".concat(prefixClsTableHeader, "-head-cell")
     }, /*#__PURE__*/React.createElement("span", {
       className: "".concat(prefixClsTableHeader, "-ellipsis")
-    }, column.label)));
+    }, column.icon && /*#__PURE__*/React.createElement("span", {
+      style: {
+        marginRight: 4,
+        display: 'inline-flex',
+        alignItems: 'center'
+      }
+    }, column.icon), column.label), /*#__PURE__*/React.createElement(ResizeHandle, {
+      onResize: handleResize(column.name, columnsWidth[index]),
+      prefixCls: prefixClsTableHeader
+    }));
   }), renderCustomHeaderFilter ? renderCustomHeaderFilter() : null)));
 };
 
@@ -5839,8 +6190,35 @@ var TimeIndicator = function TimeIndicator() {
 
 var TimeIndicator$1 = observer(TimeIndicator);
 
-var css_248z = ".gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: hidden;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n}\n";
+var css_248z = ".gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n  display: flex;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: hidden;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n  display: flex;\n}\n";
 styleInject(css_248z);
+
+var ptBR = Object.freeze({
+  day: "Dia",
+  days: "Dias",
+  week: "Semana",
+  month: "Mês",
+  quarter: "Trimestre",
+  today: "Hoje",
+  dayUnit: " Dias",
+  firstHalf: "Primeiro Semestre",
+  secondHalf: "Segundo Semestre",
+  halfYear: "Semestre",
+  majorFormat: {
+    day: "MM, YYYY",
+    week: "MMM, YYYY",
+    month: "YYYY",
+    quarter: "YYYY",
+    halfYear: "YYYY"
+  },
+  minorFormat: {
+    day: "D",
+    week: "[semana] w",
+    month: "MMMM",
+    quarter: "[T]Q",
+    halfYear: "YYYY-"
+  }
+});
 
 var enUS = Object.freeze({
   today: "Today",
@@ -5894,32 +6272,7 @@ var zhCN = Object.freeze({
   }
 });
 
-var ptBR = Object.freeze({
-  day: "Dia",
-  days: "Dias",
-  week: "Semana",
-  month: "Mês",
-  quarter: "Trimestre",
-  today: "Hoje",
-  dayUnit: " Dias",
-  firstHalf: "Primeiro Semestre",
-  secondHalf: "Segundo Semestre",
-  halfYear: "Semestre",
-  majorFormat: {
-    day: "MM, YYYY",
-    week: "MMM, YYYY",
-    month: "YYYY",
-    quarter: "YYYY",
-    halfYear: "YYYY"
-  },
-  minorFormat: {
-    day: "D",
-    week: "[semana] w",
-    month: "MMMM",
-    quarter: "[T]Q",
-    halfYear: "YYYY-"
-  }
-});
+var defaultLocale = _objectSpread2({}, ptBR);
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -6249,6 +6602,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.data = [];
     this.originData = [];
     this.columns = [];
+    this.customFields = [];
     this.dependencies = [];
     this.scrolling = false;
     this.isTimeline = false;
@@ -6264,6 +6618,8 @@ var GanttStore = /*#__PURE__*/function () {
     this.gestureKeyPress = false;
     this.mainElementRef = /*#__PURE__*/createRef();
     this.chartElementRef = /*#__PURE__*/createRef();
+    this.tableHeaderRef = /*#__PURE__*/createRef();
+    this.tableBodyRef = /*#__PURE__*/createRef();
     this.isPointerPress = false;
     this.startDateKey = 'startDate';
     this.endDateKey = 'endDate';
@@ -6432,6 +6788,29 @@ var GanttStore = /*#__PURE__*/function () {
       this.columns = columns;
     }
   }, {
+    key: "setColumnConfig",
+    value: function setColumnConfig(columnConfig) {
+      this.columnConfig = columnConfig;
+    }
+  }, {
+    key: "setColumnWidth",
+    value: function setColumnWidth(columnName, width) {
+      if (!this.columnConfig) {
+        this.columnConfig = {};
+      }
+
+      if (!this.columnConfig.columnWidths) {
+        this.columnConfig.columnWidths = {};
+      }
+
+      this.columnConfig.columnWidths[columnName] = width;
+    }
+  }, {
+    key: "setCustomFields",
+    value: function setCustomFields(customFields) {
+      this.customFields = customFields;
+    }
+  }, {
     key: "setDependencies",
     value: function setDependencies(dependencies) {
       this.dependencies = dependencies;
@@ -6585,19 +6964,54 @@ var GanttStore = /*#__PURE__*/function () {
       return this.height - HEADER_HEIGHT - 1;
     }
   }, {
+    key: "getVisibleColumns",
+    get: function get() {
+      if (!this.columnConfig) return this.columns;
+      var _this$columnConfig = this.columnConfig,
+          visibleColumns = _this$columnConfig.visibleColumns,
+          columnOrder = _this$columnConfig.columnOrder;
+      var filtered = this.columns;
+
+      if (visibleColumns && visibleColumns.length > 0) {
+        filtered = this.columns.filter(function (col) {
+          return visibleColumns.includes(col.name);
+        });
+      }
+
+      if (columnOrder && columnOrder.length > 0) {
+        filtered = filtered.sort(function (a, b) {
+          var aIndex = columnOrder.indexOf(a.name);
+          var bIndex = columnOrder.indexOf(b.name);
+          if (aIndex === -1 && bIndex === -1) return 0;
+          if (aIndex === -1) return 1;
+          if (bIndex === -1) return -1;
+          return aIndex - bIndex;
+        });
+      }
+
+      return filtered;
+    }
+  }, {
     key: "getColumnsWidth",
     get: function get() {
-      var _a;
+      var _a, _b;
 
-      if (this.columns.length === 1 && ((_a = this.columns[0]) === null || _a === void 0 ? void 0 : _a.width) < 200) return [200];
-      var totalColumnWidth = this.columns.reduce(function (width, item) {
+      var cols = this.getVisibleColumns;
+      if (cols.length === 1 && ((_a = cols[0]) === null || _a === void 0 ? void 0 : _a.width) < 200) return [200];
+      var columnWidths = (_b = this.columnConfig) === null || _b === void 0 ? void 0 : _b.columnWidths;
+      var columnsWithCustomWidths = cols.map(function (col) {
+        return _objectSpread2(_objectSpread2({}, col), {}, {
+          width: (columnWidths === null || columnWidths === void 0 ? void 0 : columnWidths[col.name]) !== undefined ? columnWidths[col.name] : col.width
+        });
+      });
+      var totalColumnWidth = columnsWithCustomWidths.reduce(function (width, item) {
         return width + (item.width || 0);
       }, 0);
-      var totalFlex = this.columns.reduce(function (total, item) {
+      var totalFlex = columnsWithCustomWidths.reduce(function (total, item) {
         return total + (item.width ? 0 : item.flex || 1);
       }, 0);
       var restWidth = this.tableWidth - totalColumnWidth;
-      return this.columns.map(function (column) {
+      return columnsWithCustomWidths.map(function (column) {
         if (column.width) return column.width;
         if (column.flex) return restWidth * (column.flex / totalFlex);
         return restWidth * (1 / totalFlex);
@@ -7155,6 +7569,10 @@ __decorate([observable], GanttStore.prototype, "originData", void 0);
 
 __decorate([observable], GanttStore.prototype, "columns", void 0);
 
+__decorate([observable], GanttStore.prototype, "columnConfig", void 0);
+
+__decorate([observable], GanttStore.prototype, "customFields", void 0);
+
 __decorate([observable], GanttStore.prototype, "dependencies", void 0);
 
 __decorate([observable], GanttStore.prototype, "scrolling", void 0);
@@ -7207,6 +7625,12 @@ __decorate([action], GanttStore.prototype, "setOnUpdate", null);
 
 __decorate([action], GanttStore.prototype, "setColumns", null);
 
+__decorate([action], GanttStore.prototype, "setColumnConfig", null);
+
+__decorate([action], GanttStore.prototype, "setColumnWidth", null);
+
+__decorate([action], GanttStore.prototype, "setCustomFields", null);
+
 __decorate([action], GanttStore.prototype, "setDependencies", null);
 
 __decorate([action], GanttStore.prototype, "setTimeline", null);
@@ -7244,6 +7668,8 @@ __decorate([computed], GanttStore.prototype, "scrollLeft", null);
 __decorate([computed], GanttStore.prototype, "scrollWidth", null);
 
 __decorate([computed], GanttStore.prototype, "bodyClientHeight", null);
+
+__decorate([computed], GanttStore.prototype, "getVisibleColumns", null);
 
 __decorate([computed], GanttStore.prototype, "getColumnsWidth", null);
 
@@ -7298,8 +7724,6 @@ var Body = function Body(_ref) {
   }, children);
 };
 
-var defaultLocale = _objectSpread2({}, ptBR);
-
 var GanttComponent = function GanttComponent(props) {
   var data = props.data,
       columns = props.columns,
@@ -7353,7 +7777,10 @@ var GanttComponent = function GanttComponent(props) {
       durationFn = props.durationFn,
       _props$customEvents = props.customEvents,
       customEvents = _props$customEvents === void 0 ? [] : _props$customEvents,
-      onCustomEventClick = props.onCustomEventClick;
+      onCustomEventClick = props.onCustomEventClick,
+      columnConfig = props.columnConfig,
+      _props$customFields = props.customFields,
+      customFields = _props$customFields === void 0 ? [] : _props$customFields;
   var store = useMemo(function () {
     return new GanttStore({
       rowHeight: rowHeight,
@@ -7368,6 +7795,12 @@ var GanttComponent = function GanttComponent(props) {
   useEffect(function () {
     store.setColumns(columns);
   }, [columns, store]);
+  useEffect(function () {
+    store.setColumnConfig(columnConfig);
+  }, [columnConfig, store]);
+  useEffect(function () {
+    store.setCustomFields(customFields);
+  }, [customFields, store]);
   useEffect(function () {
     store.setCustomEvents(customEvents);
   }, [customEvents, store]);
@@ -7438,4 +7871,4 @@ var GanttComponent = function GanttComponent(props) {
   }, /*#__PURE__*/React.createElement(SelectionIndicator$1, null), !hideTable && /*#__PURE__*/React.createElement(TableBody$1, null), /*#__PURE__*/React.createElement(Chart$1, null)), !hideTable && /*#__PURE__*/React.createElement(Divider$1, null), showBackToday && /*#__PURE__*/React.createElement(TimeIndicator$1, null), showUnitSwitch && /*#__PURE__*/React.createElement(TimeAxisScaleSelect$1, null), /*#__PURE__*/React.createElement(ScrollBar$1, null), scrollTop && /*#__PURE__*/React.createElement(ScrollTop$1, null)));
 };
 
-export { Gantt, GanttComponent as default, enUS, ptBR, zhCN };
+export { Gantt, GanttComponent as default, defaultLocale, enUS, ptBR, zhCN };

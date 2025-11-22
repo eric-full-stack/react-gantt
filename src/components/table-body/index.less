@@ -2,10 +2,10 @@
 @table-body-prefix-cls: ~'@{gantt-prefix}-table-body';
 
 .@{table-body-prefix-cls} {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: hidden;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
 
   &-row,
   &-border_row {
@@ -13,6 +13,7 @@
     align-items: center;
     position: absolute;
     width: 100%;
+    border-bottom: 1px solid #f0f0f0;
   }
 
   &-border_row {
@@ -28,8 +29,10 @@
     height: 100%;
     color: #2e405e;
     user-select: none;
-    padding: 0 8px;
+    padding: 0;
     font-size: 14px;
+    box-sizing: border-box;
+    flex-shrink: 0;
   }
 
   &-ellipsis {
@@ -37,6 +40,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-width: 0;
   }
 
   &-row-indentation {

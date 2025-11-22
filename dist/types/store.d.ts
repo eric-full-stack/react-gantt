@@ -1,8 +1,7 @@
 /// <reference types="lodash" />
 import type { Dayjs } from 'dayjs';
 import type React from 'react';
-import type { GanttLocale, GanttProps as GanttProperties } from './Gantt';
-import { Gantt } from './types';
+import { Gantt, GanttLocale } from './types';
 export declare const ONE_DAY_MS = 86400000;
 export declare const getViewTypeList: (locale: any) => Gantt.SightConfig[];
 declare function isRestDay(date: string): boolean;
@@ -43,6 +42,8 @@ declare class GanttStore {
     data: Gantt.Item[];
     originData: Gantt.Record[];
     columns: Gantt.Column[];
+    columnConfig: Gantt.ColumnConfig | undefined;
+    customFields: Gantt.CustomField[];
     dependencies: Gantt.Dependence[];
     scrolling: boolean;
     isTimeline: boolean;
@@ -67,6 +68,8 @@ declare class GanttStore {
     gestureKeyPress: boolean;
     mainElementRef: React.RefObject<HTMLDivElement>;
     chartElementRef: React.RefObject<HTMLDivElement>;
+    tableHeaderRef: React.RefObject<HTMLDivElement>;
+    tableBodyRef: React.RefObject<HTMLDivElement>;
     isPointerPress: boolean;
     startDateKey: string;
     endDateKey: string;
@@ -74,7 +77,7 @@ declare class GanttStore {
     clientX: number;
     rowHeight: number;
     customEvents: Gantt.CustomEvent[];
-    onUpdate: GanttProperties['onUpdate'];
+    onUpdate: Gantt.UpdateCallback;
     isRestDay: typeof isRestDay;
     getStartDate(): string;
     setIsRestDay(function_: (date: string) => boolean): void;
@@ -82,8 +85,11 @@ declare class GanttStore {
     toggleCollapse(): void;
     setRowCollapse(item: Gantt.Item, collapsed: boolean): void;
     setCustomEvents(customEvents: Gantt.CustomEvent[]): void;
-    setOnUpdate(onUpdate: GanttProperties['onUpdate']): void;
+    setOnUpdate(onUpdate: Gantt.UpdateCallback): void;
     setColumns(columns: Gantt.Column[]): void;
+    setColumnConfig(columnConfig?: Gantt.ColumnConfig): void;
+    setColumnWidth(columnName: string, width: number): void;
+    setCustomFields(customFields: Gantt.CustomField[]): void;
     setDependencies(dependencies: Gantt.Dependence[]): void;
     setTimeline(active: boolean): void;
     setWorkdays(workdays: 'business_days' | 'all_days'): void;
@@ -107,6 +113,7 @@ declare class GanttStore {
     get scrollLeft(): number;
     get scrollWidth(): number;
     get bodyClientHeight(): number;
+    get getVisibleColumns(): Gantt.Column[];
     get getColumnsWidth(): number[];
     get totalColumnWidth(): number;
     get bodyScrollHeight(): number;

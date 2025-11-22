@@ -15,9 +15,9 @@ import { BAR_HEIGHT, ROW_HEIGHT, TABLE_INDENT } from './constants'
 import type { GanttContext } from './context'
 import Context from './context'
 import './Gantt.less'
-import { ptBR } from './locales'
+import { defaultLocale, ptBR } from './locales'
 import GanttStore from './store'
-import type { DefaultRecordType, Gantt } from './types'
+import type { DefaultRecordType, Gantt, GanttLocale } from './types'
 
 const prefixCls = 'gantt'
 
@@ -42,7 +42,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   isTimeline?: boolean
   workdays?: 'business_days' | 'all_days'
   durationFn?: (startDate: string, endDate: string) => number
-  onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>
+  onUpdate: Gantt.UpdateCallback<RecordType>
   startDateKey?: string
   endDateKey?: string
   isRestDay?: (date: string) => boolean
@@ -94,34 +94,6 @@ export interface GanttRef {
   backToday: () => void
   getWidthByDate: (startDate: Dayjs, endDate: Dayjs) => number
 }
-
-export interface GanttLocale {
-  today: string
-  day: string
-  days: string
-  week: string
-  month: string
-  quarter: string
-  halfYear: string
-  firstHalf: string
-  secondHalf: string
-  majorFormat: {
-    day: string
-    week: string
-    month: string
-    quarter: string
-    halfYear: string
-  }
-  minorFormat: {
-    day: string
-    week: string
-    month: string
-    quarter: string
-    halfYear: string
-  }
-}
-
-export const defaultLocale: GanttLocale = { ...ptBR }
 
 const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<RecordType>) => {
   const {

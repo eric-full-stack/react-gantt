@@ -1,6 +1,7 @@
-import { Dayjs } from 'dayjs';
-import React from 'react';
+import type { Dayjs } from 'dayjs';
+import type React from 'react';
 export declare type DefaultRecordType = Record<string, any>;
+declare type NativeRecord<K extends keyof any, T> = Record<K, T>;
 export declare namespace Gantt {
     interface CustomEvent {
         key: string;
@@ -90,6 +91,7 @@ export declare namespace Gantt {
         disabled?: boolean;
     };
     type ColumnAlign = 'center' | 'right' | 'left';
+    type ColumnType = 'text' | 'date' | 'number' | 'progress' | 'status' | 'priority' | 'user' | 'tags' | 'currency' | 'custom';
     interface Column<RecordType = DefaultRecordType> {
         width?: number;
         minWidth?: number;
@@ -100,6 +102,29 @@ export declare namespace Gantt {
         style?: Object;
         render?: (item: Record<RecordType>) => React.ReactNode;
         align?: ColumnAlign;
+        type?: ColumnType;
+        key?: string;
+        formatter?: (value: any, record?: Record<RecordType>) => string;
+        cellRenderer?: (value: any, record: Record<RecordType>) => React.ReactNode;
+        icon?: React.ReactNode;
+        sortable?: boolean;
+        customFieldId?: string;
+    }
+    interface ColumnConfig {
+        visibleColumns?: string[];
+        columnOrder?: string[];
+        columnWidths?: NativeRecord<string, number>;
+    }
+    type CustomFieldType = 'text' | 'number' | 'date' | 'select' | 'multiselect' | 'currency' | 'checkbox' | 'url' | 'email' | 'phone';
+    interface CustomField {
+        id: string;
+        label: string;
+        type: CustomFieldType;
+        icon?: string;
+        options?: string[];
+        required?: boolean;
+        description?: string;
+        order?: number;
     }
     type DependenceType = 'start_finish' | 'finish_start' | 'start_start' | 'finish_finish';
     interface Dependence {
@@ -108,4 +133,31 @@ export declare namespace Gantt {
         type: DependenceType;
         color?: string;
     }
+    type UpdateCallback<RecordType = DefaultRecordType> = (record: Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>;
 }
+export interface GanttLocale {
+    today: string;
+    day: string;
+    days: string;
+    week: string;
+    month: string;
+    quarter: string;
+    halfYear: string;
+    firstHalf: string;
+    secondHalf: string;
+    majorFormat: {
+        day: string;
+        week: string;
+        month: string;
+        quarter: string;
+        halfYear: string;
+    };
+    minorFormat: {
+        day: string;
+        week: string;
+        month: string;
+        quarter: string;
+        halfYear: string;
+    };
+}
+export {};

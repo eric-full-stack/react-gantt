@@ -82,6 +82,7 @@ const TableRows = () => {
                   maxWidth: column.maxWidth,
                   textAlign: column.align ? column.align : 'left',
                   paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 12,
+                  paddingRight: 12,
                   ...column.style,
                 }}
               >
@@ -195,9 +196,18 @@ const TableBody: React.FC = () => {
   const handleMouseLeave = useCallback(() => {
     store.handleMouseLeave()
   }, [store])
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const tableHeader = store.tableHeaderRef.current
+      if (tableHeader && tableHeader.scrollLeft !== e.currentTarget.scrollLeft)
+        tableHeader.scrollLeft = e.currentTarget.scrollLeft
+    },
+    [store]
+  )
   const prefixClsTableBody = `${prefixCls}-table-body`
   return (
     <div
+      ref={store.tableBodyRef}
       className={prefixClsTableBody}
       style={{
         width: store.tableWidth,
@@ -206,6 +216,7 @@ const TableBody: React.FC = () => {
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onScroll={handleScroll}
     >
       <ObserverTableRows />
       <ObserverTableBorders />

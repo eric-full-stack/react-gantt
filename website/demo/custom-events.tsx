@@ -69,6 +69,16 @@ const App = () => {
       <RcGantt<Data>
         data={data}
         customEvents={customEvents}
+        customFields={[{
+          id: 'name',
+          label: 'Nome da Tarefa2',
+          type: 'text',
+          icon: 'name',
+          required: true,
+          description: 'Nome da Tarefa',
+          order: 1,
+          options: ['name', 'progress', 'startDate', 'endDate'],
+        }]}
         onCustomEventClick={handleCustomEventClick}
         columns={[
           {

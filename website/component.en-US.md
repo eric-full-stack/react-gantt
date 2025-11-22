@@ -36,6 +36,12 @@ You can get the current expanded status with `onExpand`
 
 <code src="./demo/child.tsx"></code>
 
+### Complete Multi-level Example
+
+Demonstrates a complete 3-level structure (Project → Phase → Task) with all column types and custom fields
+
+<code src="./demo/multi-level.en-US.tsx"></code>
+
 ### Customizing table columns
 
 `columns` type definition see Type Definition
@@ -43,6 +49,12 @@ You can get the current expanded status with `onExpand`
 where if each column is configured with the `width` property. The total width is calculated internally by the component. The default initialized table width is the total width
 
 <code src="./demo/column.tsx"></code>
+
+### Advanced Table Columns (All Types)
+
+Showcases all available column types, including standard types (text, date, number, progress), special types (status, priority, user, tags, currency), and custom fields (select, checkbox, url, email)
+
+<code src="./demo/custom-columns.en-US.tsx"></code>
 
 ### Dependency Structure
 

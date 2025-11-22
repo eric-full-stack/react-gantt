@@ -15,9 +15,8 @@ import { createRef } from 'react'
 import ptBR from 'dayjs/locale/pt-br'
 import dayjsBusinessDays from 'dayjs-business-days'
 import { HEADER_HEIGHT, TOP_PADDING } from './constants'
-import type { GanttLocale, GanttProps as GanttProperties } from './Gantt'
-import { defaultLocale } from './Gantt'
-import { Gantt } from './types'
+import { defaultLocale } from './locales'
+import { Gantt, GanttLocale } from './types'
 import { flattenDeep, transverseData } from './utils'
 
 dayjs.locale(ptBR)
@@ -159,6 +158,10 @@ class GanttStore {
 
   chartElementRef = createRef<HTMLDivElement>()
 
+  tableHeaderRef = createRef<HTMLDivElement>()
+
+  tableBodyRef = createRef<HTMLDivElement>()
+
   isPointerPress = false
 
   startDateKey = 'startDate'
@@ -173,7 +176,7 @@ class GanttStore {
 
   customEvents: Gantt.CustomEvent[] = []
 
-  onUpdate: GanttProperties['onUpdate'] = () => Promise.resolve(true)
+  onUpdate: Gantt.UpdateCallback = () => Promise.resolve(true)
 
   isRestDay = isRestDay
 
@@ -215,7 +218,7 @@ class GanttStore {
   }
 
   @action
-  setOnUpdate(onUpdate: GanttProperties['onUpdate']) {
+  setOnUpdate(onUpdate: Gantt.UpdateCallback) {
     this.onUpdate = onUpdate
   }
 
@@ -227,6 +230,17 @@ class GanttStore {
   @action
   setColumnConfig(columnConfig?: Gantt.ColumnConfig) {
     this.columnConfig = columnConfig
+  }
+
+  @action
+  setColumnWidth(columnName: string, width: number) {
+    if (!this.columnConfig) {
+      this.columnConfig = {}
+    }
+    if (!this.columnConfig.columnWidths) {
+      this.columnConfig.columnWidths = {}
+    }
+    this.columnConfig.columnWidths[columnName] = width
   }
 
   @action

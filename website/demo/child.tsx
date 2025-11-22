@@ -39,6 +39,7 @@ const App = () => (
     <RcGantt<Data>
       data={data}
       onExpand={onExpand}
+      customFields={['name', 'progress', 'startDate', 'endDate']}
       columns={[
         {
           name: 'name',

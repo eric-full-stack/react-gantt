@@ -1,7 +1,8 @@
-import { Dayjs } from 'dayjs'
-import React from 'react'
+import type { Dayjs } from 'dayjs'
+import type React from 'react'
 
 export type DefaultRecordType = Record<string, any>
+type NativeRecord<K extends keyof any, T> = Record<K, T>
 export namespace Gantt {
   export interface CustomEvent {
     key: string
@@ -130,7 +131,7 @@ export namespace Gantt {
   export interface ColumnConfig {
     visibleColumns?: string[]
     columnOrder?: string[]
-    columnWidths?: Record<string, number>
+    columnWidths?: NativeRecord<string, number>
   }
 
   export type CustomFieldType =
@@ -161,5 +162,36 @@ export namespace Gantt {
     to: string
     type: DependenceType
     color?: string
+  }
+  export type UpdateCallback<RecordType = DefaultRecordType> = (
+    record: Record<RecordType>,
+    startDate: string,
+    endDate: string
+  ) => Promise<boolean>
+}
+
+export interface GanttLocale {
+  today: string
+  day: string
+  days: string
+  week: string
+  month: string
+  quarter: string
+  halfYear: string
+  firstHalf: string
+  secondHalf: string
+  majorFormat: {
+    day: string
+    week: string
+    month: string
+    quarter: string
+    halfYear: string
+  }
+  minorFormat: {
+    day: string
+    week: string
+    month: string
+    quarter: string
+    halfYear: string
   }
 }
