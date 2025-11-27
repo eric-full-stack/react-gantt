@@ -1,9 +1,7 @@
 import React, { useContext, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import Context from '../../context';
-import ResizeHandle from './ResizeHandle';
 import './index.less';
-import './resize-handle.less';
 
 const TableHeader: React.FC = () => {
   const { store, prefixCls, renderCustomHeaderFilter } = useContext(Context);
@@ -11,16 +9,6 @@ const TableHeader: React.FC = () => {
   const columnsWidth = store.getColumnsWidth;
   const totalWidth = store.totalColumnWidth;
   const prefixClsTableHeader = `${prefixCls}-table-header`;
-
-  const handleResize = useCallback(
-    (columnName: string, initialWidth: number) => {
-      return (deltaX: number) => {
-        const newWidth = Math.max(initialWidth + deltaX, 50);
-        store.setColumnWidth(columnName, newWidth);
-      };
-    },
-    [store]
-  );
 
   const handleScroll = useCallback(
     (e: React.UIEvent<HTMLDivElement>) => {
@@ -66,10 +54,6 @@ const TableHeader: React.FC = () => {
                 )}
                 {column.label}
               </span>
-              <ResizeHandle
-                onResize={handleResize(column.name, columnsWidth[index])}
-                prefixCls={prefixClsTableHeader}
-              />
             </div>
           ))}
           { renderCustomHeaderFilter ? renderCustomHeaderFilter() : null}

@@ -267,8 +267,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z$j = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-group-bar .gantt-bar {\n  position: relative;\n  top: -3px;\n}\n";
-styleInject(css_248z$j);
+var css_248z$i = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-group-bar .gantt-bar {\n  position: relative;\n  top: -3px;\n}\n";
+styleInject(css_248z$i);
 
 var height = 8;
 var GroupBar = function GroupBar(_ref) {
@@ -627,8 +627,8 @@ var DragResize = function DragResize(_ref) {
 };
 var DragResize$1 = observer(DragResize);
 
-var css_248z$i = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
-styleInject(css_248z$i);
+var css_248z$h = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
+styleInject(css_248z$h);
 
 var barH = 8;
 var startX = 0;
@@ -759,8 +759,8 @@ var BAR_HEIGHT = 8;
 var TOP_PADDING = 0;
 var TABLE_INDENT = 30;
 
-var css_248z$h = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
-styleInject(css_248z$h);
+var css_248z$g = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
+styleInject(css_248z$g);
 
 var ONE_DAY_MS$1 = 86400000;
 var TaskBar = function TaskBar(_ref) {
@@ -979,8 +979,8 @@ var BarList = function BarList() {
 };
 var BarList$1 = observer(BarList);
 
-var css_248z$g = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  animation: pulse 1s infinite;\n}\n";
-styleInject(css_248z$g);
+var css_248z$f = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  animation: pulse 1s infinite;\n}\n";
+styleInject(css_248z$f);
 
 var TaskBarThumb = function TaskBarThumb(_ref) {
   var data = _ref.data;
@@ -4226,8 +4226,8 @@ var find = _createFind(findIndex_1);
 
 var find_1 = find;
 
-var css_248z$f = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
-styleInject(css_248z$f);
+var css_248z$e = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
+styleInject(css_248z$e);
 
 var spaceX = 10;
 var spaceY = 10;
@@ -4312,7 +4312,7 @@ var Dependence = function Dependence(_ref) {
   var endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1;
   return /*#__PURE__*/React.createElement("g", {
     stroke: color,
-    className: css_248z$f['task-dependency-line']
+    className: css_248z$e['task-dependency-line']
   }, /*#__PURE__*/React.createElement("path", {
     style: {
       stroke: color
@@ -4380,8 +4380,8 @@ var DragPresent = function DragPresent() {
 };
 var DragPresent$1 = observer(DragPresent);
 
-var css_248z$e = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
-styleInject(css_248z$e);
+var css_248z$d = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
+styleInject(css_248z$d);
 
 var Today = function Today() {
   var _useContext = useContext(context),
@@ -4401,8 +4401,8 @@ var Today = function Today() {
 };
 var Today$1 = observer(Today);
 
-var css_248z$d = ".gantt-custom-events {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-custom-event {\n  position: absolute;\n  top: 0;\n  background: transparent;\n  text-align: center;\n  pointer-events: auto;\n  cursor: pointer;\n  z-index: 10;\n}\n.gantt-custom-event:hover .gantt-custom-event_line {\n  background: #d14900;\n  width: 2px;\n  margin-left: 14px;\n}\n.gantt-custom-event_line {\n  width: 1px;\n  background: #a83000;\n  margin-left: 15px;\n  height: 100%;\n  transition: all 0.2s ease;\n}\n.gantt-custom-event_flag {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  background: #a83000;\n  color: white;\n  padding: 6px 10px;\n  border-radius: 6px;\n  font-size: 12px;\n  font-weight: 500;\n  white-space: nowrap;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\n  z-index: 15;\n  animation: fadeInFlag 0.2s ease-out;\n  pointer-events: none;\n}\n.gantt-custom-event_flag::after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 0;\n  height: 0;\n  border-left: 6px solid transparent;\n  border-right: 6px solid transparent;\n  border-top: 6px solid #a83000;\n}\n@keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n.gantt-custom-event_title {\n  display: block;\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n";
-styleInject(css_248z$d);
+var css_248z$c = ".gantt-custom-events {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-custom-event {\n  position: absolute;\n  top: 0;\n  background: transparent;\n  text-align: center;\n  pointer-events: auto;\n  cursor: pointer;\n  z-index: 10;\n}\n.gantt-custom-event:hover .gantt-custom-event_line {\n  background: #d14900;\n  width: 2px;\n  margin-left: 14px;\n}\n.gantt-custom-event_line {\n  width: 1px;\n  background: #a83000;\n  margin-left: 15px;\n  height: 100%;\n  transition: all 0.2s ease;\n}\n.gantt-custom-event_flag {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  background: #a83000;\n  color: white;\n  padding: 6px 10px;\n  border-radius: 6px;\n  font-size: 12px;\n  font-weight: 500;\n  white-space: nowrap;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\n  z-index: 15;\n  animation: fadeInFlag 0.2s ease-out;\n  pointer-events: none;\n}\n.gantt-custom-event_flag::after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 0;\n  height: 0;\n  border-left: 6px solid transparent;\n  border-right: 6px solid transparent;\n  border-top: 6px solid #a83000;\n}\n@keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n.gantt-custom-event_title {\n  display: block;\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n";
+styleInject(css_248z$c);
 
 var CustomEvents = function CustomEvents() {
   var _useContext = useContext(context),
@@ -4475,8 +4475,8 @@ var CustomEvents = function CustomEvents() {
 };
 var CustomEvents$1 = observer(CustomEvents);
 
-var css_248z$c = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
-styleInject(css_248z$c);
+var css_248z$b = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
+styleInject(css_248z$b);
 
 var Chart = function Chart() {
   var _useContext = useContext(context),
@@ -4767,8 +4767,8 @@ function useDragResize(handleResize, _ref) {
   return [handleMouseDown, resizing];
 }
 
-var css_248z$b = ".gantt-divider {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  cursor: col-resize;\n}\n.gantt-divider:hover hr {\n  border-color: #3b88f4;\n}\n.gantt-divider:hover hr:before {\n  background: #3b88f4;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper {\n  background-color: #3b88f4;\n  border-color: #3b88f4;\n  border-top: 0;\n  border-bottom: 0;\n  cursor: pointer;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper:after {\n  content: '';\n  right: -3px;\n  position: absolute;\n  width: 2px;\n  height: 30px;\n  background-color: transparent;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:after,\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:before {\n  background-color: #fff;\n}\n.gantt-divider > hr {\n  margin: 0;\n  height: 100%;\n  width: 0;\n  border: none;\n  border-right: 1px solid transparent;\n}\n.gantt-divider > .gantt-divider-icon-wrapper {\n  position: absolute;\n  left: 1px;\n  top: 50%;\n  transform: translateY(-50%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 14px;\n  height: 30px;\n  border-radius: 0 4px 4px 0;\n  border: 1px solid #f0f0f0;\n  border-left: 0;\n  background-color: #fff;\n}\n.gantt-divider-arrow:before {\n  bottom: -1px;\n  transform: rotate(30deg);\n}\n.gantt-divider-arrow:after {\n  top: -1px;\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow:after,\n.gantt-divider-arrow:before {\n  content: '';\n  display: block;\n  position: relative;\n  width: 2px;\n  height: 8px;\n  background-color: #bfbfbf;\n  border-radius: 1px;\n}\n.gantt-divider-arrow.gantt-divider-reverse:before {\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow.gantt-divider-reverse:after {\n  transform: rotate(30deg);\n}\n.gantt-divider_only > hr:before {\n  content: '';\n  position: absolute;\n  border-top: 7px solid white;\n  border-bottom: 7px solid white;\n  background: #a7add0;\n  z-index: 2;\n  height: 26px;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 2px;\n}\n.gantt-divider_only > hr {\n  border-color: #a7add0;\n}\n";
-styleInject(css_248z$b);
+var css_248z$a = ".gantt-divider {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  cursor: col-resize;\n}\n.gantt-divider:hover hr {\n  border-color: #3b88f4;\n}\n.gantt-divider:hover hr:before {\n  background: #3b88f4;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper {\n  background-color: #3b88f4;\n  border-color: #3b88f4;\n  border-top: 0;\n  border-bottom: 0;\n  cursor: pointer;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper:after {\n  content: '';\n  right: -3px;\n  position: absolute;\n  width: 2px;\n  height: 30px;\n  background-color: transparent;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:after,\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:before {\n  background-color: #fff;\n}\n.gantt-divider > hr {\n  margin: 0;\n  height: 100%;\n  width: 0;\n  border: none;\n  border-right: 1px solid transparent;\n}\n.gantt-divider > .gantt-divider-icon-wrapper {\n  position: absolute;\n  left: 1px;\n  top: 50%;\n  transform: translateY(-50%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 14px;\n  height: 30px;\n  border-radius: 0 4px 4px 0;\n  border: 1px solid #f0f0f0;\n  border-left: 0;\n  background-color: #fff;\n}\n.gantt-divider-arrow:before {\n  bottom: -1px;\n  transform: rotate(30deg);\n}\n.gantt-divider-arrow:after {\n  top: -1px;\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow:after,\n.gantt-divider-arrow:before {\n  content: '';\n  display: block;\n  position: relative;\n  width: 2px;\n  height: 8px;\n  background-color: #bfbfbf;\n  border-radius: 1px;\n}\n.gantt-divider-arrow.gantt-divider-reverse:before {\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow.gantt-divider-reverse:after {\n  transform: rotate(30deg);\n}\n.gantt-divider_only > hr:before {\n  content: '';\n  position: absolute;\n  border-top: 7px solid white;\n  border-bottom: 7px solid white;\n  background: #a7add0;\n  z-index: 2;\n  height: 26px;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 2px;\n}\n.gantt-divider_only > hr {\n  border-color: #a7add0;\n}\n";
+styleInject(css_248z$a);
 
 var Divider = function Divider() {
   var _useContext = useContext(context),
@@ -4826,8 +4826,8 @@ var Divider = function Divider() {
 };
 var Divider$1 = observer(Divider);
 
-var css_248z$a = ".gantt-scroll_bar {\n  position: absolute;\n  bottom: 0;\n  left: 16px;\n  height: 12px;\n}\n.gantt-scroll_bar-thumb {\n  position: absolute;\n  height: 100%;\n  border-radius: 4px;\n  background-color: #262626;\n  opacity: 0.2;\n  cursor: pointer;\n  will-change: transform;\n}\n";
-styleInject(css_248z$a);
+var css_248z$9 = ".gantt-scroll_bar {\n  position: absolute;\n  bottom: 0;\n  left: 16px;\n  height: 12px;\n}\n.gantt-scroll_bar-thumb {\n  position: absolute;\n  height: 100%;\n  border-radius: 4px;\n  background-color: #262626;\n  opacity: 0.2;\n  cursor: pointer;\n  will-change: transform;\n}\n";
+styleInject(css_248z$9);
 
 var ScrollBar = function ScrollBar() {
   var _useContext = useContext(context),
@@ -4865,8 +4865,8 @@ var ScrollBar = function ScrollBar() {
 };
 var ScrollBar$1 = /*#__PURE__*/memo(observer(ScrollBar));
 
-var css_248z$9 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('/Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('/Top_hover.svg');\n}\n";
-styleInject(css_248z$9);
+var css_248z$8 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('/Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('/Top_hover.svg');\n}\n";
+styleInject(css_248z$8);
 
 var ScrollTop = function ScrollTop() {
   var _useContext = useContext(context),
@@ -4891,8 +4891,8 @@ var ScrollTop = function ScrollTop() {
 };
 var ScrollTop$1 = observer(ScrollTop);
 
-var css_248z$8 = ".gantt-selection-indicator {\n  position: absolute;\n  width: 100%;\n  background: rgba(0, 0, 0, 0.04);\n  pointer-events: none;\n  z-index: 10;\n}\n";
-styleInject(css_248z$8);
+var css_248z$7 = ".gantt-selection-indicator {\n  position: absolute;\n  width: 100%;\n  background: rgba(0, 0, 0, 0.04);\n  pointer-events: none;\n  z-index: 10;\n}\n";
+styleInject(css_248z$7);
 
 /**
  * 鼠标hover效果模拟
@@ -4916,8 +4916,8 @@ var SelectionIndicator = function SelectionIndicator() {
 };
 var SelectionIndicator$1 = observer(SelectionIndicator);
 
-var css_248z$7 = ".gantt-row-toggler {\n  width: 24px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: #d9d9d9;\n  cursor: pointer;\n  position: relative;\n  z-index: 5;\n}\n.gantt-row-toggler:hover {\n  color: #8c8c8c;\n}\n.gantt-row-toggler > i {\n  width: 20px;\n  height: 20px;\n  background: white;\n}\n.gantt-row-toggler > i > svg {\n  transition: transform 218ms;\n  fill: currentColor;\n}\n.gantt-row-toggler-collapsed > i > svg {\n  transform: rotate(-90deg);\n}\n";
-styleInject(css_248z$7);
+var css_248z$6 = ".gantt-row-toggler {\n  width: 24px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: #d9d9d9;\n  cursor: pointer;\n  position: relative;\n  z-index: 5;\n}\n.gantt-row-toggler:hover {\n  color: #8c8c8c;\n}\n.gantt-row-toggler > i {\n  width: 20px;\n  height: 20px;\n  background: white;\n}\n.gantt-row-toggler > i > svg {\n  transition: transform 218ms;\n  fill: currentColor;\n}\n.gantt-row-toggler-collapsed > i > svg {\n  transform: rotate(-90deg);\n}\n";
+styleInject(css_248z$6);
 
 var RowToggler = function RowToggler(_ref) {
   var onClick = _ref.onClick,
@@ -5207,8 +5207,8 @@ var renderCell = function renderCell(value, record, column) {
   }
 };
 
-var css_248z$6 = ".gantt-table-body {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  border-bottom: 1px solid #f0f0f0;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  padding: 0;\n  font-size: 14px;\n  box-sizing: border-box;\n  flex-shrink: 0;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
-styleInject(css_248z$6);
+var css_248z$5 = ".gantt-table-body {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  border-bottom: 1px solid #f0f0f0;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  padding: 0;\n  font-size: 14px;\n  box-sizing: border-box;\n  flex-shrink: 0;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
+styleInject(css_248z$5);
 
 var TableRows = function TableRows() {
   var _useContext = useContext(context),
@@ -5326,36 +5326,10 @@ var TableRows = function TableRows() {
   }));
 };
 var ObserverTableRows = observer(TableRows);
-var TableBorders = function TableBorders() {
+var TableBody = function TableBody() {
   var _useContext2 = useContext(context),
     store = _useContext2.store,
     prefixCls = _useContext2.prefixCls;
-  var columns = store.getVisibleColumns;
-  var columnsWidth = store.getColumnsWidth;
-  var barList = store.getBarList;
-  if (barList.length === 0) return null;
-  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
-  return /*#__PURE__*/React.createElement("div", {
-    role: 'none',
-    className: "".concat(prefixClsTableBody, "-border_row")
-  }, columns.map(function (column, index) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: column.name,
-      className: "".concat(prefixClsTableBody, "-cell"),
-      style: _objectSpread2({
-        width: columnsWidth[index],
-        minWidth: column.minWidth,
-        maxWidth: column.maxWidth,
-        textAlign: column.align ? column.align : 'left'
-      }, column.style)
-    });
-  }));
-};
-var ObserverTableBorders = observer(TableBorders);
-var TableBody = function TableBody() {
-  var _useContext3 = useContext(context),
-    store = _useContext3.store,
-    prefixCls = _useContext3.prefixCls;
   var translateY = store.translateY;
   var handleMouseMove = useCallback(function (event) {
     event.persist();
@@ -5380,42 +5354,9 @@ var TableBody = function TableBody() {
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
     onScroll: handleScroll
-  }, /*#__PURE__*/React.createElement(ObserverTableRows, null), /*#__PURE__*/React.createElement(ObserverTableBorders, null));
+  }, /*#__PURE__*/React.createElement(ObserverTableRows, null));
 };
 var TableBody$1 = observer(TableBody);
-
-var css_248z$5 = ".gantt-table-header-resize-handle {\n  position: absolute;\n  top: 0;\n  right: -6px;\n  width: 10px;\n  height: 100%;\n  cursor: col-resize;\n  z-index: 999;\n}\n.gantt-table-header-resize-handle:hover::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 3px;\n  height: 100%;\n  background-color: #1890ff;\n}\n.gantt-table-header-resize-handle-active::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 3px;\n  height: 100%;\n  background-color: #1890ff;\n}\n";
-styleInject(css_248z$5);
-
-var ResizeHandle = function ResizeHandle(_ref) {
-  var onResize = _ref.onResize,
-    prefixCls = _ref.prefixCls;
-  var _useState = useState(false),
-    _useState2 = _slicedToArray(_useState, 2),
-    isDragging = _useState2[0],
-    setIsDragging = _useState2[1];
-  var handleMouseDown = useCallback(function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-    var startX = e.clientX;
-    var handleMouseMove = function handleMouseMove(moveEvent) {
-      var deltaX = moveEvent.clientX - startX;
-      onResize(deltaX);
-    };
-    var _handleMouseUp = function handleMouseUp() {
-      setIsDragging(false);
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', _handleMouseUp);
-    };
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', _handleMouseUp);
-  }, [onResize]);
-  return /*#__PURE__*/React.createElement("div", {
-    className: "".concat(prefixCls, "-resize-handle ").concat(isDragging ? "".concat(prefixCls, "-resize-handle-active") : ''),
-    onMouseDown: handleMouseDown
-  });
-};
 
 var css_248z$4 = ".gantt-table-header {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n  height: 56px;\n}\n.gantt-table-header-head {\n  position: relative;\n}\n.gantt-table-header-row {\n  display: flex;\n  width: 100%;\n}\n.gantt-table-header-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  border-bottom: 1px solid #f0f0f0;\n  font-weight: 500;\n  background: #fafafa;\n  padding: 0;\n  box-sizing: border-box;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  font-size: 14px;\n  color: #2e405e;\n  flex-shrink: 0;\n  overflow: visible;\n}\n.gantt-table-header-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n  padding-right: 10px;\n}\n";
 styleInject(css_248z$4);
@@ -5429,12 +5370,6 @@ var TableHeader = function TableHeader() {
   var columnsWidth = store.getColumnsWidth;
   var totalWidth = store.totalColumnWidth;
   var prefixClsTableHeader = "".concat(prefixCls, "-table-header");
-  var handleResize = useCallback(function (columnName, initialWidth) {
-    return function (deltaX) {
-      var newWidth = Math.max(initialWidth + deltaX, 50);
-      store.setColumnWidth(columnName, newWidth);
-    };
-  }, [store]);
   var handleScroll = useCallback(function (e) {
     var tableBody = store.tableBodyRef.current;
     if (tableBody && tableBody.scrollLeft !== e.currentTarget.scrollLeft) tableBody.scrollLeft = e.currentTarget.scrollLeft;
@@ -5478,10 +5413,7 @@ var TableHeader = function TableHeader() {
         display: 'inline-flex',
         alignItems: 'center'
       }
-    }, column.icon)), column.label), /*#__PURE__*/React.createElement(ResizeHandle, {
-      onResize: handleResize(column.name, columnsWidth[index]),
-      prefixCls: prefixClsTableHeader
-    }));
+    }, column.icon)), column.label));
   }), renderCustomHeaderFilter ? renderCustomHeaderFilter() : null)));
 };
 var TableHeader$1 = observer(TableHeader);
@@ -6289,17 +6221,6 @@ var GanttStore = /*#__PURE__*/function () {
       this.columnConfig = columnConfig;
     }
   }, {
-    key: "setColumnWidth",
-    value: function setColumnWidth(columnName, width) {
-      if (!this.columnConfig) {
-        this.columnConfig = {};
-      }
-      if (!this.columnConfig.columnWidths) {
-        this.columnConfig.columnWidths = {};
-      }
-      this.columnConfig.columnWidths[columnName] = width;
-    }
-  }, {
     key: "setCustomFields",
     value: function setCustomFields(customFields) {
       this.customFields = customFields;
@@ -7035,7 +6956,6 @@ __decorate([action], GanttStore.prototype, "setCustomEvents", null);
 __decorate([action], GanttStore.prototype, "setOnUpdate", null);
 __decorate([action], GanttStore.prototype, "setColumns", null);
 __decorate([action], GanttStore.prototype, "setColumnConfig", null);
-__decorate([action], GanttStore.prototype, "setColumnWidth", null);
 __decorate([action], GanttStore.prototype, "setCustomFields", null);
 __decorate([action], GanttStore.prototype, "setDependencies", null);
 __decorate([action], GanttStore.prototype, "setTimeline", null);

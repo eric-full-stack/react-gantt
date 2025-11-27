@@ -88,7 +88,6 @@ declare class GanttStore {
     setOnUpdate(onUpdate: Gantt.UpdateCallback): void;
     setColumns(columns: Gantt.Column[]): void;
     setColumnConfig(columnConfig?: Gantt.ColumnConfig): void;
-    setColumnWidth(columnName: string, width: number): void;
     setCustomFields(customFields: Gantt.CustomField[]): void;
     setDependencies(dependencies: Gantt.Dependence[]): void;
     setTimeline(active: boolean): void;

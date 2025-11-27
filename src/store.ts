@@ -233,17 +233,6 @@ class GanttStore {
   }
 
   @action
-  setColumnWidth(columnName: string, width: number) {
-    if (!this.columnConfig) {
-      this.columnConfig = {}
-    }
-    if (!this.columnConfig.columnWidths) {
-      this.columnConfig.columnWidths = {}
-    }
-    this.columnConfig.columnWidths[columnName] = width
-  }
-
-  @action
   setCustomFields(customFields: Gantt.CustomField[]) {
     this.customFields = customFields
   }
