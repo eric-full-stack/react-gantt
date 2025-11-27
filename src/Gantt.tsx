@@ -89,6 +89,11 @@ export interface GanttProps<RecordType = DefaultRecordType> {
    * Lista de campos customizados disponíveis
    */
   customFields?: Gantt.CustomField[]
+
+  /**
+   * Largura inicial da tabela lateral
+   */
+  tableWidth?: number
 }
 export interface GanttRef {
   backToday: () => void
@@ -136,6 +141,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     onCustomEventClick,
     columnConfig,
     customFields = [],
+    tableWidth,
   } = props
 
   const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale }), [rowHeight])
@@ -182,6 +188,12 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   useEffect(() => {
     store.setHideTable(hideTable)
   }, [hideTable])
+
+  useEffect(() => {
+    if (tableWidth !== undefined) {
+      store.setTableWidth(tableWidth)
+    }
+  }, [tableWidth, store])
 
   useEffect(() => {
     if (isRestDay) store.setIsRestDay(isRestDay)

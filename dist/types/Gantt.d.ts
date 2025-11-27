@@ -55,10 +55,14 @@ export interface GanttProps<RecordType = DefaultRecordType> {
      * Lista de campos customizados disponíveis
      */
     customFields?: Gantt.CustomField[];
+    /**
+     * Largura inicial da tabela lateral
+     */
+    tableWidth?: number;
 }
 export interface GanttRef {
     backToday: () => void;
     getWidthByDate: (startDate: Dayjs, endDate: Dayjs) => number;
 }
-declare const GanttComponent: <RecordType extends DefaultRecordType>(props: GanttProps<RecordType>) => JSX.Element;
+declare const GanttComponent: <RecordType extends DefaultRecordType>(props: GanttProps<RecordType>) => React.JSX.Element;
 export default GanttComponent;

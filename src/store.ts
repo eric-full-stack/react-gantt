@@ -309,6 +309,11 @@ class GanttStore {
     this.viewWidth = this.width - this.tableWidth
   }
 
+  @action setTableWidth(width: number) {
+    this.tableWidth = width
+    this.viewWidth = this.width - this.tableWidth
+  }
+
   @action initWidth() {
     this.tableWidth = this.totalColumnWidth || 250
     this.viewWidth = this.width - this.tableWidth

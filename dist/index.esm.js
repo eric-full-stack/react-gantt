@@ -7,139 +7,142 @@ import dayjs from 'dayjs';
 import { observable, action, computed, runInAction, toJS } from 'mobx';
 import dayjsBusinessDays from 'dayjs-business-days';
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
+function _typeof(o) {
+  "@babel/helpers - typeof";
 
-  return obj;
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, _typeof(o);
 }
 
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
 
+function toPropertyKey(t) {
+  var i = toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : i + "";
+}
+
+function _defineProperty(e, r, t) {
+  return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
+
+function ownKeys(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function (r) {
+      return Object.getOwnPropertyDescriptor(e, r).enumerable;
+    })), t.push.apply(t, o);
   }
-
-  return keys;
+  return t;
 }
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread2(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
+      _defineProperty(e, r, t[r]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
+      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
     });
   }
-
-  return target;
+  return e;
 }
 
 var context = /*#__PURE__*/createContext({});
 
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
+function _arrayLikeToArray(r, a) {
+  (null == a || a > r.length) && (a = r.length);
+  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+  return n;
+}
 
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
+function _unsupportedIterableToArray(r, a) {
+  if (r) {
+    if ("string" == typeof r) return _arrayLikeToArray(r, a);
+    var t = {}.toString.call(r).slice(8, -1);
+    return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
   }
-
-  return arr2;
 }
 
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-
-function _createForOfIteratorHelper(o, allowArrayLike) {
-  var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
-
-  if (!it) {
-    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-      if (it) o = it;
-      var i = 0;
-
-      var F = function F() {};
-
+function _createForOfIteratorHelper(r, e) {
+  var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (!t) {
+    if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) {
+      t && (r = t);
+      var _n = 0,
+        F = function F() {};
       return {
         s: F,
         n: function n() {
-          if (i >= o.length) return {
-            done: true
-          };
-          return {
-            done: false,
-            value: o[i++]
+          return _n >= r.length ? {
+            done: !0
+          } : {
+            done: !1,
+            value: r[_n++]
           };
         },
-        e: function e(_e) {
-          throw _e;
+        e: function e(r) {
+          throw r;
         },
         f: F
       };
     }
-
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-
-  var normalCompletion = true,
-      didErr = false,
-      err;
+  var o,
+    a = !0,
+    u = !1;
   return {
     s: function s() {
-      it = it.call(o);
+      t = t.call(r);
     },
     n: function n() {
-      var step = it.next();
-      normalCompletion = step.done;
-      return step;
+      var r = t.next();
+      return a = r.done, r;
     },
-    e: function e(_e2) {
-      didErr = true;
-      err = _e2;
+    e: function e(r) {
+      u = !0, o = r;
     },
     f: function f() {
       try {
-        if (!normalCompletion && it["return"] != null) it["return"]();
+        a || null == t["return"] || t["return"]();
       } finally {
-        if (didErr) throw err;
+        if (u) throw o;
       }
     }
   };
 }
 
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+function _arrayWithoutHoles(r) {
+  if (Array.isArray(r)) return _arrayLikeToArray(r);
 }
 
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+function _iterableToArray(r) {
+  if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
 }
 
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+function _toConsumableArray(r) {
+  return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread();
 }
 
 /**
@@ -155,7 +158,6 @@ function flattenDeep() {
   var index = 0;
   return array.reduce(function (flat, item) {
     var _a, _b;
-
     item._depth = depth;
     item._parent = parent;
     item._index = index;
@@ -167,26 +169,21 @@ function getMaxRange(bar) {
   var minTranslateX = 0;
   var maxTranslateX = 0;
   var temporary = [bar];
-
   while (temporary.length > 0) {
     var current = temporary.shift();
-
     if (current) {
       var _current$translateX = current.translateX,
-          translateX = _current$translateX === void 0 ? 0 : _current$translateX,
-          _current$width = current.width,
-          width = _current$width === void 0 ? 0 : _current$width;
+        translateX = _current$translateX === void 0 ? 0 : _current$translateX,
+        _current$width = current.width,
+        width = _current$width === void 0 ? 0 : _current$width;
       if (minTranslateX === 0) minTranslateX = translateX || 0;
-
       if (translateX) {
         minTranslateX = Math.min(translateX, minTranslateX);
         maxTranslateX = Math.max(translateX + width, maxTranslateX);
       }
-
       if (current.task.children && current.task.children.length > 0) {
         var _iterator = _createForOfIteratorHelper(current.task.children),
-            _step;
-
+          _step;
         try {
           for (_iterator.s(); !(_step = _iterator.n()).done;) {
             var t = _step.value;
@@ -200,29 +197,24 @@ function getMaxRange(bar) {
       }
     }
   }
-
   return {
     translateX: minTranslateX,
     width: maxTranslateX - minTranslateX
   };
 }
-
 var genKey = function () {
   var key = 0;
   return function () {
     return key++;
   };
 }();
-
 function transverseData() {
   var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var startDateKey = arguments.length > 1 ? arguments[1] : undefined;
   var endDateKey = arguments.length > 2 ? arguments[2] : undefined;
   var result = [];
-
   var _iterator2 = _createForOfIteratorHelper(data),
-      _step2;
-
+    _step2;
   try {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var record = _step2.value;
@@ -245,7 +237,6 @@ function transverseData() {
   } finally {
     _iterator2.f();
   }
-
   return result;
 }
 
@@ -280,20 +271,15 @@ var css_248z$j = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 
 styleInject(css_248z$j);
 
 var height = 8;
-
 var GroupBar = function GroupBar(_ref) {
   var data = _ref.data;
-
   var _useContext = useContext(context),
-      prefixCls = _useContext.prefixCls,
-      renderGroupBar = _useContext.renderGroupBar;
-
+    prefixCls = _useContext.prefixCls,
+    renderGroupBar = _useContext.renderGroupBar;
   var translateY = data.translateY;
-
   var _getMaxRange = getMaxRange(data),
-      translateX = _getMaxRange.translateX,
-      width = _getMaxRange.width;
-
+    translateX = _getMaxRange.translateX,
+    width = _getMaxRange.width;
   return /*#__PURE__*/React.createElement("div", {
     role: "none",
     className: classNames("".concat(prefixCls, "-group-bar")),
@@ -305,7 +291,7 @@ var GroupBar = function GroupBar(_ref) {
   }, renderGroupBar ? renderGroupBar(data, {
     width: width,
     height: height
-  }) : /*#__PURE__*/React.createElement("svg", {
+  }) : (/*#__PURE__*/React.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     version: "1.1",
     width: width + 1,
@@ -314,157 +300,122 @@ var GroupBar = function GroupBar(_ref) {
   }, /*#__PURE__*/React.createElement("path", {
     fill: data.record.background || '#7B809E',
     d: "\n              M".concat(width - 2, ",0.5\n              l-").concat(width - 4, ",0\n              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n              l0,13.65\n              l6,-7\n              l").concat(width - 12, ",0\n              l6,7\n              l0,-13.65\n              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n            ")
-  })))));
+  }))))));
 };
-
 var GroupBar$1 = observer(GroupBar);
 
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
+function _arrayWithHoles(r) {
+  if (Array.isArray(r)) return r;
 }
 
-function _iterableToArrayLimit(arr, i) {
-  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-
-  if (_i == null) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-
-  var _s, _e;
-
-  try {
-    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
+function _iterableToArrayLimit(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e,
+      n,
+      i,
+      u,
+      a = [],
+      f = !0,
+      o = !1;
     try {
-      if (!_n && _i["return"] != null) _i["return"]();
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t) return;
+        f = !1;
+      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
+    } catch (r) {
+      o = !0, n = r;
     } finally {
-      if (_d) throw _e;
+      try {
+        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
+      } finally {
+        if (o) throw n;
+      }
     }
+    return a;
   }
-
-  return _arr;
 }
 
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+function _slicedToArray(r, e) {
+  return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
 }
 
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
+function _objectWithoutPropertiesLoose(r, e) {
+  if (null == r) return {};
+  var t = {};
+  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
+    if (-1 !== e.indexOf(n)) continue;
+    t[n] = r[n];
   }
-
-  return target;
+  return t;
 }
 
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = _objectWithoutPropertiesLoose(source, excluded);
-  var key, i;
-
+function _objectWithoutProperties(e, t) {
+  if (null == e) return {};
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose(e, t);
   if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
+    var n = Object.getOwnPropertySymbols(e);
+    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
   }
-
-  return target;
+  return i;
 }
 
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+function _defineProperties(e, r) {
+  for (var t = 0; t < r.length; t++) {
+    var o = r[t];
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, toPropertyKey(o.key), o);
   }
 }
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  Object.defineProperty(Constructor, "prototype", {
-    writable: false
-  });
-  return Constructor;
+function _createClass(e, r, t) {
+  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
+    writable: !1
+  }), e;
 }
 
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
+function _classCallCheck(a, n) {
+  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
 
 var AutoScroller = /*#__PURE__*/_createClass(function AutoScroller(_ref) {
   var _this = this;
-
   var scroller = _ref.scroller,
-      _ref$rate = _ref.rate,
-      rate = _ref$rate === void 0 ? 5 : _ref$rate,
-      _ref$space = _ref.space,
-      space = _ref$space === void 0 ? 50 : _ref$space,
-      onAutoScroll = _ref.onAutoScroll,
-      reachEdge = _ref.reachEdge;
-
+    _ref$rate = _ref.rate,
+    rate = _ref$rate === void 0 ? 5 : _ref$rate,
+    _ref$space = _ref.space,
+    space = _ref$space === void 0 ? 50 : _ref$space,
+    onAutoScroll = _ref.onAutoScroll,
+    reachEdge = _ref.reachEdge;
   _classCallCheck(this, AutoScroller);
-
   this.scroller = null;
   this.autoScrollPos = 0;
   this.clientX = null;
   this.scrollTimer = null;
-
   this.handleDraggingMouseMove = function (event) {
     _this.clientX = event.clientX;
   };
-
   this.handleScroll = function (position) {
     if (_this.reachEdge(position)) {
       return;
     }
-
     if (position === 'left') {
       _this.autoScrollPos -= _this.rate;
-
       _this.onAutoScroll(-_this.rate);
     } else if (position === 'right') {
       _this.autoScrollPos += _this.rate;
-
       _this.onAutoScroll(_this.rate);
     }
   };
-
   this.start = function () {
     _this.autoScrollPos = 0;
     document.addEventListener('mousemove', _this.handleDraggingMouseMove);
-
-    var scrollFunc = function scrollFunc() {
+    var _scrollFunc = function scrollFunc() {
       var _a, _b;
-
       if (_this.scroller && _this.clientX !== null) {
         if (_this.clientX + _this.space > ((_a = _this.scroller) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect().right)) {
           _this.handleScroll('right');
@@ -472,22 +423,17 @@ var AutoScroller = /*#__PURE__*/_createClass(function AutoScroller(_ref) {
           _this.handleScroll('left');
         }
       }
-
-      _this.scrollTimer = requestAnimationFrame(scrollFunc);
+      _this.scrollTimer = requestAnimationFrame(_scrollFunc);
     };
-
-    _this.scrollTimer = requestAnimationFrame(scrollFunc);
-  }; // 停止自动滚动
-
-
+    _this.scrollTimer = requestAnimationFrame(_scrollFunc);
+  };
+  // 停止自动滚动
   this.stop = function () {
     document.removeEventListener('mousemove', _this.handleDraggingMouseMove);
-
     if (_this.scrollTimer) {
       cancelAnimationFrame(_this.scrollTimer);
     }
   };
-
   this.scroller = scroller || null;
   this.rate = rate;
   this.space = space;
@@ -496,49 +442,45 @@ var AutoScroller = /*#__PURE__*/_createClass(function AutoScroller(_ref) {
 });
 
 var _excluded = ["type", "onBeforeResize", "onResize", "onResizeEnd", "minWidth", "grid", "defaultSize", "scroller", "autoScroll", "onAutoScroll", "reachEdge", "clickStart", "children", "disabled"];
-
 var snap = function snap(n, size) {
   return Math.round(n / size) * size;
 };
-
 var DragResize = function DragResize(_ref) {
   var type = _ref.type,
-      onBeforeResize = _ref.onBeforeResize,
-      onResize = _ref.onResize,
-      onResizeEnd = _ref.onResizeEnd,
-      _ref$minWidth = _ref.minWidth,
-      minWidth = _ref$minWidth === void 0 ? 0 : _ref$minWidth,
-      grid = _ref.grid,
-      _ref$defaultSize = _ref.defaultSize,
-      defaultX = _ref$defaultSize.x,
-      defaultWidth = _ref$defaultSize.width,
-      defaultY = _ref$defaultSize.y,
-      defaultHeight = _ref$defaultSize.height,
-      scroller = _ref.scroller,
-      _ref$autoScroll = _ref.autoScroll,
-      enableAutoScroll = _ref$autoScroll === void 0 ? true : _ref$autoScroll,
-      onAutoScroll = _ref.onAutoScroll,
-      _ref$reachEdge = _ref.reachEdge,
-      reachEdge = _ref$reachEdge === void 0 ? function () {
-    return false;
-  } : _ref$reachEdge,
-      _ref$clickStart = _ref.clickStart,
-      clickStart = _ref$clickStart === void 0 ? false : _ref$clickStart,
-      children = _ref.children,
-      _ref$disabled = _ref.disabled,
-      disabled = _ref$disabled === void 0 ? false : _ref$disabled,
-      otherProps = _objectWithoutProperties(_ref, _excluded);
-
+    onBeforeResize = _ref.onBeforeResize,
+    onResize = _ref.onResize,
+    onResizeEnd = _ref.onResizeEnd,
+    _ref$minWidth = _ref.minWidth,
+    minWidth = _ref$minWidth === void 0 ? 0 : _ref$minWidth,
+    grid = _ref.grid,
+    _ref$defaultSize = _ref.defaultSize,
+    defaultX = _ref$defaultSize.x,
+    defaultWidth = _ref$defaultSize.width,
+    defaultY = _ref$defaultSize.y,
+    defaultHeight = _ref$defaultSize.height,
+    scroller = _ref.scroller,
+    _ref$autoScroll = _ref.autoScroll,
+    enableAutoScroll = _ref$autoScroll === void 0 ? true : _ref$autoScroll,
+    onAutoScroll = _ref.onAutoScroll,
+    _ref$reachEdge = _ref.reachEdge,
+    reachEdge = _ref$reachEdge === void 0 ? function () {
+      return false;
+    } : _ref$reachEdge,
+    _ref$clickStart = _ref.clickStart,
+    clickStart = _ref$clickStart === void 0 ? false : _ref$clickStart,
+    children = _ref.children,
+    _ref$disabled = _ref.disabled,
+    disabled = _ref$disabled === void 0 ? false : _ref$disabled,
+    otherProps = _objectWithoutProperties(_ref, _excluded);
   var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      resizing = _useState2[0],
-      setResizing = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    resizing = _useState2[0],
+    setResizing = _useState2[1];
   var handleAutoScroll = usePersistFn(function (delta) {
     updateSize();
     onAutoScroll(delta);
-  }); // TODO persist reachEdge
-
+  });
+  // TODO persist reachEdge
   var autoScroll = useMemo(function () {
     return new AutoScroller({
       scroller: scroller,
@@ -562,20 +504,16 @@ var DragResize = function DragResize(_ref) {
     if (disabled) return;
     var distance = moveRef.current.clientX - positionRef.current.clientX + autoScroll.autoScrollPos;
     var distanceY = moveRef.current.clientY - positionRef.current.clientY + autoScroll.autoScrollPos;
-
     switch (type) {
       case 'left':
         {
           var width = positionRef.current.width - distance;
-
           if (minWidth !== undefined) {
             width = Math.max(width, minWidth);
           }
-
           if (grid) {
             width = snap(width, grid);
           }
-
           var pos = width - positionRef.current.width;
           var x = positionRef.current.x - pos;
           onResize({
@@ -587,19 +525,15 @@ var DragResize = function DragResize(_ref) {
           break;
         }
       // 向右，x不变，只变宽度
-
       case 'right':
         {
           var _width = positionRef.current.width + distance;
-
           if (minWidth !== undefined) {
             _width = Math.max(_width, minWidth);
           }
-
           if (grid) {
             _width = snap(_width, grid);
           }
-
           var _x = positionRef.current.x;
           onResize({
             width: _width,
@@ -609,20 +543,16 @@ var DragResize = function DragResize(_ref) {
           });
           break;
         }
-
       case 'move':
         {
           var _positionRef$current = positionRef.current,
-              _width2 = _positionRef$current.width,
-              height = _positionRef$current.height;
+            _width2 = _positionRef$current.width,
+            height = _positionRef$current.height;
           var rightDistance = distance;
-
           if (grid) {
             rightDistance = snap(distance, grid);
           }
-
           var _x2 = positionRef.current.x + rightDistance;
-
           var y = positionRef.current.y + distanceY;
           onResize({
             width: _width2,
@@ -636,15 +566,12 @@ var DragResize = function DragResize(_ref) {
   });
   var handleMouseMove = usePersistFn(function (event) {
     if (disabled) return;
-
     if (!resizing) {
       setResizing(true);
-
       if (!clickStart) {
         onBeforeResize && onBeforeResize();
       }
     }
-
     moveRef.current.clientX = event.clientX;
     moveRef.current.clientY = event.clientY;
     updateSize();
@@ -654,7 +581,6 @@ var DragResize = function DragResize(_ref) {
     autoScroll.stop();
     window.removeEventListener('mousemove', handleMouseMove);
     window.removeEventListener('mouseup', handleMouseUp);
-
     if (resizing) {
       setResizing(false);
       onResizeEnd && onResizeEnd({
@@ -668,16 +594,13 @@ var DragResize = function DragResize(_ref) {
   var handleMouseDown = usePersistFn(function (event) {
     if (disabled) return;
     event.stopPropagation();
-
     if (enableAutoScroll && scroller) {
       autoScroll.start();
     }
-
     if (clickStart) {
       onBeforeResize && onBeforeResize();
       setResizing(true);
     }
-
     positionRef.current.clientX = event.clientX;
     positionRef.current.clientY = event.clientY;
     positionRef.current.x = defaultX;
@@ -690,7 +613,7 @@ var DragResize = function DragResize(_ref) {
   return /*#__PURE__*/React.createElement("div", _objectSpread2({
     role: "none",
     onMouseDown: handleMouseDown
-  }, otherProps), resizing && /*#__PURE__*/createPortal( /*#__PURE__*/React.createElement("div", {
+  }, otherProps), resizing && /*#__PURE__*/createPortal(/*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       top: 0,
@@ -702,7 +625,6 @@ var DragResize = function DragResize(_ref) {
     }
   }), document.body), children);
 };
-
 var DragResize$1 = observer(DragResize);
 
 var css_248z$i = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
@@ -710,43 +632,35 @@ styleInject(css_248z$i);
 
 var barH = 8;
 var startX = 0;
-
 var renderInvalidBarDefault = function renderInvalidBarDefault(element) {
   return element;
 };
-
 var InvalidTaskBar = function InvalidTaskBar(_ref) {
   var data = _ref.data;
-
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls,
-      _useContext$renderInv = _useContext.renderInvalidBar,
-      renderInvalidBar = _useContext$renderInv === void 0 ? renderInvalidBarDefault : _useContext$renderInv;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls,
+    _useContext$renderInv = _useContext.renderInvalidBar,
+    renderInvalidBar = _useContext$renderInv === void 0 ? renderInvalidBarDefault : _useContext$renderInv;
   var triggerRef = useRef(null);
   var translateY = data.translateY,
-      translateX = data.translateX,
-      width = data.width,
-      dateTextFormat = data.dateTextFormat,
-      record = data.record;
-
+    translateX = data.translateX,
+    width = data.width,
+    dateTextFormat = data.dateTextFormat,
+    record = data.record;
   var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      visible = _useState2[0],
-      setVisible = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    visible = _useState2[0],
+    setVisible = _useState2[1];
   var _ref2 = record || {},
-      _ref2$disabled = _ref2.disabled,
-      disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
-
+    _ref2$disabled = _ref2.disabled,
+    disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
   var viewTranslateX = store.translateX,
-      rowHeight = store.rowHeight;
+    rowHeight = store.rowHeight;
   var top = translateY;
   var prefixClsInvalidTaskBar = "".concat(prefixCls, "-invalid-task-bar");
   var handleMouseEnter = useCallback(function () {
     var _a, _b;
-
     if (data.stepGesture === 'moving') return;
     startX = ((_b = (_a = triggerRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect()) === null || _b === void 0 ? void 0 : _b.left) || 0;
     setVisible(true);
@@ -758,22 +672,19 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
   }, [data.stepGesture, store]);
   var handleMouseMove = useCallback(function (event) {
     if (data.stepGesture === 'moving') return;
-    var pointerX = viewTranslateX + (event.clientX - startX); // eslint-disable-next-line no-shadow
-
+    var pointerX = viewTranslateX + (event.clientX - startX);
+    // eslint-disable-next-line no-shadow
     var _store$startXRectBar = store.startXRectBar(pointerX),
-        left = _store$startXRectBar.left,
-        width = _store$startXRectBar.width;
-
+      left = _store$startXRectBar.left,
+      width = _store$startXRectBar.width;
     store.handleInvalidBarHover(data, left, Math.ceil(width));
   }, [data, store, viewTranslateX]);
-
   var handleBeforeResize = function handleBeforeResize() {
     store.handleInvalidBarDragStart(data);
   };
-
   var handleResize = useCallback(function (_ref3) {
     var newWidth = _ref3.width,
-        x = _ref3.x;
+      x = _ref3.x;
     store.updateBarSize(data, {
       width: newWidth,
       x: x
@@ -817,7 +728,7 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
       height: rowHeight,
       transform: "translateY(".concat(top - (rowHeight - barH) / 2, "px")
     }
-  }), visible && renderInvalidBar( /*#__PURE__*/React.createElement("div", {
+  }), visible && renderInvalidBar(/*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsInvalidTaskBar, "-block"),
     "aria-haspopup": 'true',
     "aria-expanded": 'false',
@@ -840,58 +751,50 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
     }
   }, dateTextFormat(translateX + width - width / store.pxUnitAmp))), data));
 };
-
 var InvalidTaskBar$1 = observer(InvalidTaskBar);
 
 var ROW_HEIGHT = 40;
 var HEADER_HEIGHT = 56;
 var BAR_HEIGHT = 8;
 var TOP_PADDING = 0;
-var TABLE_INDENT = 30; // 图表最小比例
+var TABLE_INDENT = 30;
 
 var css_248z$h = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
 styleInject(css_248z$h);
 
 var ONE_DAY_MS$1 = 86400000;
-
 var TaskBar = function TaskBar(_ref) {
-  var _classNames;
-
   var data = _ref.data;
-
   var _useContext = useContext(context),
-      store = _useContext.store,
-      getBarColor = _useContext.getBarColor,
-      renderBar = _useContext.renderBar,
-      onBarClick = _useContext.onBarClick,
-      prefixCls = _useContext.prefixCls,
-      barHeight = _useContext.barHeight,
-      alwaysShowTaskBar = _useContext.alwaysShowTaskBar,
-      renderLeftText = _useContext.renderLeftText,
-      renderRightText = _useContext.renderRightText;
-
+    store = _useContext.store,
+    getBarColor = _useContext.getBarColor,
+    renderBar = _useContext.renderBar,
+    onBarClick = _useContext.onBarClick,
+    prefixCls = _useContext.prefixCls,
+    barHeight = _useContext.barHeight,
+    alwaysShowTaskBar = _useContext.alwaysShowTaskBar,
+    renderLeftText = _useContext.renderLeftText,
+    renderRightText = _useContext.renderRightText;
   var width = data.width,
-      translateX = data.translateX,
-      translateY = data.translateY,
-      invalidDateRange = data.invalidDateRange,
-      stepGesture = data.stepGesture,
-      dateTextFormat = data.dateTextFormat,
-      record = data.record,
-      loading = data.loading;
-
+    translateX = data.translateX,
+    translateY = data.translateY,
+    invalidDateRange = data.invalidDateRange,
+    stepGesture = data.stepGesture,
+    dateTextFormat = data.dateTextFormat,
+    record = data.record,
+    loading = data.loading;
   var _ref2 = record || {},
-      _ref2$disabled = _ref2.disabled,
-      disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
-
+    _ref2$disabled = _ref2.disabled,
+    disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
   var prefixClsTaskBar = "".concat(prefixCls, "-task-bar");
   var selectionIndicatorTop = store.selectionIndicatorTop,
-      showSelectionIndicator = store.showSelectionIndicator,
-      rowHeight = store.rowHeight,
-      locale = store.locale,
-      isTimeline = store.isTimeline;
+    showSelectionIndicator = store.showSelectionIndicator,
+    rowHeight = store.rowHeight,
+    locale = store.locale,
+    isTimeline = store.isTimeline;
   var showDragBar = useMemo(function () {
-    if (!showSelectionIndicator) return false; // 差值
-
+    if (!showSelectionIndicator) return false;
+    // 差值
     var baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2;
     return selectionIndicatorTop === translateY - baseTop;
   }, [showSelectionIndicator, selectionIndicatorTop, translateY, rowHeight, barHeight]);
@@ -899,17 +802,15 @@ var TaskBar = function TaskBar(_ref) {
     if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE'];
     return ['#FD998F', '#F96B5D'];
   }, [store.pxUnitAmp, translateX, width]);
-
   var handleBeforeResize = function handleBeforeResize(type) {
     return function () {
       if (disabled) return;
       store.handleDragStart(data, type);
     };
   };
-
   var handleResize = useCallback(function (_ref3) {
     var newWidth = _ref3.width,
-        x = _ref3.x;
+      x = _ref3.x;
     if (disabled) return;
     store.updateBarSize(data, {
       width: newWidth,
@@ -938,8 +839,8 @@ var TaskBar = function TaskBar(_ref) {
   }, [data.record, onBarClick]);
   var reachEdge = usePersistFn(function (position) {
     return position === 'left' && store.translateX <= 0;
-  }); // 根据不同的视图确定拖动时的单位，在任何视图下都以一天为单位
-
+  });
+  // 根据不同的视图确定拖动时的单位，在任何视图下都以一天为单位
   var grid = useMemo(function () {
     return ONE_DAY_MS$1 / store.pxUnitAmp;
   }, [store.pxUnitAmp]);
@@ -950,14 +851,14 @@ var TaskBar = function TaskBar(_ref) {
   }, [translateX, width, moveCalc, translateX]);
   return /*#__PURE__*/React.createElement("div", {
     role: 'none',
-    className: classNames(prefixClsTaskBar, (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTaskBar, "-invalid-date-range"), invalidDateRange), _defineProperty(_classNames, "".concat(prefixClsTaskBar, "-overdue"), !invalidDateRange), _classNames)),
+    className: classNames(prefixClsTaskBar, _defineProperty(_defineProperty({}, "".concat(prefixClsTaskBar, "-invalid-date-range"), invalidDateRange), "".concat(prefixClsTaskBar, "-overdue"), !invalidDateRange)),
     style: {
       transform: "translate(".concat(translateX, "px, ").concat(translateY, "px)")
     },
     onClick: handleClick
   }, loading && /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-loading")
-  }), /*#__PURE__*/React.createElement("div", null, allowDrag && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(DragResize$1, {
+  }), /*#__PURE__*/React.createElement("div", null, allowDrag && (/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(DragResize$1, {
     className: classNames("".concat(prefixClsTaskBar, "-resize-handle"), "".concat(prefixClsTaskBar, "-resize-handle-left"), _defineProperty({}, "".concat(prefixClsTaskBar, "-resize-handle-disabled"), disabled)),
     style: {
       left: -14
@@ -1005,7 +906,7 @@ var TaskBar = function TaskBar(_ref) {
       width: width + 30,
       left: -14
     }
-  })), /*#__PURE__*/React.createElement(DragResize$1, {
+  }))), /*#__PURE__*/React.createElement(DragResize$1, {
     className: "".concat(prefixClsTaskBar, "-bar"),
     onResize: handleResize,
     onResizeEnd: handleMoveEnd,
@@ -1025,7 +926,7 @@ var TaskBar = function TaskBar(_ref) {
   }, renderBar ? renderBar(data, {
     width: width + 1,
     height: barHeight + 1
-  }) : /*#__PURE__*/React.createElement("svg", {
+  }) : (/*#__PURE__*/React.createElement("svg", {
     xmlns: 'http://www.w3.org/2000/svg',
     version: '1.1',
     width: width + 1,
@@ -1035,12 +936,12 @@ var TaskBar = function TaskBar(_ref) {
     fill: record.backgroundColor || getBarColor && getBarColor(record).backgroundColor || themeColor[0],
     stroke: record.borderColor || getBarColor && getBarColor(record).borderColor || themeColor[1],
     d: "\n              M".concat(width - 2, ",0.5\n              l-").concat(width - 5, ",0\n              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n              l0,5.3\n\n              c0.03256,0.38255 0.20896,0.724 0.47457,0.97045\n              c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013\n              l4,0\n\n              l").concat(width - 12, ",0\n\n              l4,0\n              c0.41421,0 0.78921,-0.16789 1.06066,-0.43934\n              c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066\n\n              l0,-5.3\n              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n            ")
-  })))), (allowDrag || disabled || alwaysShowTaskBar) && !isTimeline && /*#__PURE__*/React.createElement("div", {
+  }))))), (allowDrag || disabled || alwaysShowTaskBar) && !isTimeline && (/*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-label"),
     style: {
       left: width / 2 - 10
     }
-  }, days), (stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, days)), (stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-date-text"),
     style: {
       left: width + 16
@@ -1050,21 +951,18 @@ var TaskBar = function TaskBar(_ref) {
     style: {
       right: width + 16
     }
-  }, renderLeftText ? renderLeftText(data) : dateTextFormat(translateX))));
+  }, renderLeftText ? renderLeftText(data) : dateTextFormat(translateX)))));
 };
-
 var TaskBar$1 = observer(TaskBar);
 
 /* eslint-disable no-underscore-dangle */
-
 var BarList = function BarList() {
   var _useContext = useContext(context),
-      store = _useContext.store;
-
+    store = _useContext.store;
   var barList = store.getBarList;
   var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
+    count = _store$getVisibleRows.count,
+    start = _store$getVisibleRows.start;
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
     if (bar._group) return /*#__PURE__*/React.createElement(GroupBar$1, {
       key: bar.key,
@@ -1079,30 +977,25 @@ var BarList = function BarList() {
     });
   }));
 };
-
 var BarList$1 = observer(BarList);
 
-var css_248z$g = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@-webkit-keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  -webkit-animation: pulse 1s infinite;\n          animation: pulse 1s infinite;\n}\n";
+var css_248z$g = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n@keyframes pulse {\n  0% {\n    transform: scale(0.8);\n  }\n  50% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.8);\n  }\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n  background-color: lightblue;\n  animation: pulse 1s infinite;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n  background-color: lightblue;\n  animation: pulse 1s infinite;\n}\n";
 styleInject(css_248z$g);
 
 var TaskBarThumb = function TaskBarThumb(_ref) {
-  var _classNames;
-
   var data = _ref.data;
-
   var _useContext = useContext(context),
-      store = _useContext.store,
-      renderBarThumb = _useContext.renderBarThumb,
-      prefixCls = _useContext.prefixCls,
-      getBarColor = _useContext.getBarColor;
-
+    store = _useContext.store,
+    renderBarThumb = _useContext.renderBarThumb,
+    prefixCls = _useContext.prefixCls,
+    getBarColor = _useContext.getBarColor;
   var prefixClsTaskBarThumb = "".concat(prefixCls, "-task-bar-thumb");
   var viewTranslateX = store.translateX,
-      viewWidth = store.viewWidth;
+    viewWidth = store.viewWidth;
   var translateX = data.translateX,
-      translateY = data.translateY,
-      label = data.label,
-      record = data.record;
+    translateY = data.translateY,
+    label = data.label,
+    record = data.record;
   var type = useMemo(function () {
     var rightSide = viewTranslateX + viewWidth;
     return translateX - rightSide > 0 ? 'right' : 'left';
@@ -1119,31 +1012,28 @@ var TaskBarThumb = function TaskBarThumb(_ref) {
   }, [record]);
   return /*#__PURE__*/React.createElement("div", {
     role: 'none',
-    className: classNames(prefixClsTaskBarThumb, (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTaskBarThumb, "-left"), type === 'left'), _defineProperty(_classNames, "".concat(prefixClsTaskBarThumb, "-right"), type === 'right'), _classNames)),
+    className: classNames(prefixClsTaskBarThumb, _defineProperty(_defineProperty({}, "".concat(prefixClsTaskBarThumb, "-left"), type === 'left'), "".concat(prefixClsTaskBarThumb, "-right"), type === 'right')),
     style: {
       left: left,
       top: translateY - 5
     },
     onClick: handleClick
-  }, type === 'left' && /*#__PURE__*/React.createElement("div", {
+  }, type === 'left' && (/*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBarThumb, "-circle-left")
-  }), renderBarThumb ? renderBarThumb(data.record, type) : label, type === 'right' && /*#__PURE__*/React.createElement("div", {
+  })), renderBarThumb ? renderBarThumb(data.record, type) : label, type === 'right' && (/*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBarThumb, "-circle-right")
-  }));
+  })));
 };
-
 var TaskBarThumb$1 = observer(TaskBarThumb);
 
 /* eslint-disable no-underscore-dangle */
-
 var BarThumbList = function BarThumbList() {
   var _useContext = useContext(context),
-      store = _useContext.store;
-
+    store = _useContext.store;
   var barList = store.getBarList;
   var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
+    count = _store$getVisibleRows.count,
+    start = _store$getVisibleRows.start;
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
     if (store.getTaskBarThumbVisible(bar)) return /*#__PURE__*/React.createElement(TaskBarThumb$1, {
       data: bar,
@@ -1152,7 +1042,6 @@ var BarThumbList = function BarThumbList() {
     return null;
   }));
 };
-
 var BarThumbList$1 = observer(BarThumbList);
 
 /**
@@ -4348,14 +4237,13 @@ var spaceY = 10;
  * @param from
  * @param to
  */
-
 function getPoints(from, to, type) {
   var fromX = from.x,
-      fromY = from.y;
+    fromY = from.y;
   var toX = to.x,
-      toY = to.y;
-  var sameSide = type === 'finish_finish' || type === 'start_start'; // 同向，只需要两个关键点
-
+    toY = to.y;
+  var sameSide = type === 'finish_finish' || type === 'start_start';
+  // 同向，只需要两个关键点
   if (sameSide) {
     if (type === 'start_start') {
       return [{
@@ -4366,7 +4254,6 @@ function getPoints(from, to, type) {
         y: toY
       }];
     }
-
     return [{
       x: Math.max(fromX + spaceX, toX + spaceX),
       y: fromY
@@ -4374,9 +4261,8 @@ function getPoints(from, to, type) {
       x: Math.max(fromX + spaceX, toX + spaceX),
       y: toY
     }];
-  } // 不同向，需要四个关键点
-
-
+  }
+  // 不同向，需要四个关键点
   return [{
     x: type === 'finish_start' ? fromX + spaceX : fromX - spaceX,
     y: fromY
@@ -4391,19 +4277,16 @@ function getPoints(from, to, type) {
     y: toY
   }];
 }
-
 var Dependence = function Dependence(_ref) {
   var data = _ref.data;
-
   var _useContext = useContext(context),
-      store = _useContext.store,
-      barHeight = _useContext.barHeight;
-
+    store = _useContext.store,
+    barHeight = _useContext.barHeight;
   var from = data.from,
-      to = data.to,
-      type = data.type,
-      _data$color = data.color,
-      color = _data$color === void 0 ? '#f87872' : _data$color;
+    to = data.to,
+    type = data.type,
+    _data$color = data.color,
+    color = _data$color === void 0 ? '#f87872' : _data$color;
   var barList = store.getBarList;
   var fromBar = find_1(barList, function (bar) {
     return bar.record.id === from;
@@ -4413,20 +4296,18 @@ var Dependence = function Dependence(_ref) {
   });
   if (!fromBar || !toBar) return null;
   var posY = barHeight / 2;
-
   var _ref2 = function () {
-    return [{
-      x: type === 'finish_finish' || type === 'finish_start' ? fromBar.translateX + fromBar.width : fromBar.translateX,
-      y: fromBar.translateY + posY
-    }, {
-      x: type === 'finish_finish' || type === 'start_finish' ? toBar.translateX + toBar.width : toBar.translateX,
-      y: toBar.translateY + posY
-    }];
-  }(),
-      _ref3 = _slicedToArray(_ref2, 2),
-      start = _ref3[0],
-      end = _ref3[1];
-
+      return [{
+        x: type === 'finish_finish' || type === 'finish_start' ? fromBar.translateX + fromBar.width : fromBar.translateX,
+        y: fromBar.translateY + posY
+      }, {
+        x: type === 'finish_finish' || type === 'start_finish' ? toBar.translateX + toBar.width : toBar.translateX,
+        y: toBar.translateY + posY
+      }];
+    }(),
+    _ref3 = _slicedToArray(_ref2, 2),
+    start = _ref3[0],
+    end = _ref3[1];
   var points = [].concat(_toConsumableArray(getPoints(start, end, type)), [end]);
   var endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1;
   return /*#__PURE__*/React.createElement("g", {
@@ -4448,13 +4329,11 @@ var Dependence = function Dependence(_ref) {
     d: "\n        M".concat(end.x, ",").concat(end.y, " \n        L").concat(end.x - 4 * endPosition, ",").concat(end.y - 3 * endPosition, " \n        L").concat(end.x - 4 * endPosition, ",").concat(end.y + 3 * endPosition, " \n        Z")
   }));
 };
-
 var Dependence$1 = observer(Dependence);
 
 var Dependencies = function Dependencies() {
   var _useContext = useContext(context),
-      store = _useContext.store;
-
+    store = _useContext.store;
   var dependencies = store.dependencies;
   return /*#__PURE__*/React.createElement(React.Fragment, null, dependencies.map(function (dependence) {
     return /*#__PURE__*/React.createElement(Dependence$1, {
@@ -4463,28 +4342,23 @@ var Dependencies = function Dependencies() {
     });
   }));
 };
-
 var Dependencies$1 = observer(Dependencies);
 
 /**
  * 拖动时的提示条
  */
-
 var DragPresent = function DragPresent() {
   var _useContext = useContext(context),
-      store = _useContext.store;
-
+    store = _useContext.store;
   var dragging = store.dragging,
-      draggingType = store.draggingType,
-      bodyScrollHeight = store.bodyScrollHeight;
-
+    draggingType = store.draggingType,
+    bodyScrollHeight = store.bodyScrollHeight;
   if (!dragging) {
     return null;
-  } // 和当前拖动的块一样长
-
-
+  }
+  // 和当前拖动的块一样长
   var width = dragging.width,
-      translateX = dragging.translateX;
+    translateX = dragging.translateX;
   var left = translateX;
   var right = translateX + width;
   var leftLine = draggingType === 'left' || draggingType === 'move';
@@ -4504,7 +4378,6 @@ var DragPresent = function DragPresent() {
     d: "M".concat(right, ",0 L").concat(right, ",").concat(bodyScrollHeight)
   }));
 };
-
 var DragPresent$1 = observer(DragPresent);
 
 var css_248z$e = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
@@ -4512,9 +4385,8 @@ styleInject(css_248z$e);
 
 var Today = function Today() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls;
   return /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixCls, "-today"),
     style: {
@@ -4527,51 +4399,42 @@ var Today = function Today() {
     }
   }));
 };
-
 var Today$1 = observer(Today);
 
-var css_248z$d = ".gantt-custom-events {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-custom-event {\n  position: absolute;\n  top: 0;\n  background: transparent;\n  text-align: center;\n  pointer-events: auto;\n  cursor: pointer;\n  z-index: 10;\n}\n.gantt-custom-event:hover .gantt-custom-event_line {\n  background: #d14900;\n  width: 2px;\n  margin-left: 14px;\n}\n.gantt-custom-event_line {\n  width: 1px;\n  background: #a83000;\n  margin-left: 15px;\n  height: 100%;\n  transition: all 0.2s ease;\n}\n.gantt-custom-event_flag {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  background: #a83000;\n  color: white;\n  padding: 6px 10px;\n  border-radius: 6px;\n  font-size: 12px;\n  font-weight: 500;\n  white-space: nowrap;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\n  z-index: 15;\n  -webkit-animation: fadeInFlag 0.2s ease-out;\n          animation: fadeInFlag 0.2s ease-out;\n  pointer-events: none;\n}\n.gantt-custom-event_flag::after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 0;\n  height: 0;\n  border-left: 6px solid transparent;\n  border-right: 6px solid transparent;\n  border-top: 6px solid #a83000;\n}\n@-webkit-keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n@keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n.gantt-custom-event_title {\n  display: block;\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n";
+var css_248z$d = ".gantt-custom-events {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-custom-event {\n  position: absolute;\n  top: 0;\n  background: transparent;\n  text-align: center;\n  pointer-events: auto;\n  cursor: pointer;\n  z-index: 10;\n}\n.gantt-custom-event:hover .gantt-custom-event_line {\n  background: #d14900;\n  width: 2px;\n  margin-left: 14px;\n}\n.gantt-custom-event_line {\n  width: 1px;\n  background: #a83000;\n  margin-left: 15px;\n  height: 100%;\n  transition: all 0.2s ease;\n}\n.gantt-custom-event_flag {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  background: #a83000;\n  color: white;\n  padding: 6px 10px;\n  border-radius: 6px;\n  font-size: 12px;\n  font-weight: 500;\n  white-space: nowrap;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\n  z-index: 15;\n  animation: fadeInFlag 0.2s ease-out;\n  pointer-events: none;\n}\n.gantt-custom-event_flag::after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 0;\n  height: 0;\n  border-left: 6px solid transparent;\n  border-right: 6px solid transparent;\n  border-top: 6px solid #a83000;\n}\n@keyframes fadeInFlag {\n  from {\n    opacity: 0;\n    transform: translateX(-50%) translateY(-5px);\n  }\n  to {\n    opacity: 1;\n    transform: translateX(-50%) translateY(0);\n  }\n}\n.gantt-custom-event_title {\n  display: block;\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n";
 styleInject(css_248z$d);
 
 var CustomEvents = function CustomEvents() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls,
-      onCustomEventClick = _useContext.onCustomEventClick;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls,
+    onCustomEventClick = _useContext.onCustomEventClick;
   var customEvents = store.customEvents,
-      sightConfig = store.sightConfig,
-      getTranslateXByDate = store.getTranslateXByDate;
+    sightConfig = store.sightConfig,
+    getTranslateXByDate = store.getTranslateXByDate;
   var minorList = store.getMinorList();
-
   var _useState = useState(null),
-      _useState2 = _slicedToArray(_useState, 2),
-      hoveredEvent = _useState2[0],
-      setHoveredEvent = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    hoveredEvent = _useState2[0],
+    setHoveredEvent = _useState2[1];
   var _useState3 = useState(0),
-      _useState4 = _slicedToArray(_useState3, 2),
-      mouseY = _useState4[0],
-      setMouseY = _useState4[1];
-
+    _useState4 = _slicedToArray(_useState3, 2),
+    mouseY = _useState4[0],
+    setMouseY = _useState4[1];
   var handleEventClick = function handleEventClick(event) {
     if (onCustomEventClick) onCustomEventClick(event);
   };
-
   var handleMouseEnter = function handleMouseEnter(eventKey) {
     setHoveredEvent(eventKey);
   };
-
   var handleMouseLeave = function handleMouseLeave() {
     setHoveredEvent(null);
   };
-
   var handleMouseMove = function handleMouseMove(e) {
     var rect = e.currentTarget.getBoundingClientRect();
     setMouseY(e.clientY - rect.top - 25);
-  }; // Só renderiza eventos se estivermos na visualização de dias
-
-
+  };
+  // Só renderiza eventos se estivermos na visualização de dias
   if (sightConfig.type !== 'day') return null;
   return /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixCls, "-custom-events")
@@ -4595,14 +4458,14 @@ var CustomEvents = function CustomEvents() {
       },
       onMouseLeave: handleMouseLeave,
       onMouseMove: handleMouseMove
-    }, hoveredEvent === customEvent.key && /*#__PURE__*/React.createElement("div", {
+    }, hoveredEvent === customEvent.key && (/*#__PURE__*/React.createElement("div", {
       className: "".concat(prefixCls, "-custom-event_flag"),
       style: {
         top: Math.max(0, mouseY - 15)
       }
     }, /*#__PURE__*/React.createElement("span", {
       className: "".concat(prefixCls, "-custom-event_title")
-    }, customEvent.content || 'Evento')), /*#__PURE__*/React.createElement("div", {
+    }, customEvent.content || 'Evento'))), /*#__PURE__*/React.createElement("div", {
       className: "".concat(prefixCls, "-custom-event_line"),
       style: {
         height: store.bodyScrollHeight
@@ -4610,7 +4473,6 @@ var CustomEvents = function CustomEvents() {
     }));
   }));
 };
-
 var CustomEvents$1 = observer(CustomEvents);
 
 var css_248z$c = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
@@ -4618,18 +4480,17 @@ styleInject(css_248z$c);
 
 var Chart = function Chart() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls;
   var tableWidth = store.tableWidth,
-      viewWidth = store.viewWidth,
-      bodyScrollHeight = store.bodyScrollHeight,
-      translateX = store.translateX,
-      translateY = store.translateY,
-      chartElementRef = store.chartElementRef;
+    viewWidth = store.viewWidth,
+    bodyScrollHeight = store.bodyScrollHeight,
+    translateX = store.translateX,
+    translateY = store.translateY,
+    chartElementRef = store.chartElementRef;
   var handleResize = useCallback(function (_ref) {
     var x = _ref.x,
-        y = _ref.y;
+      y = _ref.y;
     store.handlePanMove(-x, -y);
   }, [store]);
   var handleResizeEnd = useCallback(function () {
@@ -4688,7 +4549,7 @@ var Chart = function Chart() {
     strokeWidth: '1px',
     y2: '10'
   }))), minorList.map(function (item) {
-    return item.isWeek ? /*#__PURE__*/React.createElement("g", {
+    return item.isWeek ? (/*#__PURE__*/React.createElement("g", {
       key: item.key,
       stroke: '#f0f0f0'
     }, /*#__PURE__*/React.createElement("path", {
@@ -4701,12 +4562,12 @@ var Chart = function Chart() {
       y: 0,
       width: item.width,
       height: bodyScrollHeight
-    })) : /*#__PURE__*/React.createElement("g", {
+    }))) : (/*#__PURE__*/React.createElement("g", {
       key: item.key,
       stroke: '#f0f0f0'
     }, /*#__PURE__*/React.createElement("path", {
       d: "M".concat(item.left, ",0 L").concat(item.left, ",").concat(bodyScrollHeight)
-    }));
+    })));
   }), /*#__PURE__*/React.createElement(DragPresent$1, null), /*#__PURE__*/React.createElement(Dependencies$1, null)), /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixCls, "-render-chunk"),
     style: {
@@ -4715,450 +4576,178 @@ var Chart = function Chart() {
     }
   }, /*#__PURE__*/React.createElement(BarThumbList$1, null), /*#__PURE__*/React.createElement(BarList$1, null), /*#__PURE__*/React.createElement(Today$1, null), /*#__PURE__*/React.createElement(CustomEvents$1, null))));
 };
-
 var Chart$1 = /*#__PURE__*/memo(observer(Chart));
 
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, _typeof(obj);
-}
-
-function _regeneratorRuntime() {
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
-
-  _regeneratorRuntime = function _regeneratorRuntime() {
-    return exports;
-  };
-
-  var exports = {},
-      Op = Object.prototype,
-      hasOwn = Op.hasOwnProperty,
-      $Symbol = "function" == typeof Symbol ? Symbol : {},
-      iteratorSymbol = $Symbol.iterator || "@@iterator",
-      asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-      toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj, key, value) {
-    return Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: !0,
-      configurable: !0,
-      writable: !0
-    }), obj[key];
-  }
-
+function _regeneratorDefine(e, r, n, t) {
+  var i = Object.defineProperty;
   try {
-    define({}, "");
-  } catch (err) {
-    define = function define(obj, key, value) {
-      return obj[key] = value;
-    };
+    i({}, "", {});
+  } catch (e) {
+    i = 0;
   }
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-        generator = Object.create(protoGenerator.prototype),
-        context = new Context(tryLocsList || []);
-    return generator._invoke = function (innerFn, self, context) {
-      var state = "suspendedStart";
-      return function (method, arg) {
-        if ("executing" === state) throw new Error("Generator is already running");
-
-        if ("completed" === state) {
-          if ("throw" === method) throw arg;
-          return doneResult();
-        }
-
-        for (context.method = method, context.arg = arg;;) {
-          var delegate = context.delegate;
-
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context);
-
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel) continue;
-              return delegateResult;
-            }
-          }
-
-          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-            if ("suspendedStart" === state) throw state = "completed", context.arg;
-            context.dispatchException(context.arg);
-          } else "return" === context.method && context.abrupt("return", context.arg);
-          state = "executing";
-          var record = tryCatch(innerFn, self, context);
-
-          if ("normal" === record.type) {
-            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-            return {
-              value: record.arg,
-              done: context.done
-            };
-          }
-
-          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-        }
-      };
-    }(innerFn, self, context), generator;
-  }
-
-  function tryCatch(fn, obj, arg) {
-    try {
-      return {
-        type: "normal",
-        arg: fn.call(obj, arg)
-      };
-    } catch (err) {
-      return {
-        type: "throw",
-        arg: err
-      };
-    }
-  }
-
-  exports.wrap = wrap;
-  var ContinueSentinel = {};
-
-  function Generator() {}
-
-  function GeneratorFunction() {}
-
-  function GeneratorFunctionPrototype() {}
-
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
-    return this;
-  });
-  var getProto = Object.getPrototypeOf,
-      NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
-        return this._invoke(method, arg);
+  _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
       });
-    });
-  }
-
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-
-      if ("throw" !== record.type) {
-        var result = record.arg,
-            value = result.value;
-        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
-          invoke("next", value, resolve, reject);
-        }, function (err) {
-          invoke("throw", err, resolve, reject);
-        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
-          result.value = unwrapped, resolve(result);
-        }, function (error) {
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-
-      reject(record.arg);
     }
+    r ? i ? i(e, r, {
+      value: n,
+      enumerable: !t,
+      configurable: !t,
+      writable: !t
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
+  }, _regeneratorDefine(e, r, n, t);
+}
 
-    var previousPromise;
-
-    this._invoke = function (method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
-    };
-  }
-
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-
-    if (undefined === method) {
-      if (context.delegate = null, "throw" === context.method) {
-        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
-        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
-    var info = record.arg;
-    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
-  }
-
-  function pushTryEntry(locs) {
-    var entry = {
-      tryLoc: locs[0]
-    };
-    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal", delete record.arg, entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    this.tryEntries = [{
-      tryLoc: "root"
-    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
-  }
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) return iteratorMethod.call(iterable);
-      if ("function" == typeof iterable.next) return iterable;
-
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-            next = function next() {
-          for (; ++i < iterable.length;) {
-            if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
+function _regenerator() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
+  var e,
+    t,
+    r = "function" == typeof Symbol ? Symbol : {},
+    n = r.iterator || "@@iterator",
+    o = r.toStringTag || "@@toStringTag";
+  function i(r, n, o, i) {
+    var c = n && n.prototype instanceof Generator ? n : Generator,
+      u = Object.create(c.prototype);
+    return _regeneratorDefine(u, "_invoke", function (r, n, o) {
+      var i,
+        c,
+        u,
+        f = 0,
+        p = o || [],
+        y = !1,
+        G = {
+          p: 0,
+          n: 0,
+          v: e,
+          a: d,
+          f: d.bind(e, 4),
+          d: function d(t, r) {
+            return i = t, c = 0, u = e, G.n = r, a;
           }
-
-          return next.value = undefined, next.done = !0, next;
         };
-
-        return next.next = next;
+      function d(r, n) {
+        for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
+          var o,
+            i = p[t],
+            d = G.p,
+            l = i[2];
+          r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
+        }
+        if (o || r > 1) return a;
+        throw y = !0, n;
       }
-    }
-
-    return {
-      next: doneResult
-    };
+      return function (o, p, l) {
+        if (f > 1) throw TypeError("Generator is already running");
+        for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
+          i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
+          try {
+            if (f = 2, i) {
+              if (c || (o = "next"), t = i[o]) {
+                if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
+                if (!t.done) return t;
+                u = t.value, c < 2 && (c = 0);
+              } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
+              i = e;
+            } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
+          } catch (t) {
+            i = e, c = 1, u = t;
+          } finally {
+            f = 1;
+          }
+        }
+        return {
+          value: t,
+          done: y
+        };
+      };
+    }(r, o, i), !0), u;
   }
-
-  function doneResult() {
-    return {
-      value: undefined,
-      done: !0
-    };
+  var a = {};
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+  t = Object.getPrototypeOf;
+  var c = [][n] ? t(t([][n]())) : (_regeneratorDefine(t = {}, n, function () {
+      return this;
+    }), t),
+    u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
+  function f(e) {
+    return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
   }
-
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
-    var ctor = "function" == typeof genFun && genFun.constructor;
-    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
-  }, exports.mark = function (genFun) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
-  }, exports.awrap = function (arg) {
-    return {
-      __await: arg
-    };
-  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine(u), _regeneratorDefine(u, o, "Generator"), _regeneratorDefine(u, n, function () {
     return this;
-  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    void 0 === PromiseImpl && (PromiseImpl = Promise);
-    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
-    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
-      return result.done ? result.value : iter.next();
-    });
-  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
-    return this;
-  }), define(Gp, "toString", function () {
+  }), _regeneratorDefine(u, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (object) {
-    var keys = [];
-
-    for (var key in object) {
-      keys.push(key);
-    }
-
-    return keys.reverse(), function next() {
-      for (; keys.length;) {
-        var key = keys.pop();
-        if (key in object) return next.value = key, next.done = !1, next;
-      }
-
-      return next.done = !0, next;
+  }), (_regenerator = function _regenerator() {
+    return {
+      w: i,
+      m: f
     };
-  }, exports.values = values, Context.prototype = {
-    constructor: Context,
-    reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
-    },
-    stop: function stop() {
-      this.done = !0;
-      var rootRecord = this.tryEntries[0].completion;
-      if ("throw" === rootRecord.type) throw rootRecord.arg;
-      return this.rval;
-    },
-    dispatchException: function dispatchException(exception) {
-      if (this.done) throw exception;
-      var context = this;
-
-      function handle(loc, caught) {
-        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i],
-            record = entry.completion;
-        if ("root" === entry.tryLoc) return handle("end");
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc"),
-              hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-          } else {
-            if (!hasFinally) throw new Error("try statement without catch or finally");
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          }
-        }
-      }
-    },
-    abrupt: function abrupt(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
-      var record = finallyEntry ? finallyEntry.completion : {};
-      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
-    },
-    complete: function complete(record, afterLoc) {
-      if ("throw" === record.type) throw record.arg;
-      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
-    },
-    finish: function finish(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
-      }
-    },
-    "catch": function _catch(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-
-          if ("throw" === record.type) {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-
-          return thrown;
-        }
-      }
-
-      throw new Error("illegal catch attempt");
-    },
-    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
-      return this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
-    }
-  }, exports;
+  })();
 }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep(n, t, e, r, o, a, c) {
   try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
+    var i = n[a](c),
+      u = i.value;
+  } catch (n) {
+    return void e(n);
   }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
+  i.done ? t(u) : Promise.resolve(u).then(r, o);
 }
-
-function _asyncToGenerator(fn) {
+function _asyncToGenerator(n) {
   return function () {
-    var self = this,
-        args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+    var t = this,
+      e = arguments;
+    return new Promise(function (r, o) {
+      var a = n.apply(t, e);
+      function _next(n) {
+        asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
       }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      function _throw(n) {
+        asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
       }
-
-      _next(undefined);
+      _next(void 0);
     });
   };
 }
 
 function useDragResize(handleResize, _ref) {
   var initSize = _ref.initSize,
-      minWidthConfig = _ref.minWidth,
-      maxWidthConfig = _ref.maxWidth;
-
+    minWidthConfig = _ref.minWidth,
+    maxWidthConfig = _ref.maxWidth;
   var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      resizing = _useState2[0],
-      setResizing = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    resizing = _useState2[0],
+    setResizing = _useState2[1];
   var positionRef = useRef({
     left: 0
   });
   var initSizeRef = useRef(initSize);
-  var handleMouseMove = usePersistFn( /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
+  var handleMouseMove = usePersistFn(/*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(event) {
       var distance, width;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              distance = event.clientX - positionRef.current.left;
-              width = initSizeRef.current.width + distance;
-
-              if (minWidthConfig !== undefined) {
-                width = Math.max(width, minWidthConfig);
-              }
-
-              if (maxWidthConfig !== undefined) {
-                width = Math.min(width, maxWidthConfig);
-              }
-
-              handleResize({
-                width: width
-              });
-
-            case 5:
-            case "end":
-              return _context.stop();
-          }
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
+          case 0:
+            distance = event.clientX - positionRef.current.left;
+            width = initSizeRef.current.width + distance;
+            if (minWidthConfig !== undefined) {
+              width = Math.max(width, minWidthConfig);
+            }
+            if (maxWidthConfig !== undefined) {
+              width = Math.min(width, maxWidthConfig);
+            }
+            handleResize({
+              width: width
+            });
+          case 1:
+            return _context.a(2);
         }
       }, _callee);
     }));
-
     return function (_x) {
       return _ref2.apply(this, arguments);
     };
@@ -5183,10 +4772,9 @@ styleInject(css_248z$b);
 
 var Divider = function Divider() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      tableCollapseAble = _useContext.tableCollapseAble,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    tableCollapseAble = _useContext.tableCollapseAble,
+    prefixCls = _useContext.prefixCls;
   var prefixClsDivider = "".concat(prefixCls, "-divider");
   var tableWidth = store.tableWidth;
   var handleClick = useCallback(function (event) {
@@ -5198,18 +4786,16 @@ var Divider = function Divider() {
     var width = _ref.width;
     store.handleResizeTableWidth(width);
   }, [store]);
-
   var _useDragResize = useDragResize(handleResize, {
-    initSize: {
-      width: tableWidth
-    },
-    minWidth: 200,
-    maxWidth: store.width * 0.6
-  }),
-      _useDragResize2 = _slicedToArray(_useDragResize, 2),
-      handleMouseDown = _useDragResize2[0],
-      resizing = _useDragResize2[1];
-
+      initSize: {
+        width: tableWidth
+      },
+      minWidth: 200,
+      maxWidth: store.width * 0.6
+    }),
+    _useDragResize2 = _slicedToArray(_useDragResize, 2),
+    handleMouseDown = _useDragResize2[0],
+    resizing = _useDragResize2[1];
   return /*#__PURE__*/React.createElement("div", {
     role: 'none',
     className: classNames(prefixClsDivider, _defineProperty({}, "".concat(prefixClsDivider, "_only"), !tableCollapseAble)),
@@ -5217,7 +4803,7 @@ var Divider = function Divider() {
       left: left - 1
     },
     onMouseDown: tableWidth === 0 ? undefined : handleMouseDown
-  }, resizing && /*#__PURE__*/React.createElement("div", {
+  }, resizing && (/*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       top: 0,
@@ -5227,7 +4813,7 @@ var Divider = function Divider() {
       zIndex: 9999,
       cursor: 'col-resize'
     }
-  }), /*#__PURE__*/React.createElement("hr", null), tableCollapseAble && /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("hr", null), tableCollapseAble && (/*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsDivider, "-icon-wrapper"),
     role: 'none',
     onMouseDown: function onMouseDown(e) {
@@ -5236,9 +4822,8 @@ var Divider = function Divider() {
     onClick: handleClick
   }, /*#__PURE__*/React.createElement("i", {
     className: classNames("".concat(prefixClsDivider, "-arrow"), _defineProperty({}, "".concat(prefixClsDivider, "-reverse"), left <= 0))
-  })));
+  }))));
 };
-
 var Divider$1 = observer(Divider);
 
 var css_248z$a = ".gantt-scroll_bar {\n  position: absolute;\n  bottom: 0;\n  left: 16px;\n  height: 12px;\n}\n.gantt-scroll_bar-thumb {\n  position: absolute;\n  height: 100%;\n  border-radius: 4px;\n  background-color: #262626;\n  opacity: 0.2;\n  cursor: pointer;\n  will-change: transform;\n}\n";
@@ -5246,11 +4831,10 @@ styleInject(css_248z$a);
 
 var ScrollBar = function ScrollBar() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls;
   var tableWidth = store.tableWidth,
-      viewWidth = store.viewWidth;
+    viewWidth = store.viewWidth;
   var width = store.scrollBarWidth;
   var prefixClsScrollBar = "".concat(prefixCls, "-scroll_bar");
   var handleResize = useCallback(function (_ref) {
@@ -5279,7 +4863,6 @@ var ScrollBar = function ScrollBar() {
     type: 'move'
   }));
 };
-
 var ScrollBar$1 = /*#__PURE__*/memo(observer(ScrollBar));
 
 var css_248z$9 = ".gantt-scroll_top {\n  position: absolute;\n  right: 24px;\n  bottom: 8px;\n  width: 40px;\n  height: 40px;\n  cursor: pointer;\n  background-image: url('/Top.svg');\n  background-size: contain;\n}\n.gantt-scroll_top:hover {\n  background-image: url('/Top_hover.svg');\n}\n";
@@ -5287,21 +4870,18 @@ styleInject(css_248z$9);
 
 var ScrollTop = function ScrollTop() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      scrollTopConfig = _useContext.scrollTop,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    scrollTopConfig = _useContext.scrollTop,
+    prefixCls = _useContext.prefixCls;
   var scrollTop = store.scrollTop;
   var handleClick = useCallback(function () {
     if (store.mainElementRef.current) {
       store.mainElementRef.current.scrollTop = 0;
     }
   }, [store.mainElementRef]);
-
   if (scrollTop <= 100 || !store.mainElementRef.current) {
     return null;
   }
-
   var prefixClsScrollTop = "".concat(prefixCls, "-scroll_top");
   return /*#__PURE__*/React.createElement("div", {
     className: prefixClsScrollTop,
@@ -5309,7 +4889,6 @@ var ScrollTop = function ScrollTop() {
     onClick: handleClick
   });
 };
-
 var ScrollTop$1 = observer(ScrollTop);
 
 var css_248z$8 = ".gantt-selection-indicator {\n  position: absolute;\n  width: 100%;\n  background: rgba(0, 0, 0, 0.04);\n  pointer-events: none;\n  z-index: 10;\n}\n";
@@ -5318,26 +4897,23 @@ styleInject(css_248z$8);
 /**
  * 鼠标hover效果模拟
  */
-
 var SelectionIndicator = function SelectionIndicator() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls;
   var showSelectionIndicator = store.showSelectionIndicator,
-      selectionIndicatorTop = store.selectionIndicatorTop,
-      rowHeight = store.rowHeight,
-      translateY = store.translateY;
+    selectionIndicatorTop = store.selectionIndicatorTop,
+    rowHeight = store.rowHeight,
+    translateY = store.translateY;
   var prefixClsSelectionIndicator = "".concat(prefixCls, "-selection-indicator");
-  return showSelectionIndicator ? /*#__PURE__*/React.createElement("div", {
+  return showSelectionIndicator ? (/*#__PURE__*/React.createElement("div", {
     className: prefixClsSelectionIndicator,
     style: {
       height: rowHeight,
       top: selectionIndicatorTop - translateY
     }
-  }) : null;
+  })) : null;
 };
-
 var SelectionIndicator$1 = observer(SelectionIndicator);
 
 var css_248z$7 = ".gantt-row-toggler {\n  width: 24px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: #d9d9d9;\n  cursor: pointer;\n  position: relative;\n  z-index: 5;\n}\n.gantt-row-toggler:hover {\n  color: #8c8c8c;\n}\n.gantt-row-toggler > i {\n  width: 20px;\n  height: 20px;\n  background: white;\n}\n.gantt-row-toggler > i > svg {\n  transition: transform 218ms;\n  fill: currentColor;\n}\n.gantt-row-toggler-collapsed > i > svg {\n  transform: rotate(-90deg);\n}\n";
@@ -5345,10 +4921,10 @@ styleInject(css_248z$7);
 
 var RowToggler = function RowToggler(_ref) {
   var onClick = _ref.onClick,
-      collapsed = _ref.collapsed,
-      level = _ref.level,
-      _ref$prefixCls = _ref.prefixCls,
-      prefixCls = _ref$prefixCls === void 0 ? '' : _ref$prefixCls;
+    collapsed = _ref.collapsed,
+    level = _ref.level,
+    _ref$prefixCls = _ref.prefixCls,
+    prefixCls = _ref$prefixCls === void 0 ? '' : _ref$prefixCls;
   var prefixClsRowToggler = "".concat(prefixCls, "-row-toggler");
   return /*#__PURE__*/React.createElement("div", {
     role: 'none',
@@ -5358,15 +4934,15 @@ var RowToggler = function RowToggler(_ref) {
     className: classNames(prefixClsRowToggler, _defineProperty({}, "".concat(prefixClsRowToggler, "-collapsed"), collapsed))
   }, /*#__PURE__*/React.createElement("i", {
     "data-level": level
-  }, level <= 0 ? /*#__PURE__*/React.createElement("svg", {
+  }, level <= 0 ? (/*#__PURE__*/React.createElement("svg", {
     viewBox: '0 0 1024 1024'
   }, /*#__PURE__*/React.createElement("path", {
     d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
-  })) : /*#__PURE__*/React.createElement("svg", {
+  }))) : (/*#__PURE__*/React.createElement("svg", {
     viewBox: '0 0 1024 1024'
   }, /*#__PURE__*/React.createElement("path", {
     d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
-  })))));
+  }))))));
 };
 
 var TextCell = function TextCell(_ref) {
@@ -5376,9 +4952,8 @@ var TextCell = function TextCell(_ref) {
 };
 var DateCell = function DateCell(_ref2) {
   var value = _ref2.value,
-      column = _ref2.column;
+    column = _ref2.column;
   if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
-
   try {
     var formatted = column.formatter ? column.formatter(value) : dayjs(value).format('DD/MM/YYYY');
     return /*#__PURE__*/React.createElement("span", null, formatted);
@@ -5388,7 +4963,7 @@ var DateCell = function DateCell(_ref2) {
 };
 var NumberCell = function NumberCell(_ref3) {
   var value = _ref3.value,
-      column = _ref3.column;
+    column = _ref3.column;
   if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
   var formatted = column.formatter ? column.formatter(value) : typeof value === 'number' ? value.toLocaleString('pt-BR') : value;
   return /*#__PURE__*/React.createElement("span", null, formatted);
@@ -5417,8 +4992,8 @@ var StatusCell = function StatusCell(_ref5) {
     title: String(value)
   };
   var title = statusObj.title,
-      color = statusObj.color,
-      textColor = statusObj.textColor;
+    color = statusObj.color,
+    textColor = statusObj.textColor;
   return /*#__PURE__*/React.createElement("span", {
     className: "inline-flex items-center px-2 py-1 rounded text-xs font-medium",
     style: {
@@ -5470,18 +5045,18 @@ var UserCell = function UserCell(_ref7) {
     name: String(value)
   };
   var name = userObj.name,
-      avatar = userObj.avatar,
-      picture = userObj.picture;
+    avatar = userObj.avatar,
+    picture = userObj.picture;
   var userAvatar = avatar || picture;
   return /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-2"
-  }, userAvatar && /*#__PURE__*/React.createElement("img", {
+  }, userAvatar && (/*#__PURE__*/React.createElement("img", {
     src: userAvatar,
     alt: name || 'User',
     className: "w-6 h-6 rounded-full object-cover"
-  }), !userAvatar && /*#__PURE__*/React.createElement("div", {
+  })), !userAvatar && (/*#__PURE__*/React.createElement("div", {
     className: "w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600"
-  }, (name || 'U').charAt(0).toUpperCase()), /*#__PURE__*/React.createElement("span", {
+  }, (name || 'U').charAt(0).toUpperCase())), /*#__PURE__*/React.createElement("span", {
     className: "text-sm truncate"
   }, name || value));
 };
@@ -5489,7 +5064,6 @@ var TagsCell = function TagsCell(_ref8) {
   var value = _ref8.value;
   if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
   var tags = [];
-
   if (typeof value === 'string') {
     tags = value.split(',').map(function (t) {
       return t.trim();
@@ -5497,7 +5071,6 @@ var TagsCell = function TagsCell(_ref8) {
   } else if (Array.isArray(value)) {
     tags = value;
   }
-
   if (tags.length === 0) return /*#__PURE__*/React.createElement("span", null, "-");
   return /*#__PURE__*/React.createElement("div", {
     className: "flex flex-wrap gap-1"
@@ -5510,7 +5083,7 @@ var TagsCell = function TagsCell(_ref8) {
 };
 var CurrencyCell = function CurrencyCell(_ref9) {
   var value = _ref9.value,
-      column = _ref9.column;
+    column = _ref9.column;
   if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
   var numValue = typeof value === 'number' ? value : parseFloat(value);
   if (isNaN(numValue)) return /*#__PURE__*/React.createElement("span", null, "-");
@@ -5520,10 +5093,10 @@ var CurrencyCell = function CurrencyCell(_ref9) {
   }).format(numValue);
   return /*#__PURE__*/React.createElement("span", null, formatted);
 };
-var CustomFieldCell = function CustomFieldCell(_ref10) {
-  var value = _ref10.value,
-      record = _ref10.record,
-      column = _ref10.column;
+var CustomFieldCell = function CustomFieldCell(_ref0) {
+  var value = _ref0.value,
+    record = _ref0.record,
+    column = _ref0.column;
   if (!column.customFieldId) return /*#__PURE__*/React.createElement(TextCell, {
     value: value,
     record: record,
@@ -5536,9 +5109,8 @@ var CustomFieldCell = function CustomFieldCell(_ref10) {
   });
   if (!fieldValue) return /*#__PURE__*/React.createElement("span", null, "-");
   var field = fieldValue.field,
-      fieldVal = fieldValue.value;
+    fieldVal = fieldValue.value;
   if (!field || !fieldVal) return /*#__PURE__*/React.createElement("span", null, "-");
-
   switch (field.type) {
     case 'text':
     case 'email':
@@ -5548,33 +5120,28 @@ var CustomFieldCell = function CustomFieldCell(_ref10) {
         record: record,
         column: column
       });
-
     case 'number':
       return /*#__PURE__*/React.createElement(NumberCell, {
         value: fieldVal,
         record: record,
         column: column
       });
-
     case 'date':
       return /*#__PURE__*/React.createElement(DateCell, {
         value: fieldVal,
         record: record,
         column: column
       });
-
     case 'currency':
       return /*#__PURE__*/React.createElement(CurrencyCell, {
         value: fieldVal,
         record: record,
         column: column
       });
-
     case 'select':
       return /*#__PURE__*/React.createElement("span", {
         className: "inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700"
       }, fieldVal);
-
     case 'multiselect':
       {
         var values = Array.isArray(fieldVal) ? fieldVal : [fieldVal];
@@ -5584,12 +5151,10 @@ var CustomFieldCell = function CustomFieldCell(_ref10) {
           column: column
         });
       }
-
     case 'checkbox':
       return /*#__PURE__*/React.createElement("span", {
         className: "inline-flex items-center"
       }, fieldVal === 'true' || fieldVal === true ? '✓' : '✗');
-
     case 'url':
       return /*#__PURE__*/React.createElement("a", {
         href: fieldVal,
@@ -5597,7 +5162,6 @@ var CustomFieldCell = function CustomFieldCell(_ref10) {
         rel: "noopener noreferrer",
         className: "text-blue-600 hover:underline"
       }, fieldVal);
-
     default:
       return /*#__PURE__*/React.createElement(TextCell, {
         value: fieldVal,
@@ -5610,73 +5174,59 @@ var renderCell = function renderCell(value, record, column) {
   if (column.cellRenderer) {
     return column.cellRenderer(value, record);
   }
-
   if (column.render) {
     return column.render(record);
   }
-
   var props = {
     value: value,
     record: record,
     column: column
   };
-
   switch (column.type) {
     case 'date':
       return /*#__PURE__*/React.createElement(DateCell, _objectSpread2({}, props));
-
     case 'number':
       return /*#__PURE__*/React.createElement(NumberCell, _objectSpread2({}, props));
-
     case 'progress':
       return /*#__PURE__*/React.createElement(ProgressCell, _objectSpread2({}, props));
-
     case 'status':
       return /*#__PURE__*/React.createElement(StatusCell, _objectSpread2({}, props));
-
     case 'priority':
       return /*#__PURE__*/React.createElement(PriorityCell, _objectSpread2({}, props));
-
     case 'user':
       return /*#__PURE__*/React.createElement(UserCell, _objectSpread2({}, props));
-
     case 'tags':
       return /*#__PURE__*/React.createElement(TagsCell, _objectSpread2({}, props));
-
     case 'currency':
       return /*#__PURE__*/React.createElement(CurrencyCell, _objectSpread2({}, props));
-
     case 'custom':
       return /*#__PURE__*/React.createElement(CustomFieldCell, _objectSpread2({}, props));
-
     case 'text':
     default:
       return /*#__PURE__*/React.createElement(TextCell, _objectSpread2({}, props));
   }
 };
 
-var css_248z$6 = ".gantt-table-body {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  border-bottom: 1px solid #f0f0f0;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 0;\n  font-size: 14px;\n  box-sizing: border-box;\n  flex-shrink: 0;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
+var css_248z$6 = ".gantt-table-body {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  border-bottom: 1px solid #f0f0f0;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  padding: 0;\n  font-size: 14px;\n  box-sizing: border-box;\n  flex-shrink: 0;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
 styleInject(css_248z$6);
 
 var TableRows = function TableRows() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      onRow = _useContext.onRow,
-      tableIndent = _useContext.tableIndent,
-      expandIcon = _useContext.expandIcon,
-      prefixCls = _useContext.prefixCls,
-      onExpand = _useContext.onExpand;
-
+    store = _useContext.store,
+    onRow = _useContext.onRow,
+    tableIndent = _useContext.tableIndent,
+    expandIcon = _useContext.expandIcon,
+    prefixCls = _useContext.prefixCls,
+    onExpand = _useContext.onExpand;
   var rowHeight = store.rowHeight,
-      isTimeline = store.isTimeline;
+    isTimeline = store.isTimeline;
   var columns = store.getVisibleColumns;
   var columnsWidth = store.getColumnsWidth;
   var barList = store.getBarList;
   var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
+    count = _store$getVisibleRows.count,
+    start = _store$getVisibleRows.start;
   var prefixClsTableBody = "".concat(prefixCls, "-table-body");
-
   if (barList.length === 0) {
     return /*#__PURE__*/React.createElement("div", {
       style: {
@@ -5686,10 +5236,8 @@ var TableRows = function TableRows() {
       }
     }, "Nada encontrado.");
   }
-
   var parentIdMap = {};
   var countParent = 0;
-
   if (isTimeline) {
     // if isTimeline create a object map with parentId as key and a index as value
     barList.forEach(function (item) {
@@ -5701,7 +5249,6 @@ var TableRows = function TableRows() {
       }
     });
   }
-
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
     // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
     var parent = bar._parent;
@@ -5733,21 +5280,20 @@ var TableRows = function TableRows() {
           paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 12,
           paddingRight: 12
         }, column.style)
-      }, index === 0 && !isTimeline && // eslint-disable-next-line unicorn/no-new-array
+      }, index === 0 && !isTimeline &&
+      // eslint-disable-next-line unicorn/no-new-array
       new Array(bar._depth).fill(0).map(function (_, i) {
-        var _classNames;
-
         return /*#__PURE__*/React.createElement("div", {
           // eslint-disable-next-line react/no-array-index-key
           key: i,
-          className: classNames("".concat(prefixClsTableBody, "-row-indentation"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-hidden"), isLastChild && i === bar._depth - 2), _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-both"), i === bar._depth - 1), _classNames)),
+          className: classNames("".concat(prefixClsTableBody, "-row-indentation"), _defineProperty(_defineProperty({}, "".concat(prefixClsTableBody, "-row-indentation-hidden"), isLastChild && i === bar._depth - 2), "".concat(prefixClsTableBody, "-row-indentation-both"), i === bar._depth - 1)),
           style: {
             top: -(rowHeight / 2) + 1,
             left: tableIndent * i + 15,
             width: tableIndent * 1.5 + 5
           }
         });
-      }), index === 0 && !isTimeline && bar._childrenCount > 0 && /*#__PURE__*/React.createElement("div", {
+      }), index === 0 && !isTimeline && bar._childrenCount > 0 && (/*#__PURE__*/React.createElement("div", {
         style: {
           position: 'absolute',
           left: tableIndent * bar._depth + 15,
@@ -5764,7 +5310,7 @@ var TableRows = function TableRows() {
           if (onExpand) onExpand(bar.task.record, !bar._collapsed);
           store.setRowCollapse(bar.task, !bar._collapsed);
         }
-      }) : /*#__PURE__*/React.createElement(RowToggler, {
+      }) : (/*#__PURE__*/React.createElement(RowToggler, {
         prefixCls: prefixCls,
         level: bar._depth,
         collapsed: bar._collapsed,
@@ -5773,20 +5319,17 @@ var TableRows = function TableRows() {
           if (onExpand) onExpand(bar.task.record, !bar._collapsed);
           store.setRowCollapse(bar.task, !bar._collapsed);
         }
-      })), /*#__PURE__*/React.createElement("span", {
+      })))), /*#__PURE__*/React.createElement("span", {
         className: "".concat(prefixClsTableBody, "-ellipsis")
       }, renderCell(column.key ? bar.record[column.key] : bar.record[column.name], bar.record, column)));
     }));
   }));
 };
-
 var ObserverTableRows = observer(TableRows);
-
 var TableBorders = function TableBorders() {
   var _useContext2 = useContext(context),
-      store = _useContext2.store,
-      prefixCls = _useContext2.prefixCls;
-
+    store = _useContext2.store,
+    prefixCls = _useContext2.prefixCls;
   var columns = store.getVisibleColumns;
   var columnsWidth = store.getColumnsWidth;
   var barList = store.getBarList;
@@ -5808,14 +5351,11 @@ var TableBorders = function TableBorders() {
     });
   }));
 };
-
 var ObserverTableBorders = observer(TableBorders);
-
 var TableBody = function TableBody() {
   var _useContext3 = useContext(context),
-      store = _useContext3.store,
-      prefixCls = _useContext3.prefixCls;
-
+    store = _useContext3.store,
+    prefixCls = _useContext3.prefixCls;
   var translateY = store.translateY;
   var handleMouseMove = useCallback(function (event) {
     event.persist();
@@ -5842,7 +5382,6 @@ var TableBody = function TableBody() {
     onScroll: handleScroll
   }, /*#__PURE__*/React.createElement(ObserverTableRows, null), /*#__PURE__*/React.createElement(ObserverTableBorders, null));
 };
-
 var TableBody$1 = observer(TableBody);
 
 var css_248z$5 = ".gantt-table-header-resize-handle {\n  position: absolute;\n  top: 0;\n  right: -6px;\n  width: 10px;\n  height: 100%;\n  cursor: col-resize;\n  z-index: 999;\n}\n.gantt-table-header-resize-handle:hover::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 3px;\n  height: 100%;\n  background-color: #1890ff;\n}\n.gantt-table-header-resize-handle-active::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 3px;\n  height: 100%;\n  background-color: #1890ff;\n}\n";
@@ -5850,32 +5389,27 @@ styleInject(css_248z$5);
 
 var ResizeHandle = function ResizeHandle(_ref) {
   var onResize = _ref.onResize,
-      prefixCls = _ref.prefixCls;
-
+    prefixCls = _ref.prefixCls;
   var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      isDragging = _useState2[0],
-      setIsDragging = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    isDragging = _useState2[0],
+    setIsDragging = _useState2[1];
   var handleMouseDown = useCallback(function (e) {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
     var startX = e.clientX;
-
     var handleMouseMove = function handleMouseMove(moveEvent) {
       var deltaX = moveEvent.clientX - startX;
       onResize(deltaX);
     };
-
-    var handleMouseUp = function handleMouseUp() {
+    var _handleMouseUp = function handleMouseUp() {
       setIsDragging(false);
       document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mouseup', _handleMouseUp);
     };
-
     document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mouseup', _handleMouseUp);
   }, [onResize]);
   return /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixCls, "-resize-handle ").concat(isDragging ? "".concat(prefixCls, "-resize-handle-active") : ''),
@@ -5883,15 +5417,14 @@ var ResizeHandle = function ResizeHandle(_ref) {
   });
 };
 
-var css_248z$4 = ".gantt-table-header {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n  height: 56px;\n}\n.gantt-table-header-head {\n  position: relative;\n}\n.gantt-table-header-row {\n  display: flex;\n  width: 100%;\n}\n.gantt-table-header-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  border-bottom: 1px solid #f0f0f0;\n  font-weight: 500;\n  background: #fafafa;\n  padding: 0;\n  box-sizing: border-box;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 14px;\n  color: #2e405e;\n  flex-shrink: 0;\n  overflow: visible;\n}\n.gantt-table-header-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n  padding-right: 10px;\n}\n";
+var css_248z$4 = ".gantt-table-header {\n  position: relative;\n  overflow-x: auto;\n  overflow-y: hidden;\n  flex-shrink: 0;\n  height: 56px;\n}\n.gantt-table-header-head {\n  position: relative;\n}\n.gantt-table-header-row {\n  display: flex;\n  width: 100%;\n}\n.gantt-table-header-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  border-bottom: 1px solid #f0f0f0;\n  font-weight: 500;\n  background: #fafafa;\n  padding: 0;\n  box-sizing: border-box;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  font-size: 14px;\n  color: #2e405e;\n  flex-shrink: 0;\n  overflow: visible;\n}\n.gantt-table-header-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  min-width: 0;\n  padding-right: 10px;\n}\n";
 styleInject(css_248z$4);
 
 var TableHeader = function TableHeader() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls,
-      renderCustomHeaderFilter = _useContext.renderCustomHeaderFilter;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls,
+    renderCustomHeaderFilter = _useContext.renderCustomHeaderFilter;
   var columns = store.getVisibleColumns;
   var columnsWidth = store.getColumnsWidth;
   var totalWidth = store.totalColumnWidth;
@@ -5939,33 +5472,31 @@ var TableHeader = function TableHeader() {
       }, column.style)
     }, /*#__PURE__*/React.createElement("span", {
       className: "".concat(prefixClsTableHeader, "-ellipsis")
-    }, column.icon && /*#__PURE__*/React.createElement("span", {
+    }, column.icon && (/*#__PURE__*/React.createElement("span", {
       style: {
         marginRight: 4,
         display: 'inline-flex',
         alignItems: 'center'
       }
-    }, column.icon), column.label), /*#__PURE__*/React.createElement(ResizeHandle, {
+    }, column.icon)), column.label), /*#__PURE__*/React.createElement(ResizeHandle, {
       onResize: handleResize(column.name, columnsWidth[index]),
       prefixCls: prefixClsTableHeader
     }));
   }), renderCustomHeaderFilter ? renderCustomHeaderFilter() : null)));
 };
-
 var TableHeader$1 = observer(TableHeader);
 
-var css_248z$3 = ".gantt-time-axis {\n  height: 56px;\n  position: absolute;\n  top: 0;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  overflow: hidden;\n  cursor: ew-resize;\n}\n.gantt-time-axis-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 56px;\n  pointer-events: none;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  will-change: transform;\n}\n.gantt-time-axis-today {\n  background-color: #2c7ef8;\n  border-radius: 50%;\n  color: #fff;\n  width: 35px;\n  margin: 0 auto;\n}\n.gantt-time-axis-custom-event {\n  background-color: #a83000;\n  border-radius: 50%;\n  color: #fff;\n  width: 35px;\n  margin: 0 auto;\n}\n.gantt-time-axis-major {\n  position: absolute;\n  overflow: hidden;\n  box-sizing: content-box;\n  height: 28px;\n  border-right: 1px solid #f0f0f0;\n  font-weight: 400;\n  text-align: left;\n  font-size: 13px;\n  line-height: 28px;\n}\n.gantt-time-axis-major-label {\n  overflow: hidden;\n  padding-left: 8px;\n  white-space: nowrap;\n}\n.gantt-time-axis-minor {\n  position: absolute;\n  top: 27px;\n  box-sizing: content-box;\n  height: 28px;\n  border-top: 1px solid #f0f0f0;\n  border-right: 1px solid #f0f0f0;\n  text-align: center;\n  font-size: 12px;\n  line-height: 28px;\n  color: #202d40;\n}\n.gantt-time-axis-minor.weekends {\n  background-color: hsla(0, 0%, 96.9%, 0.5);\n}\n.gantt-time-axis-minor-label.day-view {\n  font-size: 12px;\n  font-weight: 600;\n  padding: 0 4px;\n  height: 28px;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  line-height: 14px;\n}\n.gantt-time-axis-minor-label.day-view br {\n  display: block;\n  margin: 0;\n  content: \"\";\n}\n.gantt-time-axis-minor-label.day-view::before {\n  content: attr(data-day-of-week);\n  display: block;\n  font-size: 10px;\n  font-weight: normal;\n}\n.gantt-time-axis-minor-label.day-view::after {\n  content: attr(data-day-number);\n  display: block;\n  font-size: 14px;\n  font-weight: bold;\n}\n";
+var css_248z$3 = ".gantt-time-axis {\n  height: 56px;\n  position: absolute;\n  top: 0;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  overflow: hidden;\n  cursor: ew-resize;\n}\n.gantt-time-axis-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 56px;\n  pointer-events: none;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  will-change: transform;\n}\n.gantt-time-axis-today {\n  background-color: #2c7ef8;\n  border-radius: 50%;\n  color: #fff;\n  width: 35px;\n  margin: 0 auto;\n}\n.gantt-time-axis-custom-event {\n  background-color: #a83000;\n  border-radius: 50%;\n  color: #fff;\n  width: 35px;\n  margin: 0 auto;\n}\n.gantt-time-axis-major {\n  position: absolute;\n  overflow: hidden;\n  box-sizing: content-box;\n  height: 28px;\n  border-right: 1px solid #f0f0f0;\n  font-weight: 400;\n  text-align: left;\n  font-size: 13px;\n  line-height: 28px;\n}\n.gantt-time-axis-major-label {\n  overflow: hidden;\n  padding-left: 8px;\n  white-space: nowrap;\n}\n.gantt-time-axis-minor {\n  position: absolute;\n  top: 27px;\n  box-sizing: content-box;\n  height: 28px;\n  border-top: 1px solid #f0f0f0;\n  border-right: 1px solid #f0f0f0;\n  text-align: center;\n  font-size: 12px;\n  line-height: 28px;\n  color: #202d40;\n}\n.gantt-time-axis-minor.weekends {\n  background-color: hsla(0, 0%, 96.9%, 0.5);\n}\n.gantt-time-axis-minor-label.day-view {\n  font-size: 12px;\n  font-weight: 600;\n  padding: 0 4px;\n  height: 28px;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  line-height: 14px;\n}\n.gantt-time-axis-minor-label.day-view br {\n  display: block;\n  margin: 0;\n  content: \"\";\n}\n.gantt-time-axis-minor-label.day-view::before {\n  content: attr(data-day-of-week);\n  display: block;\n  font-size: 10px;\n  font-weight: normal;\n}\n.gantt-time-axis-minor-label.day-view::after {\n  content: attr(data-day-number);\n  display: block;\n  font-size: 14px;\n  font-weight: bold;\n}\n";
 styleInject(css_248z$3);
 
 var TimeAxis = function TimeAxis() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls;
   var prefixClsTimeAxis = "".concat(prefixCls, "-time-axis");
   var sightConfig = store.sightConfig,
-      isToday = store.isToday,
-      customEvents = store.customEvents;
+    isToday = store.isToday,
+    customEvents = store.customEvents;
   var majorList = store.getMajorList();
   var minorList = store.getMinorList();
   var handleResize = useCallback(function (_ref) {
@@ -5989,29 +5520,22 @@ var TimeAxis = function TimeAxis() {
     });
   }, [sightConfig, customEvents]);
   var isDayView = sightConfig.type === 'day';
-
   var renderLabel = function renderLabel(item) {
-    var _classNames2;
-
     if (isDayView) {
-      var _classNames;
-
       // For day view with <br/> in label, extract day of week and day number
       var parts = item.label.split('<br/>');
       var dayOfWeek = parts[0];
       var dayNumber = parts[1];
       return /*#__PURE__*/React.createElement("div", {
-        className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), _defineProperty(_classNames, "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), _defineProperty(_classNames, 'day-view', isDayView), _classNames)),
+        className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty(_defineProperty(_defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), 'day-view', isDayView)),
         "data-day-of-week": dayOfWeek,
         "data-day-number": dayNumber
       });
     }
-
     return /*#__PURE__*/React.createElement("div", {
-      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), (_classNames2 = {}, _defineProperty(_classNames2, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), _defineProperty(_classNames2, "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), _defineProperty(_classNames2, 'day-view', isDayView), _classNames2))
+      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty(_defineProperty(_defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), 'day-view', isDayView))
     }, item.label);
   };
-
   return /*#__PURE__*/React.createElement(DragResize$1, {
     onResize: handleResize,
     onResizeEnd: handleLeftResizeEnd,
@@ -6055,7 +5579,6 @@ var TimeAxis = function TimeAxis() {
     }, renderLabel(item));
   }))));
 };
-
 var TimeAxis$1 = observer(TimeAxis);
 
 var css_248z$2 = ".gantt-time-axis-scale-select .next-menu {\n  position: relative;\n  min-width: 150px;\n  padding: 4px 0;\n  margin: 0;\n  list-style: none;\n  border-radius: 4px;\n  background: #fff;\n  line-height: 36px;\n  font-size: 14px;\n}\n.gantt-time-axis-scale-select .next-menu,\n.gantt-time-axis-scale-select .next-menu *,\n.gantt-time-axis-scale-select .next-menu :after,\n.gantt-time-axis-scale-select .next-menu :before {\n  box-sizing: border-box;\n}\n.gantt-time-axis-scale-select .next-menu,\n.gantt-time-axis-scale-select .next-select-trigger,\n.gantt-time-axis-scale-select .next-select .next-select-inner {\n  min-width: unset;\n}\n.gantt-time-axis-scale-select .next-menu-item-text {\n  line-height: 36px;\n}\n.time-axis-scale-select__3fTI .next-menu-item-text {\n  line-height: 36px;\n}\n.gantt-shadow {\n  position: absolute;\n  top: 4px;\n  right: 0;\n  width: 90px;\n  height: 48px;\n  z-index: 0;\n  transition: box-shadow 0.5s;\n}\n.gantt-shadow.gantt-scrolling {\n  box-shadow: -3px 0 7px 0 #e5e5e5;\n}\n.gantt-trigger {\n  position: absolute;\n  top: 0;\n  right: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 56px;\n  border-top-right-radius: 4px;\n  background-color: #fff;\n  border-left: 1px solid #f0f0f0;\n  color: #bfbfbf;\n  padding: 0 8px 0 12px;\n  cursor: pointer;\n  width: 90px;\n  z-index: 1;\n  transition: color 0.2s;\n}\n.gantt-trigger:hover {\n  color: #8c8c8c;\n}\n.gantt-trigger:hover .gantt-text {\n  color: #262626;\n}\n.gantt-trigger .gantt-text {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  margin-right: 4px;\n  font-size: 14px;\n  color: #202d40;\n}\n.dropdown-icon {\n  width: 20px;\n  height: 20px;\n  line-height: 20px;\n}\n.dropdown-icon svg {\n  fill: currentColor;\n}\n.next-overlay-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n}\n.next-overlay-wrapper .next-overlay-inner {\n  z-index: 1001;\n  border-radius: 4px;\n  box-shadow: 0 12px 32px 0 rgba(38, 38, 38, 0.16);\n  -webkit-transform: translateZ(0);\n  transform: translateZ(0);\n}\n.next-overlay-wrapper .next-overlay-backdrop {\n  position: fixed;\n  z-index: 1001;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: #000;\n  transition: opacity 0.3s;\n  opacity: 0;\n}\n.next-overlay-wrapper.opened .next-overlay-backdrop {\n  opacity: 0.3;\n}\n.next-menu-item {\n  position: relative;\n  padding: 0 12px 0 40px;\n  transition: background 0.2s ease;\n  color: #262626;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n}\n.next-menu-item .gantt-selected_icon {\n  position: absolute;\n  left: 12px;\n  width: 20px;\n  height: 20px;\n  line-height: 20px;\n}\n.next-menu-item .gantt-selected_icon svg {\n  fill: #1b9aee;\n}\n.next-menu-item:hover {\n  font-weight: 400;\n  background-color: #f7f7f7;\n}\n.next-menu-item.next-selected {\n  color: #262626;\n  background-color: #fff;\n}\n.next-menu-item.next-selected .next-menu-icon-arrow {\n  color: #bfbfbf;\n}\n";
@@ -6063,18 +5586,15 @@ styleInject(css_248z$2);
 
 var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls;
   var sightConfig = store.sightConfig,
-      scrolling = store.scrolling,
-      viewTypeList = store.viewTypeList;
-
+    scrolling = store.scrolling,
+    viewTypeList = store.viewTypeList;
   var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      visible = _useState2[0],
-      setVisible = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    visible = _useState2[0],
+    setVisible = _useState2[1];
   var ref = useRef(null);
   useClickAway(function () {
     setVisible(false);
@@ -6108,7 +5628,7 @@ var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
     d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
   })))), /*#__PURE__*/React.createElement("div", {
     className: classNames("".concat(prefixCls, "-shadow"), _defineProperty({}, "".concat(prefixCls, "-scrolling"), scrolling))
-  }), visible && /*#__PURE__*/React.createElement("div", {
+  }), visible && (/*#__PURE__*/React.createElement("div", {
     className: classNames('next-overlay-wrapper', 'opened')
   }, /*#__PURE__*/React.createElement("div", {
     className: classNames('next-overlay-inner'),
@@ -6134,35 +5654,33 @@ var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
       className: classNames('next-menu-item', {
         'next-selected': isSelected(item.type)
       })
-    }, isSelected(item.type) && /*#__PURE__*/React.createElement("i", {
+    }, isSelected(item.type) && (/*#__PURE__*/React.createElement("i", {
       className: "".concat(prefixCls, "-selected_icon")
     }, /*#__PURE__*/React.createElement("svg", {
       viewBox: '0 0 1024 1024'
     }, /*#__PURE__*/React.createElement("path", {
       d: 'M413.7472 768a29.5936 29.5936 0 0 1-21.6576-9.472l-229.5296-241.152a33.3824 33.3824 0 0 1 0-45.5168 29.696 29.696 0 0 1 43.4176 0l207.7696 218.368 404.2752-424.7552a29.5936 29.5936 0 0 1 43.4176 0 33.3824 33.3824 0 0 1 0 45.568l-425.984 447.488A29.5936 29.5936 0 0 1 413.696 768'
-    }))), /*#__PURE__*/React.createElement("span", {
+    })))), /*#__PURE__*/React.createElement("span", {
       className: 'next-menu-item-text',
       "aria-selected": 'true'
     }, item.label));
-  }))))));
+  })))))));
 };
-
 var TimeAxisScaleSelect$1 = observer(TimeAxisScaleSelect);
 
-var css_248z$1 = ".gantt-time-indicator {\n  position: absolute;\n  top: 0;\n  left: 0;\n  background-color: #096dd9;\n  box-shadow: 0 2px 4px rgba(1, 113, 194, 0.1);\n  transform: translate(12px, 14px);\n  transition: opacity 0.3s;\n  padding: 0 7px;\n  color: #fff;\n  border-radius: 4px;\n  outline: 0;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  box-sizing: border-box;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  vertical-align: middle;\n  cursor: pointer;\n  border: none;\n  font-size: 12px;\n}\n.gantt-time-indicator-scrolling {\n  opacity: 0;\n}\n";
+var css_248z$1 = ".gantt-time-indicator {\n  position: absolute;\n  top: 0;\n  left: 0;\n  background-color: #096dd9;\n  box-shadow: 0 2px 4px rgba(1, 113, 194, 0.1);\n  transform: translate(12px, 14px);\n  transition: opacity 0.3s;\n  padding: 0 7px;\n  color: #fff;\n  border-radius: 4px;\n  outline: 0;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  box-sizing: border-box;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n  vertical-align: middle;\n  cursor: pointer;\n  border: none;\n  font-size: 12px;\n}\n.gantt-time-indicator-scrolling {\n  opacity: 0;\n}\n";
 styleInject(css_248z$1);
 
 var TimeIndicator = function TimeIndicator() {
   var _useContext = useContext(context),
-      store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
-
+    store = _useContext.store,
+    prefixCls = _useContext.prefixCls;
   var scrolling = store.scrolling,
-      translateX = store.translateX,
-      tableWidth = store.tableWidth,
-      viewWidth = store.viewWidth,
-      todayTranslateX = store.todayTranslateX,
-      locale = store.locale;
+    translateX = store.translateX,
+    tableWidth = store.tableWidth,
+    viewWidth = store.viewWidth,
+    todayTranslateX = store.todayTranslateX,
+    locale = store.locale;
   var prefixClsTimeIndicator = "".concat(prefixCls, "-time-indicator");
   var type = todayTranslateX < translateX ? 'left' : 'right';
   var left = type === 'left' ? tableWidth : 'unset';
@@ -6187,7 +5705,6 @@ var TimeIndicator = function TimeIndicator() {
     }
   }, /*#__PURE__*/React.createElement("span", null, locale.today));
 };
-
 var TimeIndicator$1 = observer(TimeIndicator);
 
 var css_248z = ".gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n  display: flex;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: hidden;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n  display: flex;\n}\n";
@@ -6290,14 +5807,19 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 function __decorate(decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+  var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
 
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+  var e = new Error(message);
+  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
 var advancedFormat = createCommonjsModule(function (module, exports) {
-!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t,r){var n=t.prototype,s=n.format;r.en.ordinal=function(e){var t=["th","st","nd","rd"],r=e%100;return "["+e+(t[(r-20)%10]||t[r]||t[0])+"]"},n.format=function(e){var t=this,r=this.$locale();if(!this.isValid())return s.bind(this)(e);var n=this.$utils(),a=(e||"YYYY-MM-DDTHH:mm:ssZ").replace(/\[([^\]]+)]|Q|wo|ww|w|WW|W|zzz|z|gggg|GGGG|Do|X|x|k{1,2}|S/g,(function(e){switch(e){case"Q":return Math.ceil((t.$M+1)/3);case"Do":return r.ordinal(t.$D);case"gggg":return t.weekYear();case"GGGG":return t.isoWeekYear();case"wo":return r.ordinal(t.week(),"W");case"w":case"ww":return n.s(t.week(),"w"===e?1:2,"0");case"W":case"WW":return n.s(t.isoWeek(),"W"===e?1:2,"0");case"k":case"kk":return n.s(String(0===t.$H?24:t.$H),"k"===e?1:2,"0");case"X":return Math.floor(t.$d.getTime()/1e3);case"x":return t.$d.getTime();case"z":return "["+t.offsetName()+"]";case"zzz":return "["+t.offsetName("long")+"]";default:return e}}));return s.bind(this)(a)};}}));
+!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t){var r=t.prototype,n=r.format;r.format=function(e){var t=this,r=this.$locale();if(!this.isValid())return n.bind(this)(e);var s=this.$utils(),a=(e||"YYYY-MM-DDTHH:mm:ssZ").replace(/\[([^\]]+)]|Q|wo|ww|w|WW|W|zzz|z|gggg|GGGG|Do|X|x|k{1,2}|S/g,(function(e){switch(e){case"Q":return Math.ceil((t.$M+1)/3);case"Do":return r.ordinal(t.$D);case"gggg":return t.weekYear();case"GGGG":return t.isoWeekYear();case"wo":return r.ordinal(t.week(),"W");case"w":case"ww":return s.s(t.week(),"w"===e?1:2,"0");case"W":case"WW":return s.s(t.isoWeek(),"W"===e?1:2,"0");case"k":case"kk":return s.s(String(0===t.$H?24:t.$H),"k"===e?1:2,"0");case"X":return Math.floor(t.$d.getTime()/1e3);case"x":return t.$d.getTime();case"z":return "["+t.offsetName()+"]";case"zzz":return "["+t.offsetName("long")+"]";default:return e}}));return n.bind(this)(a)};}}));
 });
 
 var isBetween = createCommonjsModule(function (module, exports) {
@@ -6535,9 +6057,7 @@ var ptBr = createCommonjsModule(function (module, exports) {
 });
 
 var Gantt;
-
 (function (Gantt) {
-
   (function (ESightValues) {
     ESightValues[ESightValues["day"] = 2880] = "day";
     ESightValues[ESightValues["week"] = 3600] = "week";
@@ -6555,8 +6075,8 @@ dayjs.extend(advancedFormat);
 dayjs.extend(isBetween);
 dayjs.extend(isLeapYear);
 dayjs.extend(dayjsBusinessDays);
-var ONE_DAY_MS = 86400000; // 视图日视图、周视图、月视图、季视图、年视图
-
+var ONE_DAY_MS = 86400000;
+// 视图日视图、周视图、月视图、季视图、年视图
 var getViewTypeList = function getViewTypeList(locale) {
   return [{
     type: 'day',
@@ -6580,24 +6100,19 @@ var getViewTypeList = function getViewTypeList(locale) {
     value: Gantt.ESightValues.halfYear
   }];
 };
-
 function isRestDay(date) {
   var calc = [0, 6];
   return calc.includes(dayjs(date).weekday());
 }
-
 var GanttStore = /*#__PURE__*/function () {
   function GanttStore(_ref) {
     var _this = this;
-
     var rowHeight = _ref.rowHeight,
-        _ref$disabled = _ref.disabled,
-        disabled = _ref$disabled === void 0 ? false : _ref$disabled,
-        customSights = _ref.customSights,
-        locale = _ref.locale;
-
+      _ref$disabled = _ref.disabled,
+      disabled = _ref$disabled === void 0 ? false : _ref$disabled,
+      customSights = _ref.customSights,
+      locale = _ref.locale;
     _classCallCheck(this, GanttStore);
-
     this.locale = _objectSpread2({}, defaultLocale);
     this.data = [];
     this.originData = [];
@@ -6626,45 +6141,36 @@ var GanttStore = /*#__PURE__*/function () {
     this.autoScrollPos = 0;
     this.clientX = 0;
     this.customEvents = [];
-
     this.onUpdate = function () {
       return Promise.resolve(true);
     };
-
     this.isRestDay = isRestDay;
-
     this.getWidthByDate = function (startDate, endDate) {
       return (endDate.valueOf() - startDate.valueOf()) / _this.pxUnitAmp;
     };
-
     this.startXRectBar = function (startX) {
       var date = dayjs(startX * _this.pxUnitAmp);
-
       var dayRect = function dayRect() {
         var stAmp = date.startOf('day');
-        var endAmp = date.endOf('day'); // @ts-expect-error
-
-        var left = stAmp / _this.pxUnitAmp; // @ts-expect-error
-
+        var endAmp = date.endOf('day');
+        // @ts-expect-error
+        var left = stAmp / _this.pxUnitAmp;
+        // @ts-expect-error
         var width = (endAmp - stAmp) / _this.pxUnitAmp;
         return {
           left: left,
           width: width
         };
       };
-
       var weekRect = function weekRect() {
         if (date.weekday() === 0) date = date.add(-1, 'week');
-
         var left = date.weekday(1).startOf('day').valueOf() / _this.pxUnitAmp;
-
         var width = (7 * 24 * 60 * 60 * 1000 - 1000) / _this.pxUnitAmp;
         return {
           left: left,
           width: width
         };
       };
-
       var monthRect = function monthRect() {
         var stAmp = date.startOf('month').valueOf();
         var endAmp = date.endOf('month').valueOf();
@@ -6675,7 +6181,6 @@ var GanttStore = /*#__PURE__*/function () {
           width: width
         };
       };
-
       var map = {
         day: dayRect,
         week: weekRect,
@@ -6685,41 +6190,32 @@ var GanttStore = /*#__PURE__*/function () {
       };
       return map[_this.sightConfig.type]();
     };
-
     this.handleWheel = function (event) {
       if (event.deltaX !== 0) {
         event.preventDefault();
         event.stopPropagation();
       }
-
-      if (_this._wheelTimer) clearTimeout(_this._wheelTimer); // 水平滚动
-
+      if (_this._wheelTimer) clearTimeout(_this._wheelTimer);
+      // 水平滚动
       if (Math.abs(event.deltaX) > 0) {
         _this.scrolling = true;
-
         _this.setTranslateX(_this.translateX + event.deltaX);
       }
-
       if (Math.abs(event.deltaY) > 0) {
         _this.scrolling = true;
-
         _this.setTranslateY(_this.translateY + event.deltaY);
       }
-
       _this._wheelTimer = window.setTimeout(function () {
         _this.scrolling = false;
       }, 100);
     };
-
     this.handleMouseMove = debounce_1(function (event) {
       if (!_this.isPointerPress) _this.showSelectionBar(event);
     }, 5);
-
     this.getHovered = function (top) {
       var baseTop = top - top % _this.rowHeight;
       return _this.selectionIndicatorTop >= baseTop && _this.selectionIndicatorTop <= baseTop + _this.rowHeight;
     };
-
     this.width = 1320;
     this.height = 418;
     this.viewTypeList = customSights.length ? customSights : getViewTypeList(locale);
@@ -6738,8 +6234,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.disabled = disabled;
     this.locale = locale;
   }
-
-  _createClass(GanttStore, [{
+  return _createClass(GanttStore, [{
     key: "getStartDate",
     value: function getStartDate() {
       return dayjs().subtract(10, 'day').toString();
@@ -6770,7 +6265,8 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "setRowCollapse",
     value: function setRowCollapse(item, collapsed) {
-      item.collapsed = collapsed; // this.barList = this.getBarList();
+      item.collapsed = collapsed;
+      // this.barList = this.getBarList();
     }
   }, {
     key: "setCustomEvents",
@@ -6798,11 +6294,9 @@ var GanttStore = /*#__PURE__*/function () {
       if (!this.columnConfig) {
         this.columnConfig = {};
       }
-
       if (!this.columnConfig.columnWidths) {
         this.columnConfig.columnWidths = {};
       }
-
       this.columnConfig.columnWidths[columnName] = width;
     }
   }, {
@@ -6834,7 +6328,6 @@ var GanttStore = /*#__PURE__*/function () {
     key: "setHideTable",
     value: function setHideTable() {
       var isHidden = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
       if (isHidden) {
         this.tableWidth = 0;
         this.viewWidth = this.width - this.tableWidth;
@@ -6859,9 +6352,8 @@ var GanttStore = /*#__PURE__*/function () {
     value: function syncSize(size) {
       if (!size.height || !size.width) return;
       var width = size.width,
-          height = size.height;
+        height = size.height;
       if (this.height !== height) this.height = height;
-
       if (this.width !== width) {
         this.width = width;
         this.initWidth();
@@ -6878,11 +6370,17 @@ var GanttStore = /*#__PURE__*/function () {
       this.viewWidth = this.width - this.tableWidth;
     }
   }, {
+    key: "setTableWidth",
+    value: function setTableWidth(width) {
+      this.tableWidth = width;
+      this.viewWidth = this.width - this.tableWidth;
+    }
+  }, {
     key: "initWidth",
     value: function initWidth() {
       this.tableWidth = this.totalColumnWidth || 250;
-      this.viewWidth = this.width - this.tableWidth; // 图表宽度不能小于 200
-
+      this.viewWidth = this.width - this.tableWidth;
+      // 图表宽度不能小于 200
       if (this.viewWidth < 200) {
         this.viewWidth = 200;
         this.tableWidth = this.width - this.viewWidth;
@@ -6900,8 +6398,8 @@ var GanttStore = /*#__PURE__*/function () {
       // This is the total content height minus the visible area height
       // If this value is negative, it means the content is shorter than the visible area,
       // so we should not allow any vertical scrolling
-      var maxTranslateY = Math.max(0, this.bodyScrollHeight - this.bodyClientHeight); // Limit translateY between 0 and maxTranslateY
-
+      var maxTranslateY = Math.max(0, this.bodyScrollHeight - this.bodyClientHeight);
+      // Limit translateY between 0 and maxTranslateY
       this.translateY = Math.max(0, Math.min(translateY, maxTranslateY));
     }
   }, {
@@ -6910,7 +6408,6 @@ var GanttStore = /*#__PURE__*/function () {
       var target = find_1(this.viewTypeList, {
         type: type
       });
-
       if (target) {
         this.sightConfig = target;
         this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000));
@@ -6942,8 +6439,8 @@ var GanttStore = /*#__PURE__*/function () {
     key: "scrollLeft",
     get: function get() {
       var rate = this.viewWidth / this.scrollWidth;
-      var currentDate = dayjs(this.translateAmp).toString(); // 默认滚动条在中间
-
+      var currentDate = dayjs(this.translateAmp).toString();
+      // 默认滚动条在中间
       var half = (this.viewWidth - this.scrollBarWidth) / 2;
       var viewScrollLeft = half + rate * (this.getTranslateXByDate(currentDate) - this.getTranslateXByDate(this.getStartDate()));
       return Math.min(Math.max(viewScrollLeft, 0), this.viewWidth - this.scrollBarWidth);
@@ -6955,8 +6452,8 @@ var GanttStore = /*#__PURE__*/function () {
       // 最小宽度
       var init = this.viewWidth + 200;
       return Math.max(Math.abs(this.viewWidth + this.translateX - this.getTranslateXByDate(this.getStartDate())), init);
-    } // 内容区滚动高度
-
+    }
+    // 内容区滚动高度
   }, {
     key: "bodyClientHeight",
     get: function get() {
@@ -6968,16 +6465,14 @@ var GanttStore = /*#__PURE__*/function () {
     get: function get() {
       if (!this.columnConfig) return this.columns;
       var _this$columnConfig = this.columnConfig,
-          visibleColumns = _this$columnConfig.visibleColumns,
-          columnOrder = _this$columnConfig.columnOrder;
+        visibleColumns = _this$columnConfig.visibleColumns,
+        columnOrder = _this$columnConfig.columnOrder;
       var filtered = this.columns;
-
       if (visibleColumns && visibleColumns.length > 0) {
         filtered = this.columns.filter(function (col) {
           return visibleColumns.includes(col.name);
         });
       }
-
       if (columnOrder && columnOrder.length > 0) {
         filtered = filtered.sort(function (a, b) {
           var aIndex = columnOrder.indexOf(a.name);
@@ -6988,14 +6483,12 @@ var GanttStore = /*#__PURE__*/function () {
           return aIndex - bIndex;
         });
       }
-
       return filtered;
     }
   }, {
     key: "getColumnsWidth",
     get: function get() {
       var _a, _b;
-
       var cols = this.getVisibleColumns;
       if (cols.length === 1 && ((_a = cols[0]) === null || _a === void 0 ? void 0 : _a.width) < 200) return [200];
       var columnWidths = (_b = this.columnConfig) === null || _b === void 0 ? void 0 : _b.columnWidths;
@@ -7023,8 +6516,8 @@ var GanttStore = /*#__PURE__*/function () {
       return this.getColumnsWidth.reduce(function (width, item) {
         return width + (item || 0);
       }, 0);
-    } // 内容区滚动区域域高度
-
+    }
+    // 内容区滚动区域域高度
   }, {
     key: "bodyScrollHeight",
     get: function get() {
@@ -7034,8 +6527,8 @@ var GanttStore = /*#__PURE__*/function () {
       var height = barListLength * this.rowHeight + TOP_PADDING;
       if (height < this.bodyClientHeight) height = this.bodyClientHeight;
       return height;
-    } // 1px对应的毫秒数
-
+    }
+    // 1px对应的毫秒数
   }, {
     key: "pxUnitAmp",
     get: function get() {
@@ -7044,11 +6537,9 @@ var GanttStore = /*#__PURE__*/function () {
         // Return a smaller value to make columns wider (one third of the original value)
         return this.sightConfig.value * 1000 / 2;
       }
-
       return this.sightConfig.value * 1000;
     }
     /** 当前开始时间毫秒数 */
-
   }, {
     key: "translateAmp",
     get: function get() {
@@ -7075,26 +6566,22 @@ var GanttStore = /*#__PURE__*/function () {
       var endAmp = translateAmp + this.getDurationAmp();
       var type = this.sightConfig.type;
       var format = majorFormatMap[type];
-
       var getNextDate = function getNextDate(start) {
         if (type === 'day' || type === 'week') return start.add(1, 'month');
         return start.add(1, 'year');
       };
-
       var getStart = function getStart(date) {
         if (type === 'day' || type === 'week') return date.startOf('month');
         return date.startOf('year');
       };
-
       var getEnd = function getEnd(date) {
         if (type === 'day' || type === 'week') return date.endOf('month');
         return date.endOf('year');
-      }; // 初始化当前时间
-
-
+      };
+      // 初始化当前时间
       var currentDate = dayjs(translateAmp);
-      var dates = []; // 对可视区域内的时间进行迭代
-
+      var dates = [];
+      // 对可视区域内的时间进行迭代
       while (currentDate.isBetween(translateAmp - 1, endAmp + 1)) {
         var majorKey = currentDate.format(format);
         var start = currentDate;
@@ -7104,12 +6591,11 @@ var GanttStore = /*#__PURE__*/function () {
           label: majorKey,
           startDate: start,
           endDate: end
-        }); // 获取下次迭代的时间
-
+        });
+        // 获取下次迭代的时间
         start = getStart(currentDate);
         currentDate = getNextDate(start);
       }
-
       return this.majorAmp2Px(dates);
     }
   }, {
@@ -7134,7 +6620,6 @@ var GanttStore = /*#__PURE__*/function () {
     key: "getMinorList",
     value: function getMinorList() {
       var _this2 = this;
-
       var minorFormatMap = {
         day: this.locale.minorFormat.day,
         week: this.locale.minorFormat.week,
@@ -7145,8 +6630,8 @@ var GanttStore = /*#__PURE__*/function () {
       var fstHalfYear = new Set([0, 1, 2, 3, 4, 5]);
       var startAmp = this.translateAmp;
       var endAmp = startAmp + this.getDurationAmp();
-      var format = minorFormatMap[this.sightConfig.type]; // eslint-disable-next-line unicorn/consistent-function-scoping
-
+      var format = minorFormatMap[this.sightConfig.type];
+      // eslint-disable-next-line unicorn/consistent-function-scoping
       var getNextDate = function getNextDate(start) {
         var map = {
           day: function day() {
@@ -7167,7 +6652,6 @@ var GanttStore = /*#__PURE__*/function () {
         };
         return map[_this2.sightConfig.type]();
       };
-
       var setStart = function setStart(date) {
         var map = {
           day: function day() {
@@ -7189,7 +6673,6 @@ var GanttStore = /*#__PURE__*/function () {
         };
         return map[_this2.sightConfig.type]();
       };
-
       var setEnd = function setEnd(start) {
         var map = {
           day: function day() {
@@ -7211,19 +6694,15 @@ var GanttStore = /*#__PURE__*/function () {
         };
         return map[_this2.sightConfig.type]();
       };
-
       var getMinorKey = function getMinorKey(date) {
         if (_this2.sightConfig.type === 'halfYear') {
           return date.format(format) + (fstHalfYear.has(date.month()) ? _this2.locale.firstHalf : _this2.locale.secondHalf);
         }
-
         return date.format(format);
-      }; // 初始化当前时间
-
-
+      };
+      // 初始化当前时间
       var currentDate = dayjs(startAmp);
       var dates = [];
-
       while (currentDate.isBetween(startAmp - 1, endAmp + 1)) {
         var minorKey = getMinorKey(currentDate);
         var start = setStart(currentDate);
@@ -7235,14 +6714,12 @@ var GanttStore = /*#__PURE__*/function () {
         });
         currentDate = getNextDate(start);
       }
-
       return this.minorAmp2Px(dates);
     }
   }, {
     key: "minorAmp2Px",
     value: function minorAmp2Px(ampList) {
       var _this3 = this;
-
       var pxUnitAmp = this.pxUnitAmp;
       return ampList.map(function (item) {
         var startDate = item.startDate;
@@ -7252,16 +6729,13 @@ var GanttStore = /*#__PURE__*/function () {
         var width = (endDate.valueOf() - startDate.valueOf()) / pxUnitAmp;
         var isWeek = false;
         if (_this3.sightConfig.type === 'day') isWeek = _this3.isRestDay(startDate.toString());
-        var finalLabel = label; // For day view, show day of week and day number
-
+        var finalLabel = label;
+        // For day view, show day of week and day number
         if (_this3.sightConfig.type === 'day') {
           var dayOfWeek = startDate.format('ddd'); // Short day name (Mon, Tue, etc)
-
           var dayNumber = startDate.format('D'); // Day number (1, 2, etc)
-
           finalLabel = "".concat(dayOfWeek, "<br/>").concat(dayNumber);
         }
-
         return {
           label: finalLabel,
           left: left,
@@ -7275,8 +6749,8 @@ var GanttStore = /*#__PURE__*/function () {
     key: "getTaskBarThumbVisible",
     value: function getTaskBarThumbVisible(barInfo) {
       var width = barInfo.width,
-          barTranslateX = barInfo.translateX,
-          invalidDateRange = barInfo.invalidDateRange;
+        barTranslateX = barInfo.translateX,
+        invalidDateRange = barInfo.invalidDateRange;
       if (invalidDateRange) return false;
       var rightSide = this.translateX + this.viewWidth;
       return barTranslateX + width < this.translateX || barTranslateX - rightSide > 0;
@@ -7285,7 +6759,7 @@ var GanttStore = /*#__PURE__*/function () {
     key: "scrollToBar",
     value: function scrollToBar(barInfo, type) {
       var barTranslateX = barInfo.translateX,
-          width = barInfo.width;
+        width = barInfo.width;
       var translateX1 = this.translateX + this.viewWidth / 2;
       var translateX2 = barTranslateX + width;
       var diffX = Math.abs(translateX2 - translateX1);
@@ -7297,27 +6771,22 @@ var GanttStore = /*#__PURE__*/function () {
     key: "getBarList",
     get: function get() {
       var _this4 = this;
-
       var pxUnitAmp = this.pxUnitAmp,
-          data = this.data; // 最小宽度
-
-      var minStamp = 11 * pxUnitAmp; // TODO 去除高度读取
-
+        data = this.data;
+      // 最小宽度
+      var minStamp = 11 * pxUnitAmp;
+      // TODO 去除高度读取
       var height = 8;
       var baseTop = TOP_PADDING + this.rowHeight / 2 - height / 2;
       var topStep = this.rowHeight;
-
       var dateTextFormat = function dateTextFormat(startX) {
         return dayjs(startX * pxUnitAmp).format('YYYY-MM-DD');
       };
-
       var getDateWidth = function getDateWidth() {
         return '1';
       };
-
       var flattenData = flattenDeep(data, 0, undefined, this.isTimeline);
       var parentIdMap = {};
-
       if (this.isTimeline) {
         // if isTimeline create a object map with parentId as key and a index as value
         data.forEach(function (item, index) {
@@ -7326,27 +6795,23 @@ var GanttStore = /*#__PURE__*/function () {
           }
         });
       }
-
       var barList = flattenData.map(function (item, index) {
         var valid = item.startDate && item.endDate;
         var startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
-        var endAmp = dayjs(item.endDate || 0).endOf('day').valueOf(); // 开始结束日期相同默认一天
-
+        var endAmp = dayjs(item.endDate || 0).endOf('day').valueOf();
+        // 开始结束日期相同默认一天
         if (Math.abs(endAmp - startAmp) < minStamp) {
           startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
           endAmp = dayjs(item.endDate || 0).endOf('day').add(minStamp, 'millisecond').valueOf();
         }
-
         var width = valid ? (endAmp - startAmp) / pxUnitAmp : 0;
         var translateX = valid ? startAmp / pxUnitAmp : 0;
         var indexMultiplier = _this4.isTimeline && item.parentId ? parentIdMap[item.parentId] : index;
         var translateY = baseTop + indexMultiplier * topStep;
         var _parent = item._parent;
-
         var record = _objectSpread2(_objectSpread2({}, item.record), {}, {
           disabled: _this4.disabled
         });
-
         var bar = {
           key: Math.random().toString(36).substr(2, 9),
           task: item,
@@ -7366,14 +6831,13 @@ var GanttStore = /*#__PURE__*/function () {
           _index: item._index,
           _parent: _parent,
           _childrenCount: !item.children ? 0 : item.children.length // 子任务
-
         };
         item._bar = bar;
         return bar;
       });
       return observable(barList);
-    } // 虚拟滚动
-
+    }
+    // 虚拟滚动
   }, {
     key: "getVisibleRows",
     get: function get() {
@@ -7394,19 +6858,16 @@ var GanttStore = /*#__PURE__*/function () {
     key: "showSelectionBar",
     value: function showSelectionBar(event) {
       var _a;
-
       if (this.isTimeline) {
         this.showSelectionIndicator = false;
       } else {
         var _ref2 = ((_a = this.mainElementRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect()) || {
-          top: 0
-        },
-            top = _ref2.top; // 内容区高度
-
-
+            top: 0
+          },
+          top = _ref2.top;
+        // 内容区高度
         var contentHeight = this.getBarList.length * this.rowHeight;
         var offsetY = event.clientY - top + this.translateY;
-
         if (offsetY - contentHeight > TOP_PADDING) {
           this.showSelectionIndicator = false;
         } else {
@@ -7431,7 +6892,6 @@ var GanttStore = /*#__PURE__*/function () {
         this.dragging.stepGesture = 'end';
         this.dragging = null;
       }
-
       this.draggingType = null;
       this.isPointerPress = false;
     }
@@ -7463,7 +6923,7 @@ var GanttStore = /*#__PURE__*/function () {
     key: "updateBarSize",
     value: function updateBarSize(barInfo, _ref3) {
       var width = _ref3.width,
-          x = _ref3.x;
+        x = _ref3.x;
       barInfo.width = width;
       barInfo.translateX = Math.max(x, 0);
       barInfo.stepGesture = 'moving';
@@ -7474,83 +6934,66 @@ var GanttStore = /*#__PURE__*/function () {
       return Math.round(ms / ONE_DAY_MS);
     }
     /** 更新时间 */
-
   }, {
     key: "updateTaskDate",
-    value: function () {
-      var _updateTaskDate = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(barInfo, oldSize, type) {
+    value: (function () {
+      var _updateTaskDate = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(barInfo, oldSize, type) {
         var translateX, width, task, record, oldStartDate, oldEndDate, startDate, endDate, moveTime, _moveTime, _moveTime2, success;
-
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                translateX = barInfo.translateX, width = barInfo.width, task = barInfo.task, record = barInfo.record;
-                oldStartDate = barInfo.task.startDate;
-                oldEndDate = barInfo.task.endDate;
-                startDate = oldStartDate;
-                endDate = oldEndDate;
-
-                if (type === 'move') {
-                  moveTime = this.getMovedDay((translateX - oldSize.x) * this.pxUnitAmp); // 移动，只根据移动距离偏移
-
-                  startDate = dayjs(oldStartDate).add(moveTime, 'day').format('YYYY-MM-DD HH:mm:ss');
-                  endDate = dayjs(oldEndDate).add(moveTime, 'day').hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss');
-                } else if (type === 'left') {
-                  _moveTime = this.getMovedDay((translateX - oldSize.x) * this.pxUnitAmp); // 左侧移动，只改变开始时间
-
-                  startDate = dayjs(oldStartDate).add(_moveTime, 'day').format('YYYY-MM-DD HH:mm:ss');
-                } else if (type === 'right') {
-                  _moveTime2 = this.getMovedDay((width - oldSize.width) * this.pxUnitAmp); // 右侧移动，只改变结束时间
-
-                  endDate = dayjs(oldEndDate).add(_moveTime2, 'day').hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss');
-                } else if (type === 'create') {
-                  // 创建
-                  startDate = dayjs(translateX * this.pxUnitAmp).format('YYYY-MM-DD HH:mm:ss');
-                  endDate = dayjs((translateX + width) * this.pxUnitAmp).subtract(1).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss');
-                }
-
-                if (!(startDate === oldStartDate && endDate === oldEndDate)) {
-                  _context.next = 8;
-                  break;
-                }
-
-                return _context.abrupt("return");
-
-              case 8:
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.n) {
+            case 0:
+              translateX = barInfo.translateX, width = barInfo.width, task = barInfo.task, record = barInfo.record;
+              oldStartDate = barInfo.task.startDate;
+              oldEndDate = barInfo.task.endDate;
+              startDate = oldStartDate;
+              endDate = oldEndDate;
+              if (type === 'move') {
+                moveTime = this.getMovedDay((translateX - oldSize.x) * this.pxUnitAmp); // 移动，只根据移动距离偏移
+                startDate = dayjs(oldStartDate).add(moveTime, 'day').format('YYYY-MM-DD HH:mm:ss');
+                endDate = dayjs(oldEndDate).add(moveTime, 'day').hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss');
+              } else if (type === 'left') {
+                _moveTime = this.getMovedDay((translateX - oldSize.x) * this.pxUnitAmp); // 左侧移动，只改变开始时间
+                startDate = dayjs(oldStartDate).add(_moveTime, 'day').format('YYYY-MM-DD HH:mm:ss');
+              } else if (type === 'right') {
+                _moveTime2 = this.getMovedDay((width - oldSize.width) * this.pxUnitAmp); // 右侧移动，只改变结束时间
+                endDate = dayjs(oldEndDate).add(_moveTime2, 'day').hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss');
+              } else if (type === 'create') {
+                // 创建
+                startDate = dayjs(translateX * this.pxUnitAmp).format('YYYY-MM-DD HH:mm:ss');
+                endDate = dayjs((translateX + width) * this.pxUnitAmp).subtract(1).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss');
+              }
+              if (!(startDate === oldStartDate && endDate === oldEndDate)) {
+                _context.n = 1;
+                break;
+              }
+              return _context.a(2);
+            case 1:
+              runInAction(function () {
+                barInfo.loading = true;
+              });
+              _context.n = 2;
+              return this.onUpdate(toJS(record), startDate, endDate);
+            case 2:
+              success = _context.v;
+              if (success) {
                 runInAction(function () {
-                  barInfo.loading = true;
+                  task.startDate = startDate;
+                  task.endDate = endDate;
                 });
-                _context.next = 11;
-                return this.onUpdate(toJS(record), startDate, endDate);
-
-              case 11:
-                success = _context.sent;
-
-                if (success) {
-                  runInAction(function () {
-                    task.startDate = startDate;
-                    task.endDate = endDate;
-                  });
-                } else {
-                  barInfo.width = oldSize.width;
-                  barInfo.translateX = oldSize.x;
-                }
-
-              case 13:
-              case "end":
-                return _context.stop();
-            }
+              } else {
+                barInfo.width = oldSize.width;
+                barInfo.translateX = oldSize.x;
+              }
+            case 3:
+              return _context.a(2);
           }
         }, _callee, this);
       }));
-
       function updateTaskDate(_x, _x2, _x3) {
         return _updateTaskDate.apply(this, arguments);
       }
-
       return updateTaskDate;
-    }()
+    }())
   }, {
     key: "isToday",
     value: function isToday(key) {
@@ -7559,160 +7002,85 @@ var GanttStore = /*#__PURE__*/function () {
       return target === now;
     }
   }]);
-
-  return GanttStore;
 }();
-
 __decorate([observable], GanttStore.prototype, "data", void 0);
-
 __decorate([observable], GanttStore.prototype, "originData", void 0);
-
 __decorate([observable], GanttStore.prototype, "columns", void 0);
-
 __decorate([observable], GanttStore.prototype, "columnConfig", void 0);
-
 __decorate([observable], GanttStore.prototype, "customFields", void 0);
-
 __decorate([observable], GanttStore.prototype, "dependencies", void 0);
-
 __decorate([observable], GanttStore.prototype, "scrolling", void 0);
-
 __decorate([observable], GanttStore.prototype, "isTimeline", void 0);
-
 __decorate([observable], GanttStore.prototype, "workdays", void 0);
-
 __decorate([observable], GanttStore.prototype, "durationFn", void 0);
-
 __decorate([observable], GanttStore.prototype, "scrollTop", void 0);
-
 __decorate([observable], GanttStore.prototype, "collapse", void 0);
-
 __decorate([observable], GanttStore.prototype, "tableWidth", void 0);
-
 __decorate([observable], GanttStore.prototype, "viewWidth", void 0);
-
 __decorate([observable], GanttStore.prototype, "width", void 0);
-
 __decorate([observable], GanttStore.prototype, "height", void 0);
-
 __decorate([observable], GanttStore.prototype, "bodyWidth", void 0);
-
 __decorate([observable], GanttStore.prototype, "translateX", void 0);
-
 __decorate([observable], GanttStore.prototype, "translateY", void 0);
-
 __decorate([observable], GanttStore.prototype, "sightConfig", void 0);
-
 __decorate([observable], GanttStore.prototype, "showSelectionIndicator", void 0);
-
 __decorate([observable], GanttStore.prototype, "selectionIndicatorTop", void 0);
-
 __decorate([observable], GanttStore.prototype, "dragging", void 0);
-
 __decorate([observable], GanttStore.prototype, "draggingType", void 0);
-
 __decorate([observable], GanttStore.prototype, "disabled", void 0);
-
 __decorate([action], GanttStore.prototype, "setData", null);
-
 __decorate([action], GanttStore.prototype, "toggleCollapse", null);
-
 __decorate([action], GanttStore.prototype, "setRowCollapse", null);
-
 __decorate([action], GanttStore.prototype, "setCustomEvents", null);
-
 __decorate([action], GanttStore.prototype, "setOnUpdate", null);
-
 __decorate([action], GanttStore.prototype, "setColumns", null);
-
 __decorate([action], GanttStore.prototype, "setColumnConfig", null);
-
 __decorate([action], GanttStore.prototype, "setColumnWidth", null);
-
 __decorate([action], GanttStore.prototype, "setCustomFields", null);
-
 __decorate([action], GanttStore.prototype, "setDependencies", null);
-
 __decorate([action], GanttStore.prototype, "setTimeline", null);
-
 __decorate([action], GanttStore.prototype, "setWorkdays", null);
-
 __decorate([action], GanttStore.prototype, "setDurationFn", null);
-
 __decorate([action], GanttStore.prototype, "setHideTable", null);
-
 __decorate([action], GanttStore.prototype, "handlePanMove", null);
-
 __decorate([action], GanttStore.prototype, "handlePanEnd", null);
-
 __decorate([action], GanttStore.prototype, "syncSize", null);
-
 __decorate([action], GanttStore.prototype, "handleResizeTableWidth", null);
-
+__decorate([action], GanttStore.prototype, "setTableWidth", null);
 __decorate([action], GanttStore.prototype, "initWidth", null);
-
 __decorate([action], GanttStore.prototype, "setTranslateX", null);
-
 __decorate([action], GanttStore.prototype, "setTranslateY", null);
-
 __decorate([action], GanttStore.prototype, "switchSight", null);
-
 __decorate([action], GanttStore.prototype, "scrollToToday", null);
-
 __decorate([computed], GanttStore.prototype, "todayTranslateX", null);
-
 __decorate([computed], GanttStore.prototype, "scrollBarWidth", null);
-
 __decorate([computed], GanttStore.prototype, "scrollLeft", null);
-
 __decorate([computed], GanttStore.prototype, "scrollWidth", null);
-
 __decorate([computed], GanttStore.prototype, "bodyClientHeight", null);
-
 __decorate([computed], GanttStore.prototype, "getVisibleColumns", null);
-
 __decorate([computed], GanttStore.prototype, "getColumnsWidth", null);
-
 __decorate([computed], GanttStore.prototype, "totalColumnWidth", null);
-
 __decorate([computed], GanttStore.prototype, "bodyScrollHeight", null);
-
 __decorate([computed], GanttStore.prototype, "pxUnitAmp", null);
-
 __decorate([computed], GanttStore.prototype, "translateAmp", null);
-
 __decorate([computed], GanttStore.prototype, "getBarList", null);
-
 __decorate([action], GanttStore.prototype, "handleWheel", void 0);
-
 __decorate([computed], GanttStore.prototype, "getVisibleRows", null);
-
 __decorate([action], GanttStore.prototype, "showSelectionBar", null);
-
 __decorate([action], GanttStore.prototype, "handleDragStart", null);
-
 __decorate([action], GanttStore.prototype, "handleDragEnd", null);
-
 __decorate([action], GanttStore.prototype, "handleInvalidBarLeave", null);
-
 __decorate([action], GanttStore.prototype, "handleInvalidBarHover", null);
-
 __decorate([action], GanttStore.prototype, "handleInvalidBarDragStart", null);
-
 __decorate([action], GanttStore.prototype, "handleInvalidBarDragEnd", null);
-
 __decorate([action], GanttStore.prototype, "updateBarSize", null);
-
 __decorate([action], GanttStore.prototype, "updateTaskDate", null);
 
 var prefixCls = 'gantt';
-
 var Body = function Body(_ref) {
   var children = _ref.children;
-
   var _useContext = useContext(context),
-      store = _useContext.store;
-
+    store = _useContext.store;
   var reference = useRef(null);
   var size = useSize(reference);
   useEffect(function () {
@@ -7723,64 +7091,64 @@ var Body = function Body(_ref) {
     ref: reference
   }, children);
 };
-
 var GanttComponent = function GanttComponent(props) {
   var data = props.data,
-      columns = props.columns,
-      _props$dependencies = props.dependencies,
-      dependencies = _props$dependencies === void 0 ? [] : _props$dependencies,
-      isTimeline = props.isTimeline,
-      onUpdate = props.onUpdate,
-      _props$startDateKey = props.startDateKey,
-      startDateKey = _props$startDateKey === void 0 ? 'startDate' : _props$startDateKey,
-      _props$endDateKey = props.endDateKey,
-      endDateKey = _props$endDateKey === void 0 ? 'endDate' : _props$endDateKey,
-      isRestDay = props.isRestDay,
-      getBarColor = props.getBarColor,
-      _props$showBackToday = props.showBackToday,
-      showBackToday = _props$showBackToday === void 0 ? true : _props$showBackToday,
-      _props$showUnitSwitch = props.showUnitSwitch,
-      showUnitSwitch = _props$showUnitSwitch === void 0 ? true : _props$showUnitSwitch,
-      unit = props.unit,
-      onRow = props.onRow,
-      _props$tableIndent = props.tableIndent,
-      tableIndent = _props$tableIndent === void 0 ? TABLE_INDENT : _props$tableIndent,
-      expandIcon = props.expandIcon,
-      renderBar = props.renderBar,
-      renderInvalidBar = props.renderInvalidBar,
-      renderGroupBar = props.renderGroupBar,
-      onBarClick = props.onBarClick,
-      _props$tableCollapseA = props.tableCollapseAble,
-      tableCollapseAble = _props$tableCollapseA === void 0 ? true : _props$tableCollapseA,
-      renderBarThumb = props.renderBarThumb,
-      _props$scrollTop = props.scrollTop,
-      scrollTop = _props$scrollTop === void 0 ? true : _props$scrollTop,
-      _props$rowHeight = props.rowHeight,
-      rowHeight = _props$rowHeight === void 0 ? ROW_HEIGHT : _props$rowHeight,
-      innerRef = props.innerRef,
-      _props$disabled = props.disabled,
-      disabled = _props$disabled === void 0 ? false : _props$disabled,
-      _props$alwaysShowTask = props.alwaysShowTaskBar,
-      alwaysShowTaskBar = _props$alwaysShowTask === void 0 ? true : _props$alwaysShowTask,
-      renderLeftText = props.renderLeftText,
-      renderRightText = props.renderRightText,
-      renderCustomHeaderFilter = props.renderCustomHeaderFilter,
-      onExpand = props.onExpand,
-      _props$customSights = props.customSights,
-      customSights = _props$customSights === void 0 ? [] : _props$customSights,
-      _props$locale = props.locale,
-      locale = _props$locale === void 0 ? _objectSpread2({}, defaultLocale) : _props$locale,
-      _props$hideTable = props.hideTable,
-      hideTable = _props$hideTable === void 0 ? false : _props$hideTable,
-      _props$workdays = props.workdays,
-      workdays = _props$workdays === void 0 ? 'all_days' : _props$workdays,
-      durationFn = props.durationFn,
-      _props$customEvents = props.customEvents,
-      customEvents = _props$customEvents === void 0 ? [] : _props$customEvents,
-      onCustomEventClick = props.onCustomEventClick,
-      columnConfig = props.columnConfig,
-      _props$customFields = props.customFields,
-      customFields = _props$customFields === void 0 ? [] : _props$customFields;
+    columns = props.columns,
+    _props$dependencies = props.dependencies,
+    dependencies = _props$dependencies === void 0 ? [] : _props$dependencies,
+    isTimeline = props.isTimeline,
+    onUpdate = props.onUpdate,
+    _props$startDateKey = props.startDateKey,
+    startDateKey = _props$startDateKey === void 0 ? 'startDate' : _props$startDateKey,
+    _props$endDateKey = props.endDateKey,
+    endDateKey = _props$endDateKey === void 0 ? 'endDate' : _props$endDateKey,
+    isRestDay = props.isRestDay,
+    getBarColor = props.getBarColor,
+    _props$showBackToday = props.showBackToday,
+    showBackToday = _props$showBackToday === void 0 ? true : _props$showBackToday,
+    _props$showUnitSwitch = props.showUnitSwitch,
+    showUnitSwitch = _props$showUnitSwitch === void 0 ? true : _props$showUnitSwitch,
+    unit = props.unit,
+    onRow = props.onRow,
+    _props$tableIndent = props.tableIndent,
+    tableIndent = _props$tableIndent === void 0 ? TABLE_INDENT : _props$tableIndent,
+    expandIcon = props.expandIcon,
+    renderBar = props.renderBar,
+    renderInvalidBar = props.renderInvalidBar,
+    renderGroupBar = props.renderGroupBar,
+    onBarClick = props.onBarClick,
+    _props$tableCollapseA = props.tableCollapseAble,
+    tableCollapseAble = _props$tableCollapseA === void 0 ? true : _props$tableCollapseA,
+    renderBarThumb = props.renderBarThumb,
+    _props$scrollTop = props.scrollTop,
+    scrollTop = _props$scrollTop === void 0 ? true : _props$scrollTop,
+    _props$rowHeight = props.rowHeight,
+    rowHeight = _props$rowHeight === void 0 ? ROW_HEIGHT : _props$rowHeight,
+    innerRef = props.innerRef,
+    _props$disabled = props.disabled,
+    disabled = _props$disabled === void 0 ? false : _props$disabled,
+    _props$alwaysShowTask = props.alwaysShowTaskBar,
+    alwaysShowTaskBar = _props$alwaysShowTask === void 0 ? true : _props$alwaysShowTask,
+    renderLeftText = props.renderLeftText,
+    renderRightText = props.renderRightText,
+    renderCustomHeaderFilter = props.renderCustomHeaderFilter,
+    onExpand = props.onExpand,
+    _props$customSights = props.customSights,
+    customSights = _props$customSights === void 0 ? [] : _props$customSights,
+    _props$locale = props.locale,
+    locale = _props$locale === void 0 ? _objectSpread2({}, defaultLocale) : _props$locale,
+    _props$hideTable = props.hideTable,
+    hideTable = _props$hideTable === void 0 ? false : _props$hideTable,
+    _props$workdays = props.workdays,
+    workdays = _props$workdays === void 0 ? 'all_days' : _props$workdays,
+    durationFn = props.durationFn,
+    _props$customEvents = props.customEvents,
+    customEvents = _props$customEvents === void 0 ? [] : _props$customEvents,
+    onCustomEventClick = props.onCustomEventClick,
+    columnConfig = props.columnConfig,
+    _props$customFields = props.customFields,
+    customFields = _props$customFields === void 0 ? [] : _props$customFields,
+    tableWidth = props.tableWidth;
   var store = useMemo(function () {
     return new GanttStore({
       rowHeight: rowHeight,
@@ -7822,6 +7190,11 @@ var GanttComponent = function GanttComponent(props) {
   useEffect(function () {
     store.setHideTable(hideTable);
   }, [hideTable]);
+  useEffect(function () {
+    if (tableWidth !== undefined) {
+      store.setTableWidth(tableWidth);
+    }
+  }, [tableWidth, store]);
   useEffect(function () {
     if (isRestDay) store.setIsRestDay(isRestDay);
   }, [isRestDay, store]);

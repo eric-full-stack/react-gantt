@@ -102,6 +102,7 @@ declare class GanttStore {
         height?: number;
     }): void;
     handleResizeTableWidth(width: number): void;
+    setTableWidth(width: number): void;
     initWidth(): void;
     setTranslateX(translateX: number): void;
     setTranslateY(translateY: number): void;
