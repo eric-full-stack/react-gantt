@@ -89,6 +89,8 @@ export declare namespace Gantt {
         collapsed?: boolean;
         children?: Record<RecordType>[];
         disabled?: boolean;
+        /** Se true, a barra do grupo usa suas próprias datas em vez de calcular baseado nos filhos */
+        fixedDates?: boolean;
     };
     type ColumnAlign = 'center' | 'right' | 'left';
     type ColumnType = 'text' | 'date' | 'number' | 'progress' | 'status' | 'priority' | 'user' | 'tags' | 'currency' | 'custom';

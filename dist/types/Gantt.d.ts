@@ -64,5 +64,5 @@ export interface GanttRef {
     backToday: () => void;
     getWidthByDate: (startDate: Dayjs, endDate: Dayjs) => number;
 }
-declare const GanttComponent: <RecordType extends DefaultRecordType>(props: GanttProps<RecordType>) => React.JSX.Element;
+declare const GanttComponent: <RecordType extends DefaultRecordType>(props: GanttProps<RecordType>) => JSX.Element;
 export default GanttComponent;
