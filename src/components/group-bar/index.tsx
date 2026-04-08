@@ -12,7 +12,10 @@ const height = 8;
 const GroupBar: React.FC<GroupBarProps> = ({ data }) => {
   const { prefixCls, renderGroupBar } = useContext(Context);
   const { translateY } = data;
-  const { translateX, width } = getMaxRange(data);
+  // Se fixedDates é true, usa as próprias datas do item, senão calcula baseado nos filhos
+  const { translateX, width } = data.record?.fixedDates
+    ? { translateX: data.translateX, width: data.width }
+    : getMaxRange(data)
   return (
     <div
       role="none"
