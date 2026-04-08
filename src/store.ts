@@ -334,7 +334,7 @@ class GanttStore {
     const target = find(this.viewTypeList, { type })
     if (target) {
       this.sightConfig = target
-      this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000))
+      this.scrollToToday()
     }
   }
 
@@ -344,7 +344,7 @@ class GanttStore {
   }
 
   getTranslateXByDate(date: string) {
-    return dayjs(date).startOf('day').valueOf() / 1440000 + 15
+    return dayjs(date).startOf('day').valueOf() / this.pxUnitAmp + 15
   }
 
   @computed get todayTranslateX() {

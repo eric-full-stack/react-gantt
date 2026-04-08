@@ -6,7 +6,6 @@ import './index.less'
 const CustomEvents: React.FC = () => {
   const { store, prefixCls, onCustomEventClick } = useContext(Context)
   const { customEvents, sightConfig, getTranslateXByDate } = store
-  const minorList = store.getMinorList()
   const [hoveredEvent, setHoveredEvent] = useState<string | null>(null)
   const [mouseY, setMouseY] = useState(0)
   
@@ -29,21 +28,12 @@ const CustomEvents: React.FC = () => {
     setMouseY(e.clientY - rect.top - 25)
   }
 
-  // Só renderiza eventos se estivermos na visualização de dias
-  if (sightConfig.type !== 'day') 
-    return null
-  
-
   return (
     <div className={`${prefixCls}-custom-events`}>
-      {minorList.map((item) => {
-        // Verifica se existe um evento customizado para este dia
-        const customEvent = customEvents.find(event => event.key === item.key.split(' ')[0])
-        if (!customEvent) return null
-
+      {customEvents.map((customEvent) => {
         return (
           <div
-            key={item.key}
+            key={customEvent.key}
             className={`${prefixCls}-custom-event`}
             style={{
               transform: `translate(${getTranslateXByDate(customEvent.date)}px)`,
