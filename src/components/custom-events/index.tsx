@@ -5,7 +5,8 @@ import './index.less'
 
 const CustomEvents: React.FC = () => {
   const { store, prefixCls, onCustomEventClick } = useContext(Context)
-  const { customEvents, sightConfig, getTranslateXByDate } = store
+  const { customEvents } = store
+  const getTranslateXByDate = store.getTranslateXByDate.bind(store)
   const [hoveredEvent, setHoveredEvent] = useState<string | null>(null)
   const [mouseY, setMouseY] = useState(0)
   
