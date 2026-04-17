@@ -8,6 +8,9 @@ export namespace Gantt {
     key: string
     date: string
     content: string
+    eventType?: 'milestone' | 'deliverable'
+    eventColor?: string
+    showLabel?: boolean
   }
   export interface Major {
     width: number

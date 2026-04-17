@@ -4440,9 +4440,12 @@ var CustomEvents = function CustomEvents() {
   return /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixCls, "-custom-events")
   }, customEvents.map(function (customEvent) {
+    var labelText = customEvent.eventType === 'deliverable' ? 'Entrega' : 'Milestone';
+    var labelColor = customEvent.eventColor || (customEvent.eventType === 'deliverable' ? '#0d9488' : '#a83000');
     return /*#__PURE__*/React.createElement("div", {
       key: customEvent.key,
-      className: "".concat(prefixCls, "-custom-event"),
+      className: "".concat(prefixCls, "-custom-event") + (customEvent.eventType ? " gantt-custom-event--".concat(customEvent.eventType) : ''),
+      "data-event-type": customEvent.eventType || undefined,
       style: {
         transform: "translate(".concat(getTranslateXByDate(customEvent.date), "px)")
       },
@@ -4456,17 +4459,37 @@ var CustomEvents = function CustomEvents() {
       onMouseMove: handleMouseMove
     }, hoveredEvent === customEvent.key && (/*#__PURE__*/React.createElement("div", {
       className: "".concat(prefixCls, "-custom-event_flag"),
-      style: {
-        top: Math.max(0, mouseY - 15)
-      }
+      style: _defineProperty({
+        top: Math.max(0, mouseY - 15),
+        background: customEvent.eventColor || undefined
+      }, '--event-color', customEvent.eventColor || undefined)
     }, /*#__PURE__*/React.createElement("span", {
       className: "".concat(prefixCls, "-custom-event_title")
     }, customEvent.content || 'Evento'))), /*#__PURE__*/React.createElement("div", {
       className: "".concat(prefixCls, "-custom-event_line"),
       style: {
-        height: store.bodyScrollHeight
+        height: store.bodyScrollHeight,
+        background: customEvent.eventColor || undefined
       }
-    }));
+    }, customEvent.showLabel && (/*#__PURE__*/React.createElement("div", {
+      className: "".concat(prefixCls, "-custom-event_label"),
+      style: {
+        writingMode: 'vertical-rl',
+        textOrientation: 'mixed',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%) rotate(180deg)',
+        fontSize: 10,
+        fontWeight: 600,
+        letterSpacing: '0.5px',
+        opacity: 0.7,
+        whiteSpace: 'nowrap',
+        pointerEvents: 'none',
+        color: labelColor,
+        textTransform: 'uppercase'
+      }
+    }, labelText))));
   }));
 };
 var CustomEvents$1 = observer(CustomEvents);
@@ -5447,8 +5470,30 @@ var TimeAxis = function TimeAxis() {
       return event.date === date;
     });
   }, [sightConfig, customEvents]);
+  var getCustomEventType = useCallback(function (item) {
+    var key = item.key;
+    var date = key.split(' ')[0];
+    var type = sightConfig.type;
+    if (type !== 'day') return undefined;
+    var match = customEvents.find(function (event) {
+      return event.date === date && event.eventType;
+    });
+    return match ? match.eventType : undefined;
+  }, [sightConfig, customEvents]);
+  var getCustomEventColor = useCallback(function (item) {
+    var key = item.key;
+    var date = key.split(' ')[0];
+    var type = sightConfig.type;
+    if (type !== 'day') return undefined;
+    var match = customEvents.find(function (event) {
+      return event.date === date && event.eventColor;
+    });
+    return match ? match.eventColor : undefined;
+  }, [sightConfig, customEvents]);
   var isDayView = sightConfig.type === 'day';
   var renderLabel = function renderLabel(item) {
+    var eventType = getCustomEventType(item);
+    var eventColor = getCustomEventColor(item);
     if (isDayView) {
       // For day view with <br/> in label, extract day of week and day number
       var parts = item.label.split('<br/>');
@@ -5457,11 +5502,16 @@ var TimeAxis = function TimeAxis() {
       return /*#__PURE__*/React.createElement("div", {
         className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty(_defineProperty(_defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), 'day-view', isDayView)),
         "data-day-of-week": dayOfWeek,
-        "data-day-number": dayNumber
+        "data-day-number": dayNumber,
+        "data-event-type": eventType,
+        style: eventColor ? {
+          backgroundColor: eventColor
+        } : undefined
       });
     }
     return /*#__PURE__*/React.createElement("div", {
-      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty(_defineProperty(_defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), 'day-view', isDayView))
+      className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty(_defineProperty(_defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), 'day-view', isDayView)),
+      "data-event-type": eventType
     }, item.label);
   };
   return /*#__PURE__*/React.createElement(DragResize$1, {

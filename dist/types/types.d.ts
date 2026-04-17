@@ -7,6 +7,9 @@ export declare namespace Gantt {
         key: string;
         date: string;
         content: string;
+        eventType?: 'milestone' | 'deliverable';
+        eventColor?: string;
+        showLabel?: boolean;
     }
     interface Major {
         width: number;

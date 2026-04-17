@@ -41,9 +41,36 @@ const TimeAxis: React.FC = () => {
     [sightConfig, customEvents]
   )
 
+  const getCustomEventType = useCallback(
+    item => {
+      const { key } = item
+      const date = key.split(' ')[0]
+      const { type } = sightConfig
+      if (type !== 'day') return undefined
+      const match = customEvents.find(event => event.date === date && event.eventType)
+      return match ? match.eventType : undefined
+    },
+    [sightConfig, customEvents]
+  )
+
+  const getCustomEventColor = useCallback(
+    item => {
+      const { key } = item
+      const date = key.split(' ')[0]
+      const { type } = sightConfig
+      if (type !== 'day') return undefined
+      const match = customEvents.find(event => event.date === date && event.eventColor)
+      return match ? match.eventColor : undefined
+    },
+    [sightConfig, customEvents]
+  )
+
   const isDayView = sightConfig.type === 'day'
 
   const renderLabel = (item) => {
+    const eventType = getCustomEventType(item)
+    const eventColor = getCustomEventColor(item)
+
     if (isDayView) {
       // For day view with <br/> in label, extract day of week and day number
       const parts = item.label.split('<br/>')
@@ -51,7 +78,7 @@ const TimeAxis: React.FC = () => {
       const dayNumber = parts[1]
 
       return (
-        <div 
+        <div
           className={classNames(`${prefixClsTimeAxis}-minor-label`, {
             [`${prefixClsTimeAxis}-today`]: getIsToday(item),
             [`${prefixClsTimeAxis}-custom-event`]: getIsCustomEvent(item),
@@ -59,10 +86,12 @@ const TimeAxis: React.FC = () => {
           })}
           data-day-of-week={dayOfWeek}
           data-day-number={dayNumber}
+          data-event-type={eventType}
+          style={eventColor ? { backgroundColor: eventColor } : undefined}
         />
       )
-    } 
-    
+    }
+
     return (
       <div
         className={classNames(`${prefixClsTimeAxis}-minor-label`, {
@@ -70,6 +99,7 @@ const TimeAxis: React.FC = () => {
           [`${prefixClsTimeAxis}-custom-event`]: getIsCustomEvent(item),
           'day-view': isDayView,
         })}
+        data-event-type={eventType}
       >
         {item.label}
       </div>
