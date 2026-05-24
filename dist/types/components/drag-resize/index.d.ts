@@ -29,5 +29,5 @@ interface DragResizeProps extends Omit<HTMLProps<HTMLDivElement>, 'onResize'> {
     clickStart?: boolean;
     disabled?: boolean;
 }
-declare const _default: React.FunctionComponent<DragResizeProps>;
+declare const _default: React.FC<DragResizeProps>;
 export default _default;

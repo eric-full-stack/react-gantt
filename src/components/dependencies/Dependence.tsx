@@ -1,5 +1,5 @@
 import find from 'lodash/find'
-import { observer } from 'mobx-react-lite'
+import { observer } from '../../mobx-react-observer'
 import React, { useContext } from 'react'
 import Context from '../../context'
 import type { Gantt } from '../../types'

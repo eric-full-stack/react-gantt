@@ -1,10 +1,10 @@
 import { usePersistFn, useClickAway, useSize } from 'ahooks';
-import React, { createContext, useContext, useState, useMemo, useRef, useCallback, memo, useEffect, createRef, useImperativeHandle } from 'react';
-import { observer } from 'mobx-react-lite';
+import * as React from 'react';
+import React__default, { createContext, useContext, useState, useMemo, useRef as useRef$1, useCallback as useCallback$1, memo, useEffect, createRef, useImperativeHandle } from 'react';
+import { Reaction, observable, action, computed, runInAction, toJS } from 'mobx';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
 import dayjs from 'dayjs';
-import { observable, action, computed, runInAction, toJS } from 'mobx';
 import dayjsBusinessDays from 'dayjs-business-days';
 
 function _typeof(o) {
@@ -62,6 +62,86 @@ function _objectSpread2(e) {
     });
   }
   return e;
+}
+
+/**
+ * React-19-safe replacement for mobx-react-lite@1.5.2's `observer`.
+ *
+ * The legacy mobx-react-lite (peer: `react ^16.8`) drives re-renders with a
+ * useState-based forceUpdate that loops ("Maximum update depth exceeded")
+ * under React 19. This implementation instead subscribes through React 18+'s
+ * `useSyncExternalStore` with a snapshot that is stable between renders and
+ * only changes when a tracked observable changes — which is loop-proof and
+ * tearing-safe.
+ *
+ * It relies solely on mobx 4's public `Reaction` API (`new Reaction`, `.track`,
+ * `.dispose`), so the existing mobx@4 store needs no changes.
+ */
+var useRef = React.useRef,
+  useCallback = React.useCallback;
+// This package is built against @types/react@17 (which predates
+// useSyncExternalStore) but always runs inside a React 18/19 host, so reach the
+// hook through a cast to stay compatible with the older type definitions.
+var useSyncExternalStore = React.useSyncExternalStore;
+function createReaction(adm) {
+  return new Reaction("observer(".concat(adm.name, ")"), function () {
+    // A tracked observable changed: bump the snapshot and tell React to
+    // re-render. Reading observables during render never bumps this, so the
+    // snapshot stays stable between renders => no update-depth loop.
+    adm.stateVersion = Symbol();
+    if (adm.onStoreChange) adm.onStoreChange();
+  });
+}
+function observer(baseComponent) {
+  var baseName = baseComponent.displayName || baseComponent.name || 'Component';
+  var ObserverComponent = function ObserverComponent(props) {
+    var admRef = useRef(null);
+    if (!admRef.current) {
+      admRef.current = {
+        reaction: null,
+        onStoreChange: null,
+        stateVersion: Symbol(),
+        name: baseName
+      };
+    }
+    var adm = admRef.current;
+    var subscribe = useCallback(function (onStoreChange) {
+      // The reaction may have been disposed by a previous commit's cleanup
+      // (or never created if a prior render was abandoned) — recreate it.
+      if (!adm.reaction) {
+        adm.reaction = createReaction(adm);
+        // An observable may have changed between render and subscribe.
+        adm.stateVersion = Symbol();
+      }
+      adm.onStoreChange = onStoreChange;
+      return function () {
+        adm.onStoreChange = null;
+        if (adm.reaction) {
+          adm.reaction.dispose();
+          adm.reaction = null;
+        }
+      };
+    }, [adm]);
+    var getSnapshot = useCallback(function () {
+      return adm.stateVersion;
+    }, [adm]);
+    useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+    // Ensure a live reaction exists to track this render.
+    if (!adm.reaction) adm.reaction = createReaction(adm);
+    var rendering = null;
+    var exception;
+    adm.reaction.track(function () {
+      try {
+        rendering = baseComponent(props);
+      } catch (error) {
+        exception = error;
+      }
+    });
+    if (exception) throw exception;
+    return rendering;
+  };
+  ObserverComponent.displayName = "observer(".concat(baseName, ")");
+  return /*#__PURE__*/React.memo(ObserverComponent);
 }
 
 var context = /*#__PURE__*/createContext({});
@@ -285,24 +365,24 @@ var GroupBar = function GroupBar(_ref) {
     } : getMaxRange(data),
     translateX = _ref2.translateX,
     width = _ref2.width;
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     role: "none",
     className: classNames("".concat(prefixCls, "-group-bar")),
     style: {
       transform: "translate(".concat(translateX, "px, ").concat(translateY, "px)")
     }
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixCls, "-bar")
   }, renderGroupBar ? renderGroupBar(data, {
     width: width,
     height: height
-  }) : (/*#__PURE__*/React.createElement("svg", {
+  }) : (/*#__PURE__*/React__default.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     version: "1.1",
     width: width + 1,
     height: height + 8,
     viewBox: "0 0 ".concat(width + 1, " ").concat(height + 8)
-  }, /*#__PURE__*/React.createElement("path", {
+  }, /*#__PURE__*/React__default.createElement("path", {
     fill: data.record.background || '#7B809E',
     d: "\n              M".concat(width - 2, ",0.5\n              l-").concat(width - 4, ",0\n              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n              l0,13.65\n              l6,-7\n              l").concat(width - 12, ",0\n              l6,7\n              l0,-13.65\n              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n            ")
   }))))));
@@ -493,7 +573,7 @@ var DragResize = function DragResize(_ref) {
       reachEdge: reachEdge
     });
   }, [handleAutoScroll, scroller, reachEdge]);
-  var positionRef = useRef({
+  var positionRef = useRef$1({
     clientX: 0,
     clientY: 0,
     width: defaultWidth,
@@ -501,7 +581,7 @@ var DragResize = function DragResize(_ref) {
     x: defaultX,
     y: defaultY
   });
-  var moveRef = useRef({
+  var moveRef = useRef$1({
     clientX: 0,
     clientY: 0
   });
@@ -615,10 +695,10 @@ var DragResize = function DragResize(_ref) {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
   });
-  return /*#__PURE__*/React.createElement("div", _objectSpread2({
+  return /*#__PURE__*/React__default.createElement("div", _objectSpread2({
     role: "none",
     onMouseDown: handleMouseDown
-  }, otherProps), resizing && /*#__PURE__*/createPortal(/*#__PURE__*/React.createElement("div", {
+  }, otherProps), resizing && /*#__PURE__*/createPortal(/*#__PURE__*/React__default.createElement("div", {
     style: {
       position: 'fixed',
       top: 0,
@@ -647,7 +727,7 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
     prefixCls = _useContext.prefixCls,
     _useContext$renderInv = _useContext.renderInvalidBar,
     renderInvalidBar = _useContext$renderInv === void 0 ? renderInvalidBarDefault : _useContext$renderInv;
-  var triggerRef = useRef(null);
+  var triggerRef = useRef$1(null);
   var translateY = data.translateY,
     translateX = data.translateX,
     width = data.width,
@@ -664,18 +744,18 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
     rowHeight = store.rowHeight;
   var top = translateY;
   var prefixClsInvalidTaskBar = "".concat(prefixCls, "-invalid-task-bar");
-  var handleMouseEnter = useCallback(function () {
+  var handleMouseEnter = useCallback$1(function () {
     var _a, _b;
     if (data.stepGesture === 'moving') return;
     startX = ((_b = (_a = triggerRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect()) === null || _b === void 0 ? void 0 : _b.left) || 0;
     setVisible(true);
   }, [data.stepGesture]);
-  var handleMouseLeave = useCallback(function () {
+  var handleMouseLeave = useCallback$1(function () {
     if (data.stepGesture === 'moving') return;
     setVisible(false);
     store.handleInvalidBarLeave();
   }, [data.stepGesture, store]);
-  var handleMouseMove = useCallback(function (event) {
+  var handleMouseMove = useCallback$1(function (event) {
     if (data.stepGesture === 'moving') return;
     var pointerX = viewTranslateX + (event.clientX - startX);
     // eslint-disable-next-line no-shadow
@@ -687,7 +767,7 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
   var handleBeforeResize = function handleBeforeResize() {
     store.handleInvalidBarDragStart(data);
   };
-  var handleResize = useCallback(function (_ref3) {
+  var handleResize = useCallback$1(function (_ref3) {
     var newWidth = _ref3.width,
       x = _ref3.x;
     store.updateBarSize(data, {
@@ -695,17 +775,17 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
       x: x
     });
   }, [data, store]);
-  var handleLeftResizeEnd = useCallback(function (oldSize) {
+  var handleLeftResizeEnd = useCallback$1(function (oldSize) {
     store.handleInvalidBarDragEnd(data, oldSize);
   }, [data, store]);
-  var handleAutoScroll = useCallback(function (delta) {
+  var handleAutoScroll = useCallback$1(function (delta) {
     store.setTranslateX(store.translateX + delta);
   }, [store]);
   var reachEdge = usePersistFn(function (position) {
     return position === 'left' && store.translateX <= 0;
   });
   if (disabled) return null;
-  return /*#__PURE__*/React.createElement(DragResize$1, {
+  return /*#__PURE__*/React__default.createElement(DragResize$1, {
     onMouseMove: handleMouseMove,
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
@@ -725,7 +805,7 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
     reachEdge: reachEdge,
     onBeforeResize: handleBeforeResize,
     clickStart: true
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     ref: triggerRef,
     className: prefixClsInvalidTaskBar,
     style: {
@@ -733,7 +813,7 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
       height: rowHeight,
       transform: "translateY(".concat(top - (rowHeight - barH) / 2, "px")
     }
-  }), visible && renderInvalidBar(/*#__PURE__*/React.createElement("div", {
+  }), visible && renderInvalidBar(/*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsInvalidTaskBar, "-block"),
     "aria-haspopup": 'true',
     "aria-expanded": 'false',
@@ -744,12 +824,12 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
       backgroundColor: '#7B90FF',
       borderColor: '#7B90FF'
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsInvalidTaskBar, "-date"),
     style: {
       right: Math.ceil(width + 6)
     }
-  }, dateTextFormat(translateX)), /*#__PURE__*/React.createElement("div", {
+  }, dateTextFormat(translateX)), /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsInvalidTaskBar, "-date"),
     style: {
       left: Math.ceil(width + 6)
@@ -813,7 +893,7 @@ var TaskBar = function TaskBar(_ref) {
       store.handleDragStart(data, type);
     };
   };
-  var handleResize = useCallback(function (_ref3) {
+  var handleResize = useCallback$1(function (_ref3) {
     var newWidth = _ref3.width,
       x = _ref3.x;
     if (disabled) return;
@@ -822,23 +902,23 @@ var TaskBar = function TaskBar(_ref) {
       x: x
     });
   }, [data, store, disabled]);
-  var handleLeftResizeEnd = useCallback(function (oldSize) {
+  var handleLeftResizeEnd = useCallback$1(function (oldSize) {
     store.handleDragEnd();
     store.updateTaskDate(data, oldSize, 'left');
   }, [data, store]);
-  var handleRightResizeEnd = useCallback(function (oldSize) {
+  var handleRightResizeEnd = useCallback$1(function (oldSize) {
     store.handleDragEnd();
     store.updateTaskDate(data, oldSize, 'right');
   }, [data, store]);
-  var handleMoveEnd = useCallback(function (oldSize) {
+  var handleMoveEnd = useCallback$1(function (oldSize) {
     store.handleDragEnd();
     store.updateTaskDate(data, oldSize, 'move');
   }, [data, store]);
-  var handleAutoScroll = useCallback(function (delta) {
+  var handleAutoScroll = useCallback$1(function (delta) {
     store.setTranslateX(store.translateX + delta);
   }, [store]);
   var allowDrag = showDragBar && !loading;
-  var handleClick = useCallback(function (e) {
+  var handleClick = useCallback$1(function (e) {
     e.stopPropagation();
     if (onBarClick) onBarClick(data.record);
   }, [data.record, onBarClick]);
@@ -854,16 +934,16 @@ var TaskBar = function TaskBar(_ref) {
     var daysWidth = Number(data.record.duration);
     return "".concat(daysWidth, " ").concat(daysWidth > 1 ? locale.days : locale.day);
   }, [translateX, width, moveCalc, translateX]);
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     role: 'none',
     className: classNames(prefixClsTaskBar, _defineProperty(_defineProperty({}, "".concat(prefixClsTaskBar, "-invalid-date-range"), invalidDateRange), "".concat(prefixClsTaskBar, "-overdue"), !invalidDateRange)),
     style: {
       transform: "translate(".concat(translateX, "px, ").concat(translateY, "px)")
     },
     onClick: handleClick
-  }, loading && /*#__PURE__*/React.createElement("div", {
+  }, loading && /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-loading")
-  }), /*#__PURE__*/React.createElement("div", null, allowDrag && (/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(DragResize$1, {
+  }), /*#__PURE__*/React__default.createElement("div", null, allowDrag && (/*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(DragResize$1, {
     className: classNames("".concat(prefixClsTaskBar, "-resize-handle"), "".concat(prefixClsTaskBar, "-resize-handle-left"), _defineProperty({}, "".concat(prefixClsTaskBar, "-resize-handle-disabled"), disabled)),
     style: {
       left: -14
@@ -884,7 +964,7 @@ var TaskBar = function TaskBar(_ref) {
     reachEdge: reachEdge,
     onBeforeResize: handleBeforeResize('left'),
     disabled: disabled
-  }), /*#__PURE__*/React.createElement(DragResize$1, {
+  }), /*#__PURE__*/React__default.createElement(DragResize$1, {
     className: classNames("".concat(prefixClsTaskBar, "-resize-handle"), "".concat(prefixClsTaskBar, "-resize-handle-right"), _defineProperty({}, "".concat(prefixClsTaskBar, "-resize-handle-disabled"), disabled)),
     style: {
       left: width + 1
@@ -905,13 +985,13 @@ var TaskBar = function TaskBar(_ref) {
     reachEdge: reachEdge,
     onBeforeResize: handleBeforeResize('right'),
     disabled: disabled
-  }), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React__default.createElement("div", {
     className: classNames("".concat(prefixClsTaskBar, "-resize-bg"), "".concat(prefixClsTaskBar, "-resize-bg-compact")),
     style: {
       width: width + 30,
       left: -14
     }
-  }))), /*#__PURE__*/React.createElement(DragResize$1, {
+  }))), /*#__PURE__*/React__default.createElement(DragResize$1, {
     className: "".concat(prefixClsTaskBar, "-bar"),
     onResize: handleResize,
     onResizeEnd: handleMoveEnd,
@@ -931,27 +1011,27 @@ var TaskBar = function TaskBar(_ref) {
   }, renderBar ? renderBar(data, {
     width: width + 1,
     height: barHeight + 1
-  }) : (/*#__PURE__*/React.createElement("svg", {
+  }) : (/*#__PURE__*/React__default.createElement("svg", {
     xmlns: 'http://www.w3.org/2000/svg',
     version: '1.1',
     width: width + 1,
     height: barHeight + 1,
     viewBox: "0 0 ".concat(width + 1, " ").concat(barHeight + 1)
-  }, /*#__PURE__*/React.createElement("path", {
+  }, /*#__PURE__*/React__default.createElement("path", {
     fill: record.backgroundColor || getBarColor && getBarColor(record).backgroundColor || themeColor[0],
     stroke: record.borderColor || getBarColor && getBarColor(record).borderColor || themeColor[1],
     d: "\n              M".concat(width - 2, ",0.5\n              l-").concat(width - 5, ",0\n              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n              l0,5.3\n\n              c0.03256,0.38255 0.20896,0.724 0.47457,0.97045\n              c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013\n              l4,0\n\n              l").concat(width - 12, ",0\n\n              l4,0\n              c0.41421,0 0.78921,-0.16789 1.06066,-0.43934\n              c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066\n\n              l0,-5.3\n              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n            ")
-  }))))), (allowDrag || disabled || alwaysShowTaskBar) && !isTimeline && (/*#__PURE__*/React.createElement("div", {
+  }))))), (allowDrag || disabled || alwaysShowTaskBar) && !isTimeline && (/*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-label"),
     style: {
       left: width / 2 - 10
     }
-  }, days)), (stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, days)), (stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (/*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-date-text"),
     style: {
       left: width + 16
     }
-  }, renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)), /*#__PURE__*/React.createElement("div", {
+  }, renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)), /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-date-text"),
     style: {
       right: width + 16
@@ -968,15 +1048,15 @@ var BarList = function BarList() {
   var _store$getVisibleRows = store.getVisibleRows,
     count = _store$getVisibleRows.count,
     start = _store$getVisibleRows.start;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
-    if (bar._group) return /*#__PURE__*/React.createElement(GroupBar$1, {
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, barList.slice(start, start + count).map(function (bar) {
+    if (bar._group) return /*#__PURE__*/React__default.createElement(GroupBar$1, {
       key: bar.key,
       data: bar
     });
-    return bar.invalidDateRange ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
+    return bar.invalidDateRange ? /*#__PURE__*/React__default.createElement(InvalidTaskBar$1, {
       key: bar.key,
       data: bar
-    }) : /*#__PURE__*/React.createElement(TaskBar$1, {
+    }) : /*#__PURE__*/React__default.createElement(TaskBar$1, {
       key: bar.key,
       data: bar
     });
@@ -1008,14 +1088,14 @@ var TaskBarThumb = function TaskBarThumb(_ref) {
   var left = useMemo(function () {
     return type === 'right' ? viewTranslateX + viewWidth - 5 : viewTranslateX + 2;
   }, [type, viewTranslateX, viewWidth]);
-  var handleClick = useCallback(function (e) {
+  var handleClick = useCallback$1(function (e) {
     e.stopPropagation();
     store.scrollToBar(data, type);
   }, [data, store, type]);
   useMemo(function () {
     return record.backgroundColor || getBarColor && getBarColor(record).backgroundColor;
   }, [record]);
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     role: 'none',
     className: classNames(prefixClsTaskBarThumb, _defineProperty(_defineProperty({}, "".concat(prefixClsTaskBarThumb, "-left"), type === 'left'), "".concat(prefixClsTaskBarThumb, "-right"), type === 'right')),
     style: {
@@ -1023,9 +1103,9 @@ var TaskBarThumb = function TaskBarThumb(_ref) {
       top: translateY - 5
     },
     onClick: handleClick
-  }, type === 'left' && (/*#__PURE__*/React.createElement("div", {
+  }, type === 'left' && (/*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTaskBarThumb, "-circle-left")
-  })), renderBarThumb ? renderBarThumb(data.record, type) : label, type === 'right' && (/*#__PURE__*/React.createElement("div", {
+  })), renderBarThumb ? renderBarThumb(data.record, type) : label, type === 'right' && (/*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTaskBarThumb, "-circle-right")
   })));
 };
@@ -1039,8 +1119,8 @@ var BarThumbList = function BarThumbList() {
   var _store$getVisibleRows = store.getVisibleRows,
     count = _store$getVisibleRows.count,
     start = _store$getVisibleRows.start;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
-    if (store.getTaskBarThumbVisible(bar)) return /*#__PURE__*/React.createElement(TaskBarThumb$1, {
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, barList.slice(start, start + count).map(function (bar) {
+    if (store.getTaskBarThumbVisible(bar)) return /*#__PURE__*/React__default.createElement(TaskBarThumb$1, {
       data: bar,
       key: bar.key
     });
@@ -4315,10 +4395,10 @@ var Dependence = function Dependence(_ref) {
     end = _ref3[1];
   var points = [].concat(_toConsumableArray(getPoints(start, end, type)), [end]);
   var endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1;
-  return /*#__PURE__*/React.createElement("g", {
+  return /*#__PURE__*/React__default.createElement("g", {
     stroke: color,
     className: css_248z$e['task-dependency-line']
-  }, /*#__PURE__*/React.createElement("path", {
+  }, /*#__PURE__*/React__default.createElement("path", {
     style: {
       stroke: color
     },
@@ -4327,7 +4407,7 @@ var Dependence = function Dependence(_ref) {
     }).join('\n'), "\n          L").concat(end.x, ",").concat(end.y, "\n          "),
     strokeWidth: '1',
     fill: 'none'
-  }), /*#__PURE__*/React.createElement("path", {
+  }), /*#__PURE__*/React__default.createElement("path", {
     name: 'arrow',
     strokeWidth: '1',
     fill: color,
@@ -4340,8 +4420,8 @@ var Dependencies = function Dependencies() {
   var _useContext = useContext(context),
     store = _useContext.store;
   var dependencies = store.dependencies;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, dependencies.map(function (dependence) {
-    return /*#__PURE__*/React.createElement(Dependence$1, {
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, dependencies.map(function (dependence) {
+    return /*#__PURE__*/React__default.createElement(Dependence$1, {
       key: JSON.stringify(dependence),
       data: dependence
     });
@@ -4368,18 +4448,18 @@ var DragPresent = function DragPresent() {
   var right = translateX + width;
   var leftLine = draggingType === 'left' || draggingType === 'move';
   var rightLine = draggingType === 'right' || draggingType === 'move';
-  return /*#__PURE__*/React.createElement("g", {
+  return /*#__PURE__*/React__default.createElement("g", {
     fill: "#DAE0FF",
     stroke: "#7B90FF"
-  }, leftLine && /*#__PURE__*/React.createElement("path", {
+  }, leftLine && /*#__PURE__*/React__default.createElement("path", {
     d: "M".concat(left, ",0 L").concat(left, ",").concat(bodyScrollHeight)
-  }), /*#__PURE__*/React.createElement("rect", {
+  }), /*#__PURE__*/React__default.createElement("rect", {
     x: left,
     y: "0",
     width: width,
     height: bodyScrollHeight,
     strokeWidth: "0"
-  }), rightLine && /*#__PURE__*/React.createElement("path", {
+  }), rightLine && /*#__PURE__*/React__default.createElement("path", {
     d: "M".concat(right, ",0 L").concat(right, ",").concat(bodyScrollHeight)
   }));
 };
@@ -4392,12 +4472,12 @@ var Today = function Today() {
   var _useContext = useContext(context),
     store = _useContext.store,
     prefixCls = _useContext.prefixCls;
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixCls, "-today"),
     style: {
       transform: "translate(".concat(store.todayTranslateX + 15, "px)")
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixCls, "-today_line"),
     style: {
       height: store.bodyScrollHeight
@@ -4437,12 +4517,12 @@ var CustomEvents = function CustomEvents() {
     var rect = e.currentTarget.getBoundingClientRect();
     setMouseY(e.clientY - rect.top - 25);
   };
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixCls, "-custom-events")
   }, customEvents.map(function (customEvent) {
     var labelText = customEvent.eventType === 'deliverable' ? 'Entrega' : 'Milestone';
     var labelColor = customEvent.eventColor || (customEvent.eventType === 'deliverable' ? '#0d9488' : '#a83000');
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React__default.createElement("div", {
       key: customEvent.key,
       className: "".concat(prefixCls, "-custom-event") + (customEvent.eventType ? " gantt-custom-event--".concat(customEvent.eventType) : ''),
       "data-event-type": customEvent.eventType || undefined,
@@ -4457,21 +4537,21 @@ var CustomEvents = function CustomEvents() {
       },
       onMouseLeave: handleMouseLeave,
       onMouseMove: handleMouseMove
-    }, hoveredEvent === customEvent.key && (/*#__PURE__*/React.createElement("div", {
+    }, hoveredEvent === customEvent.key && (/*#__PURE__*/React__default.createElement("div", {
       className: "".concat(prefixCls, "-custom-event_flag"),
       style: _defineProperty({
         top: Math.max(0, mouseY - 15),
         background: customEvent.eventColor || undefined
       }, '--event-color', customEvent.eventColor || undefined)
-    }, /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React__default.createElement("span", {
       className: "".concat(prefixCls, "-custom-event_title")
-    }, customEvent.content || 'Evento'))), /*#__PURE__*/React.createElement("div", {
+    }, customEvent.content || 'Evento'))), /*#__PURE__*/React__default.createElement("div", {
       className: "".concat(prefixCls, "-custom-event_line"),
       style: {
         height: store.bodyScrollHeight,
         background: customEvent.eventColor || undefined
       }
-    }, customEvent.showLabel && (/*#__PURE__*/React.createElement("div", {
+    }, customEvent.showLabel && (/*#__PURE__*/React__default.createElement("div", {
       className: "".concat(prefixCls, "-custom-event_label"),
       style: {
         writingMode: 'vertical-rl',
@@ -4507,20 +4587,20 @@ var Chart = function Chart() {
     translateX = store.translateX,
     translateY = store.translateY,
     chartElementRef = store.chartElementRef;
-  var handleResize = useCallback(function (_ref) {
+  var handleResize = useCallback$1(function (_ref) {
     var x = _ref.x,
       y = _ref.y;
     store.handlePanMove(-x, -y);
   }, [store]);
-  var handleResizeEnd = useCallback(function () {
+  var handleResizeEnd = useCallback$1(function () {
     store.handlePanEnd();
   }, [store]);
   var minorList = store.getMinorList();
-  var handleMouseMove = useCallback(function (event) {
+  var handleMouseMove = useCallback$1(function (event) {
     event.persist();
     store.handleMouseMove(event);
   }, [store]);
-  var handleMouseLeave = useCallback(function () {
+  var handleMouseLeave = useCallback$1(function () {
     store.handleMouseLeave();
   }, [store]);
   useEffect(function () {
@@ -4530,7 +4610,7 @@ var Chart = function Chart() {
       if (element) element.removeEventListener('wheel', store.handleWheel);
     };
   }, [chartElementRef, store]);
-  return /*#__PURE__*/React.createElement(DragResize$1, {
+  return /*#__PURE__*/React__default.createElement(DragResize$1, {
     onResize: handleResize,
     onResizeEnd: handleResizeEnd,
     defaultSize: {
@@ -4540,7 +4620,7 @@ var Chart = function Chart() {
       height: 0
     },
     type: 'move'
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     ref: chartElementRef,
     className: "".concat(prefixCls, "-chart"),
     onMouseMove: handleMouseMove,
@@ -4550,30 +4630,30 @@ var Chart = function Chart() {
       width: viewWidth,
       height: bodyScrollHeight
     }
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, /*#__PURE__*/React__default.createElement("svg", {
     className: "".concat(prefixCls, "-chart-svg-renderer"),
     xmlns: 'http://www.w3.org/2000/svg',
     version: '1.1',
     width: viewWidth,
     height: bodyScrollHeight,
     viewBox: "".concat(translateX, " ").concat(translateY, " ").concat(viewWidth, " ").concat(bodyScrollHeight)
-  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("pattern", {
+  }, /*#__PURE__*/React__default.createElement("defs", null, /*#__PURE__*/React__default.createElement("pattern", {
     id: 'repeat',
     width: '4.5',
     height: '10',
     patternUnits: 'userSpaceOnUse',
     patternTransform: 'rotate(70 50 50)'
-  }, /*#__PURE__*/React.createElement("line", {
+  }, /*#__PURE__*/React__default.createElement("line", {
     stroke: '#c6c6c6',
     strokeWidth: '1px',
     y2: '10'
   }))), minorList.map(function (item) {
-    return item.isWeek ? (/*#__PURE__*/React.createElement("g", {
+    return item.isWeek ? (/*#__PURE__*/React__default.createElement("g", {
       key: item.key,
       stroke: '#f0f0f0'
-    }, /*#__PURE__*/React.createElement("path", {
+    }, /*#__PURE__*/React__default.createElement("path", {
       d: "M".concat(item.left, ",0 L").concat(item.left, ",").concat(bodyScrollHeight)
-    }), /*#__PURE__*/React.createElement("rect", {
+    }), /*#__PURE__*/React__default.createElement("rect", {
       fill: 'url(#repeat)',
       opacity: '0.5',
       strokeWidth: '0',
@@ -4581,19 +4661,19 @@ var Chart = function Chart() {
       y: 0,
       width: item.width,
       height: bodyScrollHeight
-    }))) : (/*#__PURE__*/React.createElement("g", {
+    }))) : (/*#__PURE__*/React__default.createElement("g", {
       key: item.key,
       stroke: '#f0f0f0'
-    }, /*#__PURE__*/React.createElement("path", {
+    }, /*#__PURE__*/React__default.createElement("path", {
       d: "M".concat(item.left, ",0 L").concat(item.left, ",").concat(bodyScrollHeight)
     })));
-  }), /*#__PURE__*/React.createElement(DragPresent$1, null), /*#__PURE__*/React.createElement(Dependencies$1, null)), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React__default.createElement(DragPresent$1, null), /*#__PURE__*/React__default.createElement(Dependencies$1, null)), /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixCls, "-render-chunk"),
     style: {
       height: bodyScrollHeight,
       transform: "translate(-".concat(translateX, "px, -").concat(translateY, "px)")
     }
-  }, /*#__PURE__*/React.createElement(BarThumbList$1, null), /*#__PURE__*/React.createElement(BarList$1, null), /*#__PURE__*/React.createElement(Today$1, null), /*#__PURE__*/React.createElement(CustomEvents$1, null))));
+  }, /*#__PURE__*/React__default.createElement(BarThumbList$1, null), /*#__PURE__*/React__default.createElement(BarList$1, null), /*#__PURE__*/React__default.createElement(Today$1, null), /*#__PURE__*/React__default.createElement(CustomEvents$1, null))));
 };
 var Chart$1 = /*#__PURE__*/memo(observer(Chart));
 
@@ -4741,10 +4821,10 @@ function useDragResize(handleResize, _ref) {
     _useState2 = _slicedToArray(_useState, 2),
     resizing = _useState2[0],
     setResizing = _useState2[1];
-  var positionRef = useRef({
+  var positionRef = useRef$1({
     left: 0
   });
-  var initSizeRef = useRef(initSize);
+  var initSizeRef = useRef$1(initSize);
   var handleMouseMove = usePersistFn(/*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(event) {
       var distance, width;
@@ -4771,12 +4851,12 @@ function useDragResize(handleResize, _ref) {
       return _ref2.apply(this, arguments);
     };
   }());
-  var handleMouseUp = useCallback(function () {
+  var handleMouseUp = useCallback$1(function () {
     window.removeEventListener('mousemove', handleMouseMove);
     window.removeEventListener('mouseup', handleMouseUp);
     setResizing(false);
   }, [handleMouseMove]);
-  var handleMouseDown = useCallback(function (event) {
+  var handleMouseDown = useCallback$1(function (event) {
     positionRef.current.left = event.clientX;
     initSizeRef.current = initSize;
     window.addEventListener('mousemove', handleMouseMove);
@@ -4796,12 +4876,12 @@ var Divider = function Divider() {
     prefixCls = _useContext.prefixCls;
   var prefixClsDivider = "".concat(prefixCls, "-divider");
   var tableWidth = store.tableWidth;
-  var handleClick = useCallback(function (event) {
+  var handleClick = useCallback$1(function (event) {
     event.stopPropagation();
     store.toggleCollapse();
   }, [store]);
   var left = tableWidth;
-  var handleResize = useCallback(function (_ref) {
+  var handleResize = useCallback$1(function (_ref) {
     var width = _ref.width;
     store.handleResizeTableWidth(width);
   }, [store]);
@@ -4815,14 +4895,14 @@ var Divider = function Divider() {
     _useDragResize2 = _slicedToArray(_useDragResize, 2),
     handleMouseDown = _useDragResize2[0],
     resizing = _useDragResize2[1];
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     role: 'none',
     className: classNames(prefixClsDivider, _defineProperty({}, "".concat(prefixClsDivider, "_only"), !tableCollapseAble)),
     style: {
       left: left - 1
     },
     onMouseDown: tableWidth === 0 ? undefined : handleMouseDown
-  }, resizing && (/*#__PURE__*/React.createElement("div", {
+  }, resizing && (/*#__PURE__*/React__default.createElement("div", {
     style: {
       position: 'fixed',
       top: 0,
@@ -4832,14 +4912,14 @@ var Divider = function Divider() {
       zIndex: 9999,
       cursor: 'col-resize'
     }
-  })), /*#__PURE__*/React.createElement("hr", null), tableCollapseAble && (/*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React__default.createElement("hr", null), tableCollapseAble && (/*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsDivider, "-icon-wrapper"),
     role: 'none',
     onMouseDown: function onMouseDown(e) {
       return e.stopPropagation();
     },
     onClick: handleClick
-  }, /*#__PURE__*/React.createElement("i", {
+  }, /*#__PURE__*/React__default.createElement("i", {
     className: classNames("".concat(prefixClsDivider, "-arrow"), _defineProperty({}, "".concat(prefixClsDivider, "-reverse"), left <= 0))
   }))));
 };
@@ -4856,18 +4936,18 @@ var ScrollBar = function ScrollBar() {
     viewWidth = store.viewWidth;
   var width = store.scrollBarWidth;
   var prefixClsScrollBar = "".concat(prefixCls, "-scroll_bar");
-  var handleResize = useCallback(function (_ref) {
+  var handleResize = useCallback$1(function (_ref) {
     var x = _ref.x;
     store.setTranslateX(x * (store.scrollWidth / store.viewWidth));
   }, [store]);
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     role: 'none',
     className: prefixClsScrollBar,
     style: {
       left: tableWidth,
       width: viewWidth
     }
-  }, /*#__PURE__*/React.createElement(DragResize$1, {
+  }, /*#__PURE__*/React__default.createElement(DragResize$1, {
     className: "".concat(prefixClsScrollBar, "-thumb"),
     onResize: handleResize,
     defaultSize: {
@@ -4893,7 +4973,7 @@ var ScrollTop = function ScrollTop() {
     scrollTopConfig = _useContext.scrollTop,
     prefixCls = _useContext.prefixCls;
   var scrollTop = store.scrollTop;
-  var handleClick = useCallback(function () {
+  var handleClick = useCallback$1(function () {
     if (store.mainElementRef.current) {
       store.mainElementRef.current.scrollTop = 0;
     }
@@ -4902,7 +4982,7 @@ var ScrollTop = function ScrollTop() {
     return null;
   }
   var prefixClsScrollTop = "".concat(prefixCls, "-scroll_top");
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     className: prefixClsScrollTop,
     style: scrollTopConfig instanceof Object ? scrollTopConfig : undefined,
     onClick: handleClick
@@ -4925,7 +5005,7 @@ var SelectionIndicator = function SelectionIndicator() {
     rowHeight = store.rowHeight,
     translateY = store.translateY;
   var prefixClsSelectionIndicator = "".concat(prefixCls, "-selection-indicator");
-  return showSelectionIndicator ? (/*#__PURE__*/React.createElement("div", {
+  return showSelectionIndicator ? (/*#__PURE__*/React__default.createElement("div", {
     className: prefixClsSelectionIndicator,
     style: {
       height: rowHeight,
@@ -4945,75 +5025,75 @@ var RowToggler = function RowToggler(_ref) {
     _ref$prefixCls = _ref.prefixCls,
     prefixCls = _ref$prefixCls === void 0 ? '' : _ref$prefixCls;
   var prefixClsRowToggler = "".concat(prefixCls, "-row-toggler");
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     role: 'none',
     onClick: onClick,
     className: prefixClsRowToggler
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: classNames(prefixClsRowToggler, _defineProperty({}, "".concat(prefixClsRowToggler, "-collapsed"), collapsed))
-  }, /*#__PURE__*/React.createElement("i", {
+  }, /*#__PURE__*/React__default.createElement("i", {
     "data-level": level
-  }, level <= 0 ? (/*#__PURE__*/React.createElement("svg", {
+  }, level <= 0 ? (/*#__PURE__*/React__default.createElement("svg", {
     viewBox: '0 0 1024 1024'
-  }, /*#__PURE__*/React.createElement("path", {
+  }, /*#__PURE__*/React__default.createElement("path", {
     d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
-  }))) : (/*#__PURE__*/React.createElement("svg", {
+  }))) : (/*#__PURE__*/React__default.createElement("svg", {
     viewBox: '0 0 1024 1024'
-  }, /*#__PURE__*/React.createElement("path", {
+  }, /*#__PURE__*/React__default.createElement("path", {
     d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
   }))))));
 };
 
 var TextCell = function TextCell(_ref) {
   var value = _ref.value;
-  if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
-  return /*#__PURE__*/React.createElement("span", null, String(value));
+  if (value === null || value === undefined) return /*#__PURE__*/React__default.createElement("span", null, "-");
+  return /*#__PURE__*/React__default.createElement("span", null, String(value));
 };
 var DateCell = function DateCell(_ref2) {
   var value = _ref2.value,
     column = _ref2.column;
-  if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (!value) return /*#__PURE__*/React__default.createElement("span", null, "-");
   try {
     var formatted = column.formatter ? column.formatter(value) : dayjs(value).format('DD/MM/YYYY');
-    return /*#__PURE__*/React.createElement("span", null, formatted);
+    return /*#__PURE__*/React__default.createElement("span", null, formatted);
   } catch (_unused) {
-    return /*#__PURE__*/React.createElement("span", null, "-");
+    return /*#__PURE__*/React__default.createElement("span", null, "-");
   }
 };
 var NumberCell = function NumberCell(_ref3) {
   var value = _ref3.value,
     column = _ref3.column;
-  if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (value === null || value === undefined) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var formatted = column.formatter ? column.formatter(value) : typeof value === 'number' ? value.toLocaleString('pt-BR') : value;
-  return /*#__PURE__*/React.createElement("span", null, formatted);
+  return /*#__PURE__*/React__default.createElement("span", null, formatted);
 };
 var ProgressCell = function ProgressCell(_ref4) {
   var value = _ref4.value;
   var progress = typeof value === 'number' ? value : 0;
   var percentage = Math.min(Math.max(progress, 0), 100);
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     className: "flex items-center gap-2 w-full"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: "flex-1 h-2 bg-gray-200 rounded-full overflow-hidden"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: "h-full bg-blue-500 transition-all",
     style: {
       width: "".concat(percentage, "%")
     }
-  })), /*#__PURE__*/React.createElement("span", {
+  })), /*#__PURE__*/React__default.createElement("span", {
     className: "text-xs text-gray-600 min-w-[3ch]"
   }, percentage, "%"));
 };
 var StatusCell = function StatusCell(_ref5) {
   var value = _ref5.value;
-  if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (!value) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var statusObj = _typeof(value) === 'object' ? value : {
     title: String(value)
   };
   var title = statusObj.title,
     color = statusObj.color,
     textColor = statusObj.textColor;
-  return /*#__PURE__*/React.createElement("span", {
+  return /*#__PURE__*/React__default.createElement("span", {
     className: "inline-flex items-center px-2 py-1 rounded text-xs font-medium",
     style: {
       backgroundColor: color || '#e5e7eb',
@@ -5023,7 +5103,7 @@ var StatusCell = function StatusCell(_ref5) {
 };
 var PriorityCell = function PriorityCell(_ref6) {
   var value = _ref6.value;
-  if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (value === null || value === undefined) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var priorityMap = {
     1: {
       label: 'Muito Baixa',
@@ -5050,7 +5130,7 @@ var PriorityCell = function PriorityCell(_ref6) {
     label: String(value),
     color: '#6b7280'
   };
-  return /*#__PURE__*/React.createElement("span", {
+  return /*#__PURE__*/React__default.createElement("span", {
     className: "inline-flex items-center px-2 py-1 rounded text-xs font-medium text-white",
     style: {
       backgroundColor: priority.color
@@ -5059,7 +5139,7 @@ var PriorityCell = function PriorityCell(_ref6) {
 };
 var UserCell = function UserCell(_ref7) {
   var value = _ref7.value;
-  if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (!value) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var userObj = _typeof(value) === 'object' ? value : {
     name: String(value)
   };
@@ -5067,21 +5147,21 @@ var UserCell = function UserCell(_ref7) {
     avatar = userObj.avatar,
     picture = userObj.picture;
   var userAvatar = avatar || picture;
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     className: "flex items-center gap-2"
-  }, userAvatar && (/*#__PURE__*/React.createElement("img", {
+  }, userAvatar && (/*#__PURE__*/React__default.createElement("img", {
     src: userAvatar,
     alt: name || 'User',
     className: "w-6 h-6 rounded-full object-cover"
-  })), !userAvatar && (/*#__PURE__*/React.createElement("div", {
+  })), !userAvatar && (/*#__PURE__*/React__default.createElement("div", {
     className: "w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600"
-  }, (name || 'U').charAt(0).toUpperCase())), /*#__PURE__*/React.createElement("span", {
+  }, (name || 'U').charAt(0).toUpperCase())), /*#__PURE__*/React__default.createElement("span", {
     className: "text-sm truncate"
   }, name || value));
 };
 var TagsCell = function TagsCell(_ref8) {
   var value = _ref8.value;
-  if (!value) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (!value) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var tags = [];
   if (typeof value === 'string') {
     tags = value.split(',').map(function (t) {
@@ -5090,11 +5170,11 @@ var TagsCell = function TagsCell(_ref8) {
   } else if (Array.isArray(value)) {
     tags = value;
   }
-  if (tags.length === 0) return /*#__PURE__*/React.createElement("span", null, "-");
-  return /*#__PURE__*/React.createElement("div", {
+  if (tags.length === 0) return /*#__PURE__*/React__default.createElement("span", null, "-");
+  return /*#__PURE__*/React__default.createElement("div", {
     className: "flex flex-wrap gap-1"
   }, tags.map(function (tag, index) {
-    return /*#__PURE__*/React.createElement("span", {
+    return /*#__PURE__*/React__default.createElement("span", {
       key: index,
       className: "inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700"
     }, tag);
@@ -5103,86 +5183,86 @@ var TagsCell = function TagsCell(_ref8) {
 var CurrencyCell = function CurrencyCell(_ref9) {
   var value = _ref9.value,
     column = _ref9.column;
-  if (value === null || value === undefined) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (value === null || value === undefined) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var numValue = typeof value === 'number' ? value : parseFloat(value);
-  if (isNaN(numValue)) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (isNaN(numValue)) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var formatted = column.formatter ? column.formatter(value) : new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
   }).format(numValue);
-  return /*#__PURE__*/React.createElement("span", null, formatted);
+  return /*#__PURE__*/React__default.createElement("span", null, formatted);
 };
 var CustomFieldCell = function CustomFieldCell(_ref0) {
   var value = _ref0.value,
     record = _ref0.record,
     column = _ref0.column;
-  if (!column.customFieldId) return /*#__PURE__*/React.createElement(TextCell, {
+  if (!column.customFieldId) return /*#__PURE__*/React__default.createElement(TextCell, {
     value: value,
     record: record,
     column: column
   });
   var customFieldValues = record.customFieldValues;
-  if (!customFieldValues) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (!customFieldValues) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var fieldValue = customFieldValues.find(function (fv) {
     return fv.fieldId === column.customFieldId;
   });
-  if (!fieldValue) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (!fieldValue) return /*#__PURE__*/React__default.createElement("span", null, "-");
   var field = fieldValue.field,
     fieldVal = fieldValue.value;
-  if (!field || !fieldVal) return /*#__PURE__*/React.createElement("span", null, "-");
+  if (!field || !fieldVal) return /*#__PURE__*/React__default.createElement("span", null, "-");
   switch (field.type) {
     case 'text':
     case 'email':
     case 'phone':
-      return /*#__PURE__*/React.createElement(TextCell, {
+      return /*#__PURE__*/React__default.createElement(TextCell, {
         value: fieldVal,
         record: record,
         column: column
       });
     case 'number':
-      return /*#__PURE__*/React.createElement(NumberCell, {
+      return /*#__PURE__*/React__default.createElement(NumberCell, {
         value: fieldVal,
         record: record,
         column: column
       });
     case 'date':
-      return /*#__PURE__*/React.createElement(DateCell, {
+      return /*#__PURE__*/React__default.createElement(DateCell, {
         value: fieldVal,
         record: record,
         column: column
       });
     case 'currency':
-      return /*#__PURE__*/React.createElement(CurrencyCell, {
+      return /*#__PURE__*/React__default.createElement(CurrencyCell, {
         value: fieldVal,
         record: record,
         column: column
       });
     case 'select':
-      return /*#__PURE__*/React.createElement("span", {
+      return /*#__PURE__*/React__default.createElement("span", {
         className: "inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700"
       }, fieldVal);
     case 'multiselect':
       {
         var values = Array.isArray(fieldVal) ? fieldVal : [fieldVal];
-        return /*#__PURE__*/React.createElement(TagsCell, {
+        return /*#__PURE__*/React__default.createElement(TagsCell, {
           value: values,
           record: record,
           column: column
         });
       }
     case 'checkbox':
-      return /*#__PURE__*/React.createElement("span", {
+      return /*#__PURE__*/React__default.createElement("span", {
         className: "inline-flex items-center"
       }, fieldVal === 'true' || fieldVal === true ? '✓' : '✗');
     case 'url':
-      return /*#__PURE__*/React.createElement("a", {
+      return /*#__PURE__*/React__default.createElement("a", {
         href: fieldVal,
         target: "_blank",
         rel: "noopener noreferrer",
         className: "text-blue-600 hover:underline"
       }, fieldVal);
     default:
-      return /*#__PURE__*/React.createElement(TextCell, {
+      return /*#__PURE__*/React__default.createElement(TextCell, {
         value: fieldVal,
         record: record,
         column: column
@@ -5203,26 +5283,26 @@ var renderCell = function renderCell(value, record, column) {
   };
   switch (column.type) {
     case 'date':
-      return /*#__PURE__*/React.createElement(DateCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(DateCell, _objectSpread2({}, props));
     case 'number':
-      return /*#__PURE__*/React.createElement(NumberCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(NumberCell, _objectSpread2({}, props));
     case 'progress':
-      return /*#__PURE__*/React.createElement(ProgressCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(ProgressCell, _objectSpread2({}, props));
     case 'status':
-      return /*#__PURE__*/React.createElement(StatusCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(StatusCell, _objectSpread2({}, props));
     case 'priority':
-      return /*#__PURE__*/React.createElement(PriorityCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(PriorityCell, _objectSpread2({}, props));
     case 'user':
-      return /*#__PURE__*/React.createElement(UserCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(UserCell, _objectSpread2({}, props));
     case 'tags':
-      return /*#__PURE__*/React.createElement(TagsCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(TagsCell, _objectSpread2({}, props));
     case 'currency':
-      return /*#__PURE__*/React.createElement(CurrencyCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(CurrencyCell, _objectSpread2({}, props));
     case 'custom':
-      return /*#__PURE__*/React.createElement(CustomFieldCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(CustomFieldCell, _objectSpread2({}, props));
     case 'text':
     default:
-      return /*#__PURE__*/React.createElement(TextCell, _objectSpread2({}, props));
+      return /*#__PURE__*/React__default.createElement(TextCell, _objectSpread2({}, props));
   }
 };
 
@@ -5247,7 +5327,7 @@ var TableRows = function TableRows() {
     start = _store$getVisibleRows.start;
   var prefixClsTableBody = "".concat(prefixCls, "-table-body");
   if (barList.length === 0) {
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React__default.createElement("div", {
       style: {
         textAlign: 'center',
         color: ' rgba(0,0,0,0.65)',
@@ -5268,7 +5348,7 @@ var TableRows = function TableRows() {
       }
     });
   }
-  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
     // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
     var parent = bar._parent;
     var parentItem = parent === null || parent === void 0 ? void 0 : parent._parent;
@@ -5276,7 +5356,7 @@ var TableRows = function TableRows() {
     if ((parentItem === null || parentItem === void 0 ? void 0 : parentItem.children) && parentItem.children[parentItem.children.length - 1] === bar._parent) isLastChild = true;
     var topIndex = isTimeline && !bar.task.parentId ? parentIdMap[bar.record.id] : rowIndex;
     if (isTimeline && bar.task.parentId) return null;
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React__default.createElement("div", {
       key: bar.key,
       role: 'none',
       className: "".concat(prefixClsTableBody, "-row"),
@@ -5288,7 +5368,7 @@ var TableRows = function TableRows() {
         onRow === null || onRow === void 0 ? void 0 : onRow.onClick(bar.record);
       }
     }, columns.map(function (column, index) {
-      return /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React__default.createElement("div", {
         key: column.name,
         className: "".concat(prefixClsTableBody, "-cell"),
         style: _objectSpread2({
@@ -5302,7 +5382,7 @@ var TableRows = function TableRows() {
       }, index === 0 && !isTimeline &&
       // eslint-disable-next-line unicorn/no-new-array
       new Array(bar._depth).fill(0).map(function (_, i) {
-        return /*#__PURE__*/React.createElement("div", {
+        return /*#__PURE__*/React__default.createElement("div", {
           // eslint-disable-next-line react/no-array-index-key
           key: i,
           className: classNames("".concat(prefixClsTableBody, "-row-indentation"), _defineProperty(_defineProperty({}, "".concat(prefixClsTableBody, "-row-indentation-hidden"), isLastChild && i === bar._depth - 2), "".concat(prefixClsTableBody, "-row-indentation-both"), i === bar._depth - 1)),
@@ -5312,7 +5392,7 @@ var TableRows = function TableRows() {
             width: tableIndent * 1.5 + 5
           }
         });
-      }), index === 0 && !isTimeline && bar._childrenCount > 0 && (/*#__PURE__*/React.createElement("div", {
+      }), index === 0 && !isTimeline && bar._childrenCount > 0 && (/*#__PURE__*/React__default.createElement("div", {
         style: {
           position: 'absolute',
           left: tableIndent * bar._depth + 15,
@@ -5329,7 +5409,7 @@ var TableRows = function TableRows() {
           if (onExpand) onExpand(bar.task.record, !bar._collapsed);
           store.setRowCollapse(bar.task, !bar._collapsed);
         }
-      }) : (/*#__PURE__*/React.createElement(RowToggler, {
+      }) : (/*#__PURE__*/React__default.createElement(RowToggler, {
         prefixCls: prefixCls,
         level: bar._depth,
         collapsed: bar._collapsed,
@@ -5338,7 +5418,7 @@ var TableRows = function TableRows() {
           if (onExpand) onExpand(bar.task.record, !bar._collapsed);
           store.setRowCollapse(bar.task, !bar._collapsed);
         }
-      })))), /*#__PURE__*/React.createElement("span", {
+      })))), /*#__PURE__*/React__default.createElement("span", {
         className: "".concat(prefixClsTableBody, "-ellipsis")
       }, renderCell(column.key ? bar.record[column.key] : bar.record[column.name], bar.record, column)));
     }));
@@ -5350,19 +5430,19 @@ var TableBody = function TableBody() {
     store = _useContext2.store,
     prefixCls = _useContext2.prefixCls;
   var translateY = store.translateY;
-  var handleMouseMove = useCallback(function (event) {
+  var handleMouseMove = useCallback$1(function (event) {
     event.persist();
     store.handleMouseMove(event);
   }, [store]);
-  var handleMouseLeave = useCallback(function () {
+  var handleMouseLeave = useCallback$1(function () {
     store.handleMouseLeave();
   }, [store]);
-  var handleScroll = useCallback(function (e) {
+  var handleScroll = useCallback$1(function (e) {
     var tableHeader = store.tableHeaderRef.current;
     if (tableHeader && tableHeader.scrollLeft !== e.currentTarget.scrollLeft) tableHeader.scrollLeft = e.currentTarget.scrollLeft;
   }, [store]);
   var prefixClsTableBody = "".concat(prefixCls, "-table-body");
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     ref: store.tableBodyRef,
     className: prefixClsTableBody,
     style: {
@@ -5373,7 +5453,7 @@ var TableBody = function TableBody() {
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
     onScroll: handleScroll
-  }, /*#__PURE__*/React.createElement(ObserverTableRows, null));
+  }, /*#__PURE__*/React__default.createElement(ObserverTableRows, null));
 };
 var TableBody$1 = observer(TableBody);
 
@@ -5389,30 +5469,30 @@ var TableHeader = function TableHeader() {
   var columnsWidth = store.getColumnsWidth;
   var totalWidth = store.totalColumnWidth;
   var prefixClsTableHeader = "".concat(prefixCls, "-table-header");
-  var handleScroll = useCallback(function (e) {
+  var handleScroll = useCallback$1(function (e) {
     var tableBody = store.tableBodyRef.current;
     if (tableBody && tableBody.scrollLeft !== e.currentTarget.scrollLeft) tableBody.scrollLeft = e.currentTarget.scrollLeft;
   }, [store]);
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     ref: store.tableHeaderRef,
     className: prefixClsTableHeader,
     style: {
       width: store.tableWidth
     },
     onScroll: handleScroll
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTableHeader, "-head"),
     style: {
       width: totalWidth,
       height: 56
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTableHeader, "-row"),
     style: {
       height: 56
     }
   }, columns.map(function (column, index) {
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React__default.createElement("div", {
       key: column.name,
       className: "".concat(prefixClsTableHeader, "-cell"),
       style: _objectSpread2({
@@ -5424,9 +5504,9 @@ var TableHeader = function TableHeader() {
         paddingRight: 12,
         height: 56
       }, column.style)
-    }, /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React__default.createElement("span", {
       className: "".concat(prefixClsTableHeader, "-ellipsis")
-    }, column.icon && (/*#__PURE__*/React.createElement("span", {
+    }, column.icon && (/*#__PURE__*/React__default.createElement("span", {
       style: {
         marginRight: 4,
         display: 'inline-flex',
@@ -5450,19 +5530,19 @@ var TimeAxis = function TimeAxis() {
     customEvents = store.customEvents;
   var majorList = store.getMajorList();
   var minorList = store.getMinorList();
-  var handleResize = useCallback(function (_ref) {
+  var handleResize = useCallback$1(function (_ref) {
     var x = _ref.x;
     store.handlePanMove(-x, -store.translateY);
   }, [store]);
-  var handleLeftResizeEnd = useCallback(function () {
+  var handleLeftResizeEnd = useCallback$1(function () {
     store.handlePanEnd();
   }, [store]);
-  var getIsToday = useCallback(function (item) {
+  var getIsToday = useCallback$1(function (item) {
     var key = item.key;
     var type = sightConfig.type;
     return type === 'day' && isToday(key);
   }, [sightConfig, isToday]);
-  var getIsCustomEvent = useCallback(function (item) {
+  var getIsCustomEvent = useCallback$1(function (item) {
     var key = item.key;
     var date = key.split(' ')[0];
     var type = sightConfig.type;
@@ -5470,7 +5550,7 @@ var TimeAxis = function TimeAxis() {
       return event.date === date;
     });
   }, [sightConfig, customEvents]);
-  var getCustomEventType = useCallback(function (item) {
+  var getCustomEventType = useCallback$1(function (item) {
     var key = item.key;
     var date = key.split(' ')[0];
     var type = sightConfig.type;
@@ -5480,7 +5560,7 @@ var TimeAxis = function TimeAxis() {
     });
     return match ? match.eventType : undefined;
   }, [sightConfig, customEvents]);
-  var getCustomEventColor = useCallback(function (item) {
+  var getCustomEventColor = useCallback$1(function (item) {
     var key = item.key;
     var date = key.split(' ')[0];
     var type = sightConfig.type;
@@ -5499,7 +5579,7 @@ var TimeAxis = function TimeAxis() {
       var parts = item.label.split('<br/>');
       var dayOfWeek = parts[0];
       var dayNumber = parts[1];
-      return /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React__default.createElement("div", {
         className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty(_defineProperty(_defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), 'day-view', isDayView)),
         "data-day-of-week": dayOfWeek,
         "data-day-number": dayNumber,
@@ -5509,12 +5589,12 @@ var TimeAxis = function TimeAxis() {
         } : undefined
       });
     }
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React__default.createElement("div", {
       className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty(_defineProperty(_defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)), "".concat(prefixClsTimeAxis, "-custom-event"), getIsCustomEvent(item)), 'day-view', isDayView)),
       "data-event-type": eventType
     }, item.label);
   };
-  return /*#__PURE__*/React.createElement(DragResize$1, {
+  return /*#__PURE__*/React__default.createElement(DragResize$1, {
     onResize: handleResize,
     onResizeEnd: handleLeftResizeEnd,
     defaultSize: {
@@ -5524,30 +5604,30 @@ var TimeAxis = function TimeAxis() {
       height: 0
     },
     type: 'move'
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: prefixClsTimeAxis,
     style: {
       left: store.tableWidth,
       width: store.viewWidth
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixClsTimeAxis, "-render-chunk"),
     style: {
       transform: "translateX(-".concat(store.translateX, "px")
     }
   }, majorList.map(function (item) {
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React__default.createElement("div", {
       key: item.key,
       className: "".concat(prefixClsTimeAxis, "-major"),
       style: {
         width: item.width,
         left: item.left
       }
-    }, /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React__default.createElement("div", {
       className: "".concat(prefixClsTimeAxis, "-major-label")
     }, item.label));
   }), minorList.map(function (item) {
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React__default.createElement("div", {
       key: item.key,
       className: classNames("".concat(prefixClsTimeAxis, "-minor")),
       style: {
@@ -5573,42 +5653,42 @@ var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
     _useState2 = _slicedToArray(_useState, 2),
     visible = _useState2[0],
     setVisible = _useState2[1];
-  var ref = useRef(null);
+  var ref = useRef$1(null);
   useClickAway(function () {
     setVisible(false);
   }, ref);
-  var handleClick = useCallback(function () {
+  var handleClick = useCallback$1(function () {
     setVisible(true);
   }, []);
-  var handleSelect = useCallback(function (item) {
+  var handleSelect = useCallback$1(function (item) {
     store.switchSight(item.type);
     setVisible(false);
   }, [store]);
   var selected = sightConfig.type;
-  var isSelected = useCallback(function (key) {
+  var isSelected = useCallback$1(function (key) {
     return key === selected;
   }, [selected]);
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixCls, "-time-axis-scale-select"),
     ref: ref
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     role: 'none',
     className: "".concat(prefixCls, "-trigger"),
     onClick: handleClick
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixCls, "-text")
-  }, sightConfig.label), /*#__PURE__*/React.createElement("span", {
+  }, sightConfig.label), /*#__PURE__*/React__default.createElement("span", {
     className: 'dropdown-icon'
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, /*#__PURE__*/React__default.createElement("svg", {
     id: 'at-triangle-down-s',
     viewBox: '0 0 1024 1024'
-  }, /*#__PURE__*/React.createElement("path", {
+  }, /*#__PURE__*/React__default.createElement("path", {
     d: 'M296.704 409.6a14.9504 14.9504 0 0 0-10.752 4.608 15.5648 15.5648 0 0 0 0.1536 21.7088l210.8416 212.0704a24.832 24.832 0 0 0 35.584-0.256l205.5168-211.968a15.5136 15.5136 0 0 0 4.352-10.752c0-8.4992-6.7584-15.4112-15.104-15.4112h-430.592z'
-  })))), /*#__PURE__*/React.createElement("div", {
+  })))), /*#__PURE__*/React__default.createElement("div", {
     className: classNames("".concat(prefixCls, "-shadow"), _defineProperty({}, "".concat(prefixCls, "-scrolling"), scrolling))
-  }), visible && (/*#__PURE__*/React.createElement("div", {
+  }), visible && (/*#__PURE__*/React__default.createElement("div", {
     className: classNames('next-overlay-wrapper', 'opened')
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: classNames('next-overlay-inner'),
     "aria-hidden": 'false',
     style: {
@@ -5616,14 +5696,14 @@ var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
       right: 15,
       top: 60
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React__default.createElement("div", {
     className: 'next-loading-wrap'
-  }, /*#__PURE__*/React.createElement("ul", {
+  }, /*#__PURE__*/React__default.createElement("ul", {
     role: 'listbox',
     className: classNames('next-menu'),
     "aria-multiselectable": 'false'
   }, viewTypeList.map(function (item) {
-    return /*#__PURE__*/React.createElement("li", {
+    return /*#__PURE__*/React__default.createElement("li", {
       key: item.type,
       role: 'none',
       onClick: function onClick() {
@@ -5632,13 +5712,13 @@ var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
       className: classNames('next-menu-item', {
         'next-selected': isSelected(item.type)
       })
-    }, isSelected(item.type) && (/*#__PURE__*/React.createElement("i", {
+    }, isSelected(item.type) && (/*#__PURE__*/React__default.createElement("i", {
       className: "".concat(prefixCls, "-selected_icon")
-    }, /*#__PURE__*/React.createElement("svg", {
+    }, /*#__PURE__*/React__default.createElement("svg", {
       viewBox: '0 0 1024 1024'
-    }, /*#__PURE__*/React.createElement("path", {
+    }, /*#__PURE__*/React__default.createElement("path", {
       d: 'M413.7472 768a29.5936 29.5936 0 0 1-21.6576-9.472l-229.5296-241.152a33.3824 33.3824 0 0 1 0-45.5168 29.696 29.696 0 0 1 43.4176 0l207.7696 218.368 404.2752-424.7552a29.5936 29.5936 0 0 1 43.4176 0 33.3824 33.3824 0 0 1 0 45.568l-425.984 447.488A29.5936 29.5936 0 0 1 413.696 768'
-    })))), /*#__PURE__*/React.createElement("span", {
+    })))), /*#__PURE__*/React__default.createElement("span", {
       className: 'next-menu-item-text',
       "aria-selected": 'true'
     }, item.label));
@@ -5668,10 +5748,10 @@ var TimeIndicator = function TimeIndicator() {
     var isOverRight = todayTranslateX > translateX + viewWidth;
     return isOverLeft || isOverRight ? 'block' : 'none';
   }, [todayTranslateX, translateX, viewWidth]);
-  var handleClick = useCallback(function () {
+  var handleClick = useCallback$1(function () {
     store.scrollToToday();
   }, [store]);
-  return /*#__PURE__*/React.createElement("button", {
+  return /*#__PURE__*/React__default.createElement("button", {
     onClick: handleClick,
     className: classNames(prefixClsTimeIndicator, _defineProperty({}, "".concat(prefixClsTimeIndicator, "-scrolling"), scrolling)),
     type: "button",
@@ -5681,7 +5761,7 @@ var TimeIndicator = function TimeIndicator() {
       right: right,
       display: display
     }
-  }, /*#__PURE__*/React.createElement("span", null, locale.today));
+  }, /*#__PURE__*/React__default.createElement("span", null, locale.today));
 };
 var TimeIndicator$1 = observer(TimeIndicator);
 
@@ -7047,12 +7127,12 @@ var Body = function Body(_ref) {
   var children = _ref.children;
   var _useContext = useContext(context),
     store = _useContext.store;
-  var reference = useRef(null);
+  var reference = useRef$1(null);
   var size = useSize(reference);
   useEffect(function () {
     store.syncSize(size);
   }, [size, store]);
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React__default.createElement("div", {
     className: "".concat(prefixCls, "-body"),
     ref: reference
   }, children);
@@ -7175,7 +7255,7 @@ var GanttComponent = function GanttComponent(props) {
       getWidthByDate: store.getWidthByDate
     };
   });
-  var ContextValue = React.useMemo(function () {
+  var ContextValue = React__default.useMemo(function () {
     return {
       prefixCls: prefixCls,
       store: store,
@@ -7203,11 +7283,11 @@ var GanttComponent = function GanttComponent(props) {
       onCustomEventClick: onCustomEventClick
     };
   }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, customEvents, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderCustomHeaderFilter, onExpand, hideTable, onCustomEventClick]);
-  return /*#__PURE__*/React.createElement(context.Provider, {
+  return /*#__PURE__*/React__default.createElement(context.Provider, {
     value: ContextValue
-  }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {
+  }, /*#__PURE__*/React__default.createElement(Body, null, /*#__PURE__*/React__default.createElement("header", null, !hideTable && /*#__PURE__*/React__default.createElement(TableHeader$1, null), /*#__PURE__*/React__default.createElement(TimeAxis$1, null)), /*#__PURE__*/React__default.createElement("main", {
     ref: store.mainElementRef
-  }, /*#__PURE__*/React.createElement(SelectionIndicator$1, null), !hideTable && /*#__PURE__*/React.createElement(TableBody$1, null), /*#__PURE__*/React.createElement(Chart$1, null)), !hideTable && /*#__PURE__*/React.createElement(Divider$1, null), showBackToday && /*#__PURE__*/React.createElement(TimeIndicator$1, null), showUnitSwitch && /*#__PURE__*/React.createElement(TimeAxisScaleSelect$1, null), /*#__PURE__*/React.createElement(ScrollBar$1, null), scrollTop && /*#__PURE__*/React.createElement(ScrollTop$1, null)));
+  }, /*#__PURE__*/React__default.createElement(SelectionIndicator$1, null), !hideTable && /*#__PURE__*/React__default.createElement(TableBody$1, null), /*#__PURE__*/React__default.createElement(Chart$1, null)), !hideTable && /*#__PURE__*/React__default.createElement(Divider$1, null), showBackToday && /*#__PURE__*/React__default.createElement(TimeIndicator$1, null), showUnitSwitch && /*#__PURE__*/React__default.createElement(TimeAxisScaleSelect$1, null), /*#__PURE__*/React__default.createElement(ScrollBar$1, null), scrollTop && /*#__PURE__*/React__default.createElement(ScrollTop$1, null)));
 };
 
 export { Gantt, GanttComponent as default, defaultLocale, enUS, ptBR, zhCN };

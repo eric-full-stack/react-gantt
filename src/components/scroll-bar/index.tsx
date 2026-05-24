@@ -1,5 +1,5 @@
 import { usePersistFn } from 'ahooks'
-import { observer } from 'mobx-react-lite'
+import { observer } from '../../mobx-react-observer'
 import React, { memo, useCallback, useContext, useRef, useState } from 'react'
 import Context from '../../context'
 import DragResize from '../drag-resize'

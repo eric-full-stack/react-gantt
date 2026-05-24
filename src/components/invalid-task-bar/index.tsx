@@ -1,5 +1,5 @@
 import React, { useContext, useCallback, useState, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
+import { observer } from '../../mobx-react-observer'
 import { usePersistFn } from 'ahooks'
 import Context from '../../context'
 import { Gantt } from '../../types'

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { observer } from '../../mobx-react-observer'
 import Context from '../../context'
 import './index.less'
 

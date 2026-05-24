@@ -4,5 +4,5 @@ import './index.less';
 interface GroupBarProps {
     data: Gantt.Bar;
 }
-declare const _default: React.FunctionComponent<GroupBarProps>;
+declare const _default: React.FC<GroupBarProps>;
 export default _default;

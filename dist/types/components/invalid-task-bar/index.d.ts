@@ -4,5 +4,5 @@ import './index.less';
 interface TaskBarProps {
     data: Gantt.Bar;
 }
-declare const _default: React.FunctionComponent<TaskBarProps>;
+declare const _default: React.FC<TaskBarProps>;
 export default _default;

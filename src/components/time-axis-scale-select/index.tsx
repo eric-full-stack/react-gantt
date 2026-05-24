@@ -1,6 +1,6 @@
 import { useClickAway } from 'ahooks'
 import classNames from 'classnames'
-import { observer } from 'mobx-react-lite'
+import { observer } from '../../mobx-react-observer'
 import React, { useCallback, useContext, useRef, useState } from 'react'
 import Context from '../../context'
 import { Gantt } from '../../types'

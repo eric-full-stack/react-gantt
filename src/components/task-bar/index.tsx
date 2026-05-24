@@ -1,7 +1,7 @@
 import { usePersistFn } from 'ahooks'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
-import { observer } from 'mobx-react-lite'
+import { observer } from '../../mobx-react-observer'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TOP_PADDING } from '../../constants'
 import Context from '../../context'

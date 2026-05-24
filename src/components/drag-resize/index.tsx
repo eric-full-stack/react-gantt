@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo, HTMLProps } from 'react';
 import { createPortal } from 'react-dom';
 import { usePersistFn } from 'ahooks';
-import { observer } from 'mobx-react-lite';
+import { observer } from '../../mobx-react-observer';
 import AutoScroller from './AutoScroller';
 
 interface DragResizeProps extends Omit<HTMLProps<HTMLDivElement>, 'onResize'> {
