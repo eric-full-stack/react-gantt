@@ -1,8 +1,8 @@
 import { usePersistFn, useClickAway, useSize } from 'ahooks';
-import * as React from 'react';
-import React__default, { createContext, useContext, useState, useMemo, useRef as useRef$1, useCallback as useCallback$1, memo, useEffect, createRef, useImperativeHandle } from 'react';
-import { Reaction, observable, action, computed, runInAction, toJS } from 'mobx';
 import classNames from 'classnames';
+import * as React from 'react';
+import React__default, { createContext, useContext, useState as useState$1, useMemo, useRef as useRef$1, useCallback as useCallback$1, memo, useEffect as useEffect$1, createRef, useImperativeHandle } from 'react';
+import { Reaction, observable, action, computed, runInAction, toJS } from 'mobx';
 import { createPortal } from 'react-dom';
 import dayjs from 'dayjs';
 import dayjsBusinessDays from 'dayjs-business-days';
@@ -64,25 +64,117 @@ function _objectSpread2(e) {
   return e;
 }
 
-/**
- * React-19-safe replacement for mobx-react-lite@1.5.2's `observer`.
- *
- * The legacy mobx-react-lite (peer: `react ^16.8`) drives re-renders with a
- * useState-based forceUpdate that loops ("Maximum update depth exceeded")
- * under React 19. This implementation instead subscribes through React 18+'s
- * `useSyncExternalStore` with a snapshot that is stable between renders and
- * only changes when a tracked observable changes — which is loop-proof and
- * tearing-safe.
- *
- * It relies solely on mobx 4's public `Reaction` API (`new Reaction`, `.track`,
- * `.dispose`), so the existing mobx@4 store needs no changes.
- */
+function _arrayWithHoles(r) {
+  if (Array.isArray(r)) return r;
+}
+
+function _iterableToArrayLimit(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e,
+      n,
+      i,
+      u,
+      a = [],
+      f = !0,
+      o = !1;
+    try {
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t) return;
+        f = !1;
+      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
+    } catch (r) {
+      o = !0, n = r;
+    } finally {
+      try {
+        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
+      } finally {
+        if (o) throw n;
+      }
+    }
+    return a;
+  }
+}
+
+function _arrayLikeToArray(r, a) {
+  (null == a || a > r.length) && (a = r.length);
+  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+  return n;
+}
+
+function _unsupportedIterableToArray(r, a) {
+  if (r) {
+    if ("string" == typeof r) return _arrayLikeToArray(r, a);
+    var t = {}.toString.call(r).slice(8, -1);
+    return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
+  }
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _slicedToArray(r, e) {
+  return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
+}
+
+var _a;
 var useRef = React.useRef,
-  useCallback = React.useCallback;
-// This package is built against @types/react@17 (which predates
-// useSyncExternalStore) but always runs inside a React 18/19 host, so reach the
-// hook through a cast to stay compatible with the older type definitions.
-var useSyncExternalStore = React.useSyncExternalStore;
+  useCallback = React.useCallback,
+  useState = React.useState,
+  useEffect = React.useEffect,
+  useLayoutEffect = React.useLayoutEffect;
+/**
+ * Backport of `useSyncExternalStore` for React < 18 (e.g. the React 17 host
+ * used by the dumi docs site). This is the non-concurrent shim shipped by
+ * React itself: it forces an update only when the snapshot actually changed
+ * (`Object.is`), so it preserves the loop-proof guarantee this observer relies
+ * on. React 18/19 hosts use the built-in implementation instead.
+ */
+var useSyncExternalStoreShim = function useSyncExternalStoreShim(subscribe, getSnapshot) {
+  var value = getSnapshot();
+  var _useState = useState({
+      inst: {
+        value: value,
+        getSnapshot: getSnapshot
+      }
+    }),
+    _useState2 = _slicedToArray(_useState, 2),
+    inst = _useState2[0].inst,
+    forceUpdate = _useState2[1];
+  useLayoutEffect(function () {
+    inst.value = value;
+    inst.getSnapshot = getSnapshot;
+    if (checkIfSnapshotChanged(inst)) forceUpdate({
+      inst: inst
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscribe, value, getSnapshot]);
+  useEffect(function () {
+    if (checkIfSnapshotChanged(inst)) forceUpdate({
+      inst: inst
+    });
+    var handleStoreChange = function handleStoreChange() {
+      if (checkIfSnapshotChanged(inst)) forceUpdate({
+        inst: inst
+      });
+    };
+    return subscribe(handleStoreChange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscribe]);
+  return value;
+};
+function checkIfSnapshotChanged(inst) {
+  var prevValue = inst.value;
+  try {
+    var nextValue = inst.getSnapshot();
+    return !Object.is(prevValue, nextValue);
+  } catch (_unused) {
+    return true;
+  }
+}
+// Prefer React 18+'s native hook; fall back to the shim on React 17.
+var useSyncExternalStore = (_a = React.useSyncExternalStore) !== null && _a !== void 0 ? _a : useSyncExternalStoreShim;
 function createReaction(adm) {
   return new Reaction("observer(".concat(adm.name, ")"), function () {
     // A tracked observable changed: bump the snapshot and tell React to
@@ -145,20 +237,6 @@ function observer(baseComponent) {
 }
 
 var context = /*#__PURE__*/createContext({});
-
-function _arrayLikeToArray(r, a) {
-  (null == a || a > r.length) && (a = r.length);
-  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
-  return n;
-}
-
-function _unsupportedIterableToArray(r, a) {
-  if (r) {
-    if ("string" == typeof r) return _arrayLikeToArray(r, a);
-    var t = {}.toString.call(r).slice(8, -1);
-    return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
-  }
-}
 
 function _createForOfIteratorHelper(r, e) {
   var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
@@ -389,46 +467,6 @@ var GroupBar = function GroupBar(_ref) {
 };
 var GroupBar$1 = observer(GroupBar);
 
-function _arrayWithHoles(r) {
-  if (Array.isArray(r)) return r;
-}
-
-function _iterableToArrayLimit(r, l) {
-  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
-  if (null != t) {
-    var e,
-      n,
-      i,
-      u,
-      a = [],
-      f = !0,
-      o = !1;
-    try {
-      if (i = (t = t.call(r)).next, 0 === l) {
-        if (Object(t) !== t) return;
-        f = !1;
-      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
-    } catch (r) {
-      o = !0, n = r;
-    } finally {
-      try {
-        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
-      } finally {
-        if (o) throw n;
-      }
-    }
-    return a;
-  }
-}
-
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-
-function _slicedToArray(r, e) {
-  return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
-}
-
 function _objectWithoutPropertiesLoose(r, e) {
   if (null == r) return {};
   var t = {};
@@ -557,7 +595,7 @@ var DragResize = function DragResize(_ref) {
     _ref$disabled = _ref.disabled,
     disabled = _ref$disabled === void 0 ? false : _ref$disabled,
     otherProps = _objectWithoutProperties(_ref, _excluded);
-  var _useState = useState(false),
+  var _useState = useState$1(false),
     _useState2 = _slicedToArray(_useState, 2),
     resizing = _useState2[0],
     setResizing = _useState2[1];
@@ -733,7 +771,7 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
     width = data.width,
     dateTextFormat = data.dateTextFormat,
     record = data.record;
-  var _useState = useState(false),
+  var _useState = useState$1(false),
     _useState2 = _slicedToArray(_useState, 2),
     visible = _useState2[0],
     setVisible = _useState2[1];
@@ -4496,11 +4534,11 @@ var CustomEvents = function CustomEvents() {
     onCustomEventClick = _useContext.onCustomEventClick;
   var customEvents = store.customEvents;
   var getTranslateXByDate = store.getTranslateXByDate.bind(store);
-  var _useState = useState(null),
+  var _useState = useState$1(null),
     _useState2 = _slicedToArray(_useState, 2),
     hoveredEvent = _useState2[0],
     setHoveredEvent = _useState2[1];
-  var _useState3 = useState(0),
+  var _useState3 = useState$1(0),
     _useState4 = _slicedToArray(_useState3, 2),
     mouseY = _useState4[0],
     setMouseY = _useState4[1];
@@ -4603,7 +4641,7 @@ var Chart = function Chart() {
   var handleMouseLeave = useCallback$1(function () {
     store.handleMouseLeave();
   }, [store]);
-  useEffect(function () {
+  useEffect$1(function () {
     var element = chartElementRef.current;
     if (element) element.addEventListener('wheel', store.handleWheel);
     return function () {
@@ -4817,7 +4855,7 @@ function useDragResize(handleResize, _ref) {
   var initSize = _ref.initSize,
     minWidthConfig = _ref.minWidth,
     maxWidthConfig = _ref.maxWidth;
-  var _useState = useState(false),
+  var _useState = useState$1(false),
     _useState2 = _slicedToArray(_useState, 2),
     resizing = _useState2[0],
     setResizing = _useState2[1];
@@ -5649,7 +5687,7 @@ var TimeAxisScaleSelect = function TimeAxisScaleSelect() {
   var sightConfig = store.sightConfig,
     scrolling = store.scrolling,
     viewTypeList = store.viewTypeList;
-  var _useState = useState(false),
+  var _useState = useState$1(false),
     _useState2 = _slicedToArray(_useState, 2),
     visible = _useState2[0],
     setVisible = _useState2[1];
@@ -5765,7 +5803,7 @@ var TimeIndicator = function TimeIndicator() {
 };
 var TimeIndicator$1 = observer(TimeIndicator);
 
-var css_248z = ".gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n  display: flex;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: hidden;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n  display: flex;\n}\n";
+var css_248z = ".gantt-body.gantt-dark {\n  background: #1f2430;\n  border-color: #3a4252;\n  color: #c9d3e3;\n}\n.gantt-body.gantt-dark main {\n  border-top-color: #3a4252;\n}\n.gantt-body.gantt-dark .gantt-table-header-cell {\n  background: #262c3a;\n  color: #c9d3e3;\n  border-right-color: #3a4252;\n  border-bottom-color: #3a4252;\n}\n.gantt-body.gantt-dark .gantt-table-body-row,\n.gantt-body.gantt-dark .gantt-table-body-border_row {\n  border-bottom-color: #3a4252;\n}\n.gantt-body.gantt-dark .gantt-table-body-cell {\n  color: #c9d3e3;\n  border-right-color: #3a4252;\n}\n.gantt-body.gantt-dark .gantt-table-body-row-indentation:before,\n.gantt-body.gantt-dark .gantt-table-body-row-indentation-both:after {\n  background-color: #4a5468;\n}\n.gantt-body.gantt-dark .gantt-time-axis-major {\n  border-right-color: #3a4252;\n}\n.gantt-body.gantt-dark .gantt-time-axis-minor {\n  color: #c9d3e3;\n  border-top-color: #3a4252;\n  border-right-color: #3a4252;\n}\n.gantt-body.gantt-dark .gantt-time-axis-minor.weekends {\n  background-color: rgba(255, 255, 255, 0.04);\n}\n.gantt-body.gantt-dark .gantt-chart-svg-renderer g {\n  stroke: #3a4252;\n}\n.gantt-body.gantt-dark .gantt-task-bar-date-text,\n.gantt-body.gantt-dark .gantt-task-bar-label {\n  color: #fff;\n}\n.gantt-body.gantt-dark .gantt-trigger {\n  background-color: #262c3a;\n  border-left-color: #3a4252;\n  color: #8a93a6;\n}\n.gantt-body.gantt-dark .gantt-trigger:hover {\n  color: #c9d3e3;\n}\n.gantt-body.gantt-dark .gantt-trigger .gantt-text {\n  color: #c9d3e3;\n}\n.gantt-body.gantt-dark .gantt-selection-indicator {\n  background: rgba(255, 255, 255, 0.06);\n}\n.gantt-body {\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border: 1px solid #f0f0f0;\n  border-radius: 4px;\n  background: #fff;\n}\n.gantt-body *,\n.gantt-body *::before,\n.gantt-body *::after {\n  box-sizing: border-box;\n}\n.gantt-body header {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  height: 56px;\n  display: flex;\n}\n.gantt-body main {\n  position: relative;\n  overflow-x: hidden;\n  overflow-y: hidden;\n  width: 100%;\n  flex: 1;\n  border-top: 1px solid #f0f0f0;\n  will-change: transform;\n  will-change: overflow;\n  display: flex;\n}\n";
 styleInject(css_248z);
 
 var ptBR = Object.freeze({
@@ -7124,16 +7162,17 @@ __decorate([action], GanttStore.prototype, "updateTaskDate", null);
 
 var prefixCls = 'gantt';
 var Body = function Body(_ref) {
-  var children = _ref.children;
+  var children = _ref.children,
+    darkMode = _ref.darkMode;
   var _useContext = useContext(context),
     store = _useContext.store;
   var reference = useRef$1(null);
   var size = useSize(reference);
-  useEffect(function () {
+  useEffect$1(function () {
     store.syncSize(size);
   }, [size, store]);
   return /*#__PURE__*/React__default.createElement("div", {
-    className: "".concat(prefixCls, "-body"),
+    className: classNames("".concat(prefixCls, "-body"), _defineProperty({}, "".concat(prefixCls, "-dark"), darkMode)),
     ref: reference
   }, children);
 };
@@ -7194,7 +7233,9 @@ var GanttComponent = function GanttComponent(props) {
     columnConfig = props.columnConfig,
     _props$customFields = props.customFields,
     customFields = _props$customFields === void 0 ? [] : _props$customFields,
-    tableWidth = props.tableWidth;
+    tableWidth = props.tableWidth,
+    _props$darkMode = props.darkMode,
+    darkMode = _props$darkMode === void 0 ? false : _props$darkMode;
   var store = useMemo(function () {
     return new GanttStore({
       rowHeight: rowHeight,
@@ -7203,48 +7244,48 @@ var GanttComponent = function GanttComponent(props) {
       locale: locale
     });
   }, [rowHeight]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setData(data, startDateKey, endDateKey);
   }, [data, endDateKey, startDateKey, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setColumns(columns);
   }, [columns, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setColumnConfig(columnConfig);
   }, [columnConfig, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setCustomFields(customFields);
   }, [customFields, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setCustomEvents(customEvents);
   }, [customEvents, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setOnUpdate(onUpdate);
   }, [onUpdate, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setDependencies(dependencies);
   }, [dependencies, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setTimeline(isTimeline);
   }, [isTimeline, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setWorkdays(workdays);
   }, [workdays, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setDurationFn(durationFn);
   }, [durationFn, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     store.setHideTable(hideTable);
   }, [hideTable]);
-  useEffect(function () {
+  useEffect$1(function () {
     if (tableWidth !== undefined) {
       store.setTableWidth(tableWidth);
     }
   }, [tableWidth, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     if (isRestDay) store.setIsRestDay(isRestDay);
   }, [isRestDay, store]);
-  useEffect(function () {
+  useEffect$1(function () {
     if (unit) store.switchSight(unit);
   }, [unit, store]);
   useImperativeHandle(innerRef, function () {
@@ -7285,7 +7326,9 @@ var GanttComponent = function GanttComponent(props) {
   }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, customEvents, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderCustomHeaderFilter, onExpand, hideTable, onCustomEventClick]);
   return /*#__PURE__*/React__default.createElement(context.Provider, {
     value: ContextValue
-  }, /*#__PURE__*/React__default.createElement(Body, null, /*#__PURE__*/React__default.createElement("header", null, !hideTable && /*#__PURE__*/React__default.createElement(TableHeader$1, null), /*#__PURE__*/React__default.createElement(TimeAxis$1, null)), /*#__PURE__*/React__default.createElement("main", {
+  }, /*#__PURE__*/React__default.createElement(Body, {
+    darkMode: darkMode
+  }, /*#__PURE__*/React__default.createElement("header", null, !hideTable && /*#__PURE__*/React__default.createElement(TableHeader$1, null), /*#__PURE__*/React__default.createElement(TimeAxis$1, null)), /*#__PURE__*/React__default.createElement("main", {
     ref: store.mainElementRef
   }, /*#__PURE__*/React__default.createElement(SelectionIndicator$1, null), !hideTable && /*#__PURE__*/React__default.createElement(TableBody$1, null), /*#__PURE__*/React__default.createElement(Chart$1, null)), !hideTable && /*#__PURE__*/React__default.createElement(Divider$1, null), showBackToday && /*#__PURE__*/React__default.createElement(TimeIndicator$1, null), showUnitSwitch && /*#__PURE__*/React__default.createElement(TimeAxisScaleSelect$1, null), /*#__PURE__*/React__default.createElement(ScrollBar$1, null), scrollTop && /*#__PURE__*/React__default.createElement(ScrollTop$1, null)));
 };

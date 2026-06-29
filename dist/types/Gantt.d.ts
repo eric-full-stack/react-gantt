@@ -59,6 +59,10 @@ export interface GanttProps<RecordType = DefaultRecordType> {
      * Largura inicial da tabela lateral
      */
     tableWidth?: number;
+    /**
+     * Ativa o tema escuro (dark mode) do gantt
+     */
+    darkMode?: boolean;
 }
 export interface GanttRef {
     backToday: () => void;
