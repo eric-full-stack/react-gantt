@@ -1,4 +1,5 @@
 import { useSize } from 'ahooks'
+import classNames from 'classnames'
 import type { Dayjs } from 'dayjs'
 import React, { useContext, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import Chart from './components/chart'
@@ -21,7 +22,7 @@ import type { DefaultRecordType, Gantt, GanttLocale } from './types'
 
 const prefixCls = 'gantt'
 
-const Body: React.FC = ({ children }) => {
+const Body: React.FC<{ darkMode?: boolean }> = ({ children, darkMode }) => {
   const { store } = useContext(Context)
   const reference = useRef<HTMLDivElement>(null)
   const size = useSize(reference)
@@ -29,7 +30,10 @@ const Body: React.FC = ({ children }) => {
     store.syncSize(size)
   }, [size, store])
   return (
-    <div className={`${prefixCls}-body`} ref={reference}>
+    <div
+      className={classNames(`${prefixCls}-body`, { [`${prefixCls}-dark`]: darkMode })}
+      ref={reference}
+    >
       {children}
     </div>
   )
@@ -94,6 +98,11 @@ export interface GanttProps<RecordType = DefaultRecordType> {
    * Largura inicial da tabela lateral
    */
   tableWidth?: number
+
+  /**
+   * Ativa o tema escuro (dark mode) do gantt
+   */
+  darkMode?: boolean
 }
 export interface GanttRef {
   backToday: () => void
@@ -142,6 +151,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     columnConfig,
     customFields = [],
     tableWidth,
+    darkMode = false,
   } = props
 
   const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale }), [rowHeight])
@@ -263,7 +273,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
 
   return (
     <Context.Provider value={ContextValue}>
-      <Body>
+      <Body darkMode={darkMode}>
         <header>
           {!hideTable && <TableHeader />}
           <TimeAxis />

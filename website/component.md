@@ -70,6 +70,12 @@ nav:
 
 <code src="./demo/custom.tsx"></code>
 
+### 暗黑模式
+
+通过 `darkMode` 属性即可开启 / 关闭甘特图的暗黑主题
+
+<code src="./demo/dark-mode.tsx"></code>
+
 ## 类型定义
 
 ### `Column` 定义
@@ -177,6 +183,7 @@ export type Sight = 'day' | 'week' | 'month' | 'quarter' | 'halfYear'
 | renderLeftText | 自定义渲染左侧内容区 | `(barInfo: Gantt.Bar<RecordType>) => React.ReactNode` |
 | renderRightText | 自定义渲染右侧内容区 | `(barInfo: Gantt.Bar<RecordType>) => React.ReactNode` |
 | onExpand | 点击展开图标时触发 | `(record: Gantt.Record<RecordType>,collapsed:boolean) => void` |
+| darkMode | 是否开启暗黑模式 | `boolean` | `false` |
 
 ## 方法
 

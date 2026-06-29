@@ -14,7 +14,7 @@
 import { Reaction } from 'mobx'
 import * as React from 'react'
 
-const { useRef, useCallback } = React
+const { useRef, useCallback, useState, useEffect, useLayoutEffect } = React
 
 type UseSyncExternalStore = <T>(
   subscribe: (onStoreChange: () => void) => () => void,
@@ -22,10 +22,49 @@ type UseSyncExternalStore = <T>(
   getServerSnapshot?: () => T
 ) => T
 
-// This package is built against @types/react@17 (which predates
-// useSyncExternalStore) but always runs inside a React 18/19 host, so reach the
-// hook through a cast to stay compatible with the older type definitions.
-const useSyncExternalStore: UseSyncExternalStore = (React as any).useSyncExternalStore
+/**
+ * Backport of `useSyncExternalStore` for React < 18 (e.g. the React 17 host
+ * used by the dumi docs site). This is the non-concurrent shim shipped by
+ * React itself: it forces an update only when the snapshot actually changed
+ * (`Object.is`), so it preserves the loop-proof guarantee this observer relies
+ * on. React 18/19 hosts use the built-in implementation instead.
+ */
+const useSyncExternalStoreShim: UseSyncExternalStore = (subscribe, getSnapshot) => {
+  const value = getSnapshot()
+  const [{ inst }, forceUpdate] = useState({ inst: { value, getSnapshot } })
+
+  useLayoutEffect(() => {
+    inst.value = value
+    inst.getSnapshot = getSnapshot
+    if (checkIfSnapshotChanged(inst)) forceUpdate({ inst })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscribe, value, getSnapshot])
+
+  useEffect(() => {
+    if (checkIfSnapshotChanged(inst)) forceUpdate({ inst })
+    const handleStoreChange = () => {
+      if (checkIfSnapshotChanged(inst)) forceUpdate({ inst })
+    }
+    return subscribe(handleStoreChange)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscribe])
+
+  return value
+}
+
+function checkIfSnapshotChanged<T>(inst: { value: T; getSnapshot: () => T }): boolean {
+  const prevValue = inst.value
+  try {
+    const nextValue = inst.getSnapshot()
+    return !Object.is(prevValue, nextValue)
+  } catch {
+    return true
+  }
+}
+
+// Prefer React 18+'s native hook; fall back to the shim on React 17.
+const useSyncExternalStore: UseSyncExternalStore =
+  (React as any).useSyncExternalStore ?? useSyncExternalStoreShim
 
 interface ObserverAdmin {
   reaction: Reaction | null
