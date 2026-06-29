@@ -76,6 +76,12 @@ Introducing the use of the built-in methods on `alwaysShowTaskBar`, `unit` and `
 
 <code src="./demo/custom.tsx"></code>
 
+### Dark mode
+
+Use the `darkMode` prop to enable / disable the Gantt dark theme
+
+<code src="./demo/dark-mode.tsx"></code>
+
 ## Type Definition
 
 ### `Column` Definition
@@ -183,6 +189,7 @@ export type Sight = 'day' | 'week' | 'month' | 'quarter' | 'halfYear'
 | renderLeftText | 自定义渲染左侧内容区 | `(barInfo: Gantt.Bar<RecordType>) => React.ReactNode` |
 | renderRightText | 自定义渲染右侧内容区 | `(barInfo: Gantt.Bar<RecordType>) => React.ReactNode` |
 | onExpand | 点击展开图标时触发 | `(record: Gantt.Record<RecordType>,collapsed:boolean) => void` |
+| darkMode | 是否开启暗黑模式 | `boolean` | `false` |
 
 ## Methods
 

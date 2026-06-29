@@ -1,0 +1,95 @@
+@import './themes/index';
+
+// ===== Dark mode =====
+// Ativado quando a prop `darkMode` do componente Gantt é verdadeira,
+// adicionando a classe `@{gantt-prefix}-dark` ao container raiz.
+
+// Paleta do tema escuro
+@dark-bg: #1f2430; // fundo principal
+@dark-bg-elevated: #262c3a; // header / células de cabeçalho
+@dark-bg-hover: #2e3545; // hover / popovers
+@dark-border: #3a4252; // bordas e grades
+@dark-border-strong: #4a5468; // bordas de destaque
+@dark-text: #c9d3e3; // texto principal
+@dark-text-muted: #8a93a6; // texto secundário
+
+.@{gantt-prefix}-body.@{gantt-prefix}-dark {
+  background: @dark-bg;
+  border-color: @dark-border;
+  color: @dark-text;
+
+  main {
+    border-top-color: @dark-border;
+  }
+
+  // ----- Cabeçalho da tabela -----
+  .@{gantt-prefix}-table-header-cell {
+    background: @dark-bg-elevated;
+    color: @dark-text;
+    border-right-color: @dark-border;
+    border-bottom-color: @dark-border;
+  }
+
+  // ----- Corpo da tabela -----
+  .@{gantt-prefix}-table-body-row,
+  .@{gantt-prefix}-table-body-border_row {
+    border-bottom-color: @dark-border;
+  }
+
+  .@{gantt-prefix}-table-body-cell {
+    color: @dark-text;
+    border-right-color: @dark-border;
+  }
+
+  .@{gantt-prefix}-table-body-row-indentation:before,
+  .@{gantt-prefix}-table-body-row-indentation-both:after {
+    background-color: @dark-border-strong;
+  }
+
+  // ----- Eixo de tempo -----
+  .@{gantt-prefix}-time-axis-major {
+    border-right-color: @dark-border;
+  }
+
+  .@{gantt-prefix}-time-axis-minor {
+    color: @dark-text;
+    border-top-color: @dark-border;
+    border-right-color: @dark-border;
+
+    &.weekends {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+  }
+
+  // ----- Grade do gráfico (SVG) -----
+  .@{gantt-prefix}-chart-svg-renderer g {
+    stroke: @dark-border;
+  }
+
+  // ----- Barras de tarefa -----
+  // Datas ao lado das barras e texto de duração acima da barra
+  .@{gantt-prefix}-task-bar-date-text,
+  .@{gantt-prefix}-task-bar-label {
+    color: #fff;
+  }
+
+  // ----- Seletor de escala de tempo -----
+  .@{gantt-prefix}-trigger {
+    background-color: @dark-bg-elevated;
+    border-left-color: @dark-border;
+    color: @dark-text-muted;
+
+    &:hover {
+      color: @dark-text;
+    }
+
+    .@{gantt-prefix}-text {
+      color: @dark-text;
+    }
+  }
+
+  // ----- Indicador de seleção -----
+  .@{gantt-prefix}-selection-indicator {
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
